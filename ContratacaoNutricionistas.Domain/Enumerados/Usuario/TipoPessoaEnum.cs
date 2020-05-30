@@ -1,7 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#region Histórico de manutenção
+/*
+ * Programador: Pedro Henrique Pires
+ * Data: 30/05/2020
+ * Implementação: Implementação Inicial do enumerado de tipo de pessoa
+ */
+#endregion
+
 using System.ComponentModel;
-using System.Text;
 
 namespace ContratacaoNutricionistas.Domain.Enumerados.Usuario
 {
@@ -20,12 +25,6 @@ namespace ContratacaoNutricionistas.Domain.Enumerados.Usuario
         /// Pessoa física
         /// </summary>
         [Description("Física"), DefaultValue("0")]
-        Fisica = 0,
-
-        /// <summary>
-        /// Pessoa jurídica
-        /// </summary>
-        [Description("Jurídica"),DefaultValue("1")]
-        Juridica = 1
+        Fisica = 0
     }
 }

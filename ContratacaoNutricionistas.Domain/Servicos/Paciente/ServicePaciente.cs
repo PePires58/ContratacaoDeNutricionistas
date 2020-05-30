@@ -1,4 +1,12 @@
-﻿using ContratacaoNutricionistas.Domain.Entidades.Paciente;
+﻿#region Histórico de manutenção
+/*
+ * Programador: Pedro Henrique Pires
+ * Data: 30/05/2020
+ * Implementação: Implementação Inicial da classe de serviço de paciente
+ */
+#endregion
+
+using ContratacaoNutricionistas.Domain.Entidades.Paciente;
 using ContratacaoNutricionistas.Domain.Interfaces.Paciente;
 using DataBaseHelper.Interfaces;
 using System;
@@ -7,23 +15,26 @@ using System.Text;
 
 namespace ContratacaoNutricionistas.Domain.Servicos.Paciente
 {
+    /// <summary>
+    /// Essa classe contém as regras quando se trata de paciente
+    /// </summary>
     public class ServicePaciente : IServicePaciente
     {
         #region Propriedades
         /// <summary>
         /// Unidade de conexão e execução com banco de dados
         /// </summary>
-        private readonly IUnitOfWork _UnitOfWork;
+        private readonly IPacienteRepository _PacienteRepository;
         #endregion
 
         #region Construtor
         /// <summary>
         /// Unidade de trabalho
         /// </summary>
-        /// <param name="pIUnitOfWork"></param>
-        public ServicePaciente(IUnitOfWork pIUnitOfWork)
+        /// <param name="pPacienteRepository"></param>
+        public ServicePaciente(IPacienteRepository pPacienteRepository)
         {
-            _UnitOfWork = pIUnitOfWork;
+            _PacienteRepository = pPacienteRepository;
         }
         #endregion
 
@@ -35,13 +46,23 @@ namespace ContratacaoNutricionistas.Domain.Servicos.Paciente
         /// <param name="pModel"></param>
         public void Cadastra(PacienteCadastro pModel)
         {
-            _UnitOfWork.Executar(_UnitOfWork.MontaInsertPorAttributo(pModel).ToString());
+            if (!LoginExistente(pModel.Login))
+                _PacienteRepository.CadastrarPaciente(pModel);
+            else
+                throw new Exception($"O login: { pModel }, já existe!");
         }
 
+        /*Esse método será migrado para um serviço específico. 
+         * Pois o login é tanto para paciente quanto para nutricionista*/
         public bool LoginExistente(string pLogin)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(pLogin))
+                throw new ArgumentException(message: "O login é obrigatório para verificar a existência");
+
+            return _PacienteRepository.LoginExiste(pLogin);
         }
+
+
         #endregion
 
     }

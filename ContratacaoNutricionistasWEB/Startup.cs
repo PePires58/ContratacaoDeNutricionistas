@@ -1,8 +1,17 @@
-﻿using System;
+﻿#region Histórico de manutenção
+/*
+ * Programador: Pedro Henrique Pires
+ * Data: 30/05/2020
+ * Implementação: Implementação Inicial da classe de configuração do site
+ */
+#endregion
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ContratacaoNutricionistas.Domain.Interfaces.Paciente;
+using ContratacaoNutricionistas.Domain.Repository.Paciente;
 using ContratacaoNutricionistas.Domain.Servicos.Paciente;
 using DataBaseHelper;
 using DataBaseHelper.Interfaces;
@@ -42,6 +51,7 @@ namespace ContratacaoNutricionistasWEB
             #region Injeção de depencia
             services.AddSingleton<IUnitOfWork>(new UnitOfWork(Configuration.GetConnectionString("DefaultConnection")));
             services.AddSingleton<IServicePaciente, ServicePaciente>();
+            services.AddSingleton<IPacienteRepository, PacienteRepository>();
             #endregion
         }
 

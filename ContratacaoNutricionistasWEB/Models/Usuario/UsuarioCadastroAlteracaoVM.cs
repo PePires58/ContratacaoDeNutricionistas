@@ -1,4 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿#region Histórico de manutenção
+/*
+ * Programador: Pedro Henrique Pires
+ * Data: 30/05/2020
+ * Implementação: Implementação Inicial da classe de cadastro ou alteração de usuários
+ */
+#endregion
+
+using System.ComponentModel.DataAnnotations;
 
 namespace ContratacaoNutricionistasWEB.Models.Usuario
 {
@@ -15,12 +23,11 @@ namespace ContratacaoNutricionistasWEB.Models.Usuario
         [Required(ErrorMessage = "O campo Nome completo é obrigatório")]
         public string Nome { get; set; }
 
-#warning ajustar para comtemplar quinta digito opcional
         /// <summary>
         /// Telefone
         /// </summary>
         [Display(Name = "Telefone", Prompt = "Ex.: (011) 91242-1234")]
-        [RegularExpression(@"^\(\d{3}\)\s{0,1}\d{4}-\d{4}$", ErrorMessage ="Telefone deve estar no formato (011) 91242-1234")]
+        [RegularExpression(@"^\(\d{3}\)\d{4}\-\d{4}$", ErrorMessage ="Telefone deve estar no formato (011)91242-1234")]
         [Required(ErrorMessage = "O campo Telefone é obrigatório.")]
         public string Telefone { get; set; }
 

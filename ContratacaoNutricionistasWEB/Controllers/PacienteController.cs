@@ -1,13 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
+﻿#region Histórico de manutenção
+/*
+ * Programador: Pedro Henrique Pires
+ * Data: 30/05/2020
+ * Implementação: Implementação Inicial do controlador de nutricionista
+ */
+#endregion
+
 using ContratacaoNutricionistas.Domain.Interfaces.Paciente;
 using ContratacaoNutricionistasWEB.Models.Paciente;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ModulosHelper.Extensions;
+using System;
+using System.Collections.Generic;
 
 namespace ContratacaoNutricionistasWEB.Controllers
 {
@@ -18,6 +23,10 @@ namespace ContratacaoNutricionistasWEB.Controllers
     {
 
         #region Propriedades
+        /// <summary>
+        /// Construtor
+        /// </summary>
+        /// <param name="pIServicePaciente">Serviço de paciente</param>
         public PacienteController(IServicePaciente pIServicePaciente)
         {
             _ServicePaciente = pIServicePaciente;
@@ -32,20 +41,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
         #endregion
 
         #region Constantes
-        /// <summary>
-        /// Constante para acesso da ViewData
-        /// </summary>
-        private const string ViewDataMensagemRetorno = "MensagemRetorno";
-
-        /// <summary>
-        /// Constante para acesso da ViewData
-        /// </summary>
-        private const string ViewDataMensagemErro = "MensagemErro";
-
-        /// <summary>
-        /// Constante para lista do tipo de pessoa
-        /// </summary>
-        private const string ViewDataListaTipoPessoa = "ListaTipoPessoa";
+        
 
         /// <summary>
         /// Lista de tipo de pessoa
@@ -61,79 +57,70 @@ namespace ContratacaoNutricionistasWEB.Controllers
             {
                 Text = ContratacaoNutricionistas.Domain.Enumerados.Usuario.TipoPessoaEnum.Fisica.GetDescription(),
                 Value = ContratacaoNutricionistas.Domain.Enumerados.Usuario.TipoPessoaEnum.Fisica.GetDefaultValue()
-            },
-            new SelectListItem()
-            {
-                Text = ContratacaoNutricionistas.Domain.Enumerados.Usuario.TipoPessoaEnum.Juridica.GetDescription(),
-                Value = ContratacaoNutricionistas.Domain.Enumerados.Usuario.TipoPessoaEnum.Juridica.GetDefaultValue()
             }
         };
         #endregion
 
         /// <summary>
-        /// View para cadastro
+        /// View para cadastro, retorna a view Cadastro.cshtml da pasta Paciente
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Cadastro.cshtml da pasta Paciente</returns>
         public IActionResult Cadastro()
         {
-            ViewData[ViewDataListaTipoPessoa] = ListaTipoPessoa;
+            /*Utilizada para montar o combo de tipo de pessoa*/
+            ViewData[Constantes.ViewDataListaTipoPessoa] = ListaTipoPessoa;
 
             return View();
         }
 
         /// <summary>
-        /// View para envio do cadastro
+        /// View para envio do cadastro, realiza o cadastro do Paciente.
         /// </summary>
         /// <param name="pModel">Modelo</param>
-        /// <returns></returns>
+        /// <returns>Retorna para a tela de Login quando realizado com sucesso.</returns>
         [HttpPost]
         public IActionResult Cadastro(PacienteCadastroVM pModel)
         {
-            ViewData[ViewDataListaTipoPessoa] = ListaTipoPessoa;
+            ViewData[Constantes.ViewDataListaTipoPessoa] = ListaTipoPessoa;
 
             try
             {
-                ViewData[ViewDataMensagemRetorno] = string.Empty;
-                ViewData[ViewDataMensagemErro] = string.Empty;
-
-#warning validar CPF e CNPJ a partir do tipo de pessoa
-
-
+                ViewData[Constantes.ViewDataMensagemErro] = ViewData[Constantes.ViewDataMensagemRetorno] = null;
+                /*Verifica se o modelo é valido, de acordo com os atributos da classe passado no parâmetro*/
                 if (!ModelState.IsValid)
-                {
                     return View(pModel);
-                }
-
+                
 
                 /*Valida se já existe login cadastrado*/
-                if (_ServicePaciente.LoginExistente(pModel.Login))
-                {
-                    ViewData[ViewDataMensagemErro] = $"O login: {pModel}, já existe!";
-                    ModelState.ClearValidationState(nameof(pModel.Login));
-                    pModel.Login = string.Empty;
+                //if (_ServicePaciente.LoginExistente(pModel.Login))
+                //{
+                //    ViewData[ViewDataMensagemErro] = $"O login: {pModel}, já existe!";
+                //    ModelState.ClearValidationState(nameof(pModel.Login));
+                //    pModel.Login = string.Empty;
+                //    return View(pModel);
+                //}
 
-                    return View(pModel);
-                }
-
-                /*Cadastro o paciente*/
-                _ServicePaciente.Cadastra(new ContratacaoNutricionistas.Domain.Entidades.Paciente.PacienteCadastro()
-                {
-                    Login = pModel.Login,
-                    Nome = pModel.Nome,
-                    Senha = pModel.Senha,
-                    Telefone = pModel.Telefone,
-                    TipoPessoa = pModel.TipoPessoa,
-                    TipoUsuario = pModel.TipoUsuario,
-                    CpfCnpj = pModel.TipoPessoa == ContratacaoNutricionistas.Domain.Enumerados.Usuario.TipoPessoaEnum.Fisica ? pModel.CPF : pModel.CNPJ
-                });
-
-                ViewData[ViewDataMensagemRetorno] = $"Usuário {pModel.Login} cadastrado com sucesso";
-
-                return RedirectToActionPermanent("Index", "Home");
+                ///*Cadastro o paciente*/
+                //_ServicePaciente.Cadastra(new ContratacaoNutricionistas.Domain.Entidades.Paciente.PacienteCadastro
+                //(
+                //    pModel.Nome,
+                //    pModel.Telefone,
+                //    pModel.Login,
+                //    pModel.Senha,
+                //    new CPF(pModel.CPF, false)
+                // ));
+                /*Escreve uma mensagem de retorno para a tela de Login*/
+                ViewData[Constantes.ViewDataMensagemRetorno] = $"Usuário {pModel.Login} cadastrado com sucesso";
+                /*Redireciona para a página Index.cshtml da pasta Login*/
+                return RedirectToAction("Index","Login", new { pMensagemSucesso = ViewData[Constantes.ViewDataMensagemRetorno] });
             }
-            catch
+            catch (Exception ex)
             {
-                return StatusCode(Convert.ToInt32(HttpStatusCode.InternalServerError));
+                /*Escreve a mensagem no objeto de ViewData para ser exibida em tela.*/
+                ViewData[Constantes.ViewDataMensagemErro] = ex.Message;
+                ModelState.ClearValidationState(nameof(pModel.Login));
+                pModel.Login = string.Empty;
+                return View(pModel);
             }
         }
     }

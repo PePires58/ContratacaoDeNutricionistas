@@ -1,6 +1,6 @@
-﻿@model ContratacaoNutricionistasWEB.Models.Paciente.PacienteCadastroVM
+﻿@model ContratacaoNutricionistasWEB.Models.Nutricionista.NutricionistaCadastroVM
 
-<h2>Cadastro de Pacientes</h2>
+<h2>Cadastro de Nutricionistas</h2>
 
 <hr />
 
@@ -19,7 +19,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="Cadastro" asp-controller="Paciente">
+        <form asp-action="Cadastro" asp-controller="Nutricionista">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Nome" class="control-label"></label>
@@ -30,6 +30,12 @@
                 <label asp-for="CPF" class="control-label"></label>
                 <input asp-for="CPF" class="form-control" maxlength="14" />
                 <span asp-validation-for="CPF" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CRM" class="control-label"></label>
+                <input asp-for="CRM" class="form-control" maxlength="16" />
+                <span asp-validation-for="CRM" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Telefone" class="control-label"></label>

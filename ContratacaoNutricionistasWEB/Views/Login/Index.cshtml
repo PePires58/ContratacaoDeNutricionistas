@@ -1,0 +1,65 @@
+﻿@model ContratacaoNutricionistasWEB.Models.Usuario.UsuarioLoginVM
+
+<h2>Login</h2>
+
+<hr />
+
+@if (ViewData["MensagemErro"] != null)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12 alert alert-danger">
+                <span>
+                    @ViewData["MensagemErro"].ToString()
+                </span>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewData["MensagemRetorno"] != null)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12 alert alert-success">
+                <span>
+                    @ViewData["MensagemRetorno"].ToString()
+                </span>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Index" asp-controller="Usuario">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Login" class="control-label"></label>
+                <input asp-for="Login" class="form-control" maxlength="20" />
+                <span asp-validation-for="Login" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Senha" class="control-label"></label>
+                <input asp-for="Senha" class="form-control" maxlength="20" />
+                <span asp-validation-for="Senha" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input id="btnLogin" type="submit" value="Login" class="btn btn-primary form-control" />
+            </div>
+        </form>
+        <div class="col-md-12 text-center">
+            <label><b>Não possui cadastro?</b></label>
+        </div>
+        <div class="col-md-12 text-center">
+            <a asp-action="Cadastro" asp-controller="Paciente">Cadastrar como paciente</a>
+        </div>
+        <div class="col-md-12 text-center">
+            <a asp-action="Cadastro" asp-controller="Nutricionista">Cadastrar como nutricionista</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

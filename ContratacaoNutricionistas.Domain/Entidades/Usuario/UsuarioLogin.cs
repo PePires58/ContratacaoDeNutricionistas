@@ -1,4 +1,12 @@
-﻿using ContratacaoNutricionistas.Domain.Enumerados.Usuario;
+﻿#region Histórico de manutenção
+/*
+ * Programador: Pedro Henrique Pires
+ * Data: 30/05/2020
+ * Implementação: Implementação Inicial da classe de login do usuário
+ */
+#endregion
+
+using ContratacaoNutricionistas.Domain.Enumerados.Usuario;
 
 namespace ContratacaoNutricionistas.Domain.Entidades.Paciente.Usuario
 {
@@ -20,6 +28,6 @@ namespace ContratacaoNutricionistas.Domain.Entidades.Paciente.Usuario
         /// <summary>
         /// Tipo de usuário
         /// </summary>
-        public abstract TipoUsuarioEnum TipoUsuario { get; set; }
+        public abstract TipoUsuarioEnum TipoUsuario { get; }
     }
 }
