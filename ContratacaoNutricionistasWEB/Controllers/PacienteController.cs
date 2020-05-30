@@ -22,7 +22,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
     public class PacienteController : Controller
     {
 
-        #region Propriedades
+        #region Construtor
         /// <summary>
         /// Construtor
         /// </summary>
