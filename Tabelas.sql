@@ -2,17 +2,6 @@ Create Database ContratacaoDeNutricionistas
 
 Use ContratacaoDeNutricionistas
 
-/* 
-EXCLUIR TABELAS:
- 
-Drop Table usuario_tb
-Drop Table agenda_tb
-Drop Table endereco_tb
-Drop Table paciente_tb
-Drop Table nutricionista_tb
-
-*/
-
 --Tabela usuario
 Create Table usuario_tb (
 	id_usuario				INT Identity(1,1) Primary Key	Not Null, --Identificador de cada usuário(chave primaria).
@@ -54,8 +43,11 @@ Create Table agenda_tb (
 --Tabela do Contratante
 Create Table Contratos (
 	id_contrato				INT Identity(1,1) Primary Key	Not Null, -- Identificar o contratante
+	id_usuario				INT								Not Null, --Id da(o) nutricionista.
 	id_agenda				INT								Not Null, --Identificar agenda
 	Status					INT								Not Null, --Se a consulta foi realizada, cancelada...
+	Constraint FK_id_usuario_usuario_tb3 Foreign Key (id_usuario) References usuario_tb (id_usuario), --Chave estrangeira
+	Constraint FK_id_agenda_agenda_tb Foreign Key (id_agenda) References agenda_tb (id_agenda), --Chave estrangeira
 )
 
 
