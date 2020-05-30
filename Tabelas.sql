@@ -51,7 +51,12 @@ Create Table agenda_tb (
 	Constraint FK_id_endereco_endereco_tb Foreign Key (id_endereco) References endereco_tb (id_endereco) --Chave estrangeira
 )
 
-
+--Tabela do Contratante
+Create Table Contratos (
+	id_contrato				INT Identity(1,1) Primary Key	Not Null, -- Identificar o contratante
+	id_agenda				INT								Not Null, --Identificar agenda
+	Status					INT								Not Null, --Se a consulta foi realizada, cancelada...
+)
 
 
 
