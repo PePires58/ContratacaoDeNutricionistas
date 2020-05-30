@@ -17,7 +17,7 @@ Drop Table nutricionista_tb
 Create Table usuario_tb (
 	id_usuario				INT Identity(1,1) Primary Key	Not Null, --Identificador de cada usuário(chave primaria).
 	CPF						VARCHAR(14)						Not Null, --CPF do usuario.						 
-	CRM						INT Null						Null,	  --CRM do nutricionista.
+	CRN						INT Null						Null,	  --CRN do nutricionista.
 	Nome					VARCHAR(50)						Not Null, --Nome do usuário
 	Telefone				VARCHAR(12)						Not Null, --Telefone para contato.
 	tp_usuario				INT								Not Null, --0 - Paciente ou 1 - Nutricionista
@@ -29,7 +29,7 @@ Create Table usuario_tb (
 --Tabela endereço do Nutricionista
 Create Table endereco_tb (
 	id_endereco				INT Identity(1,1) Primary Key	Not Null, --Identificação do endereco(acho que não deveria ter)(chave primaria).
-	id_nutri				INT								Not Null, --Id da(o) nutricionista.
+	id_usuario				INT								Not Null, --Id da(o) usuário.
 	Rua						VARCHAR(100)					Not Null, --Nome da rua.
 	Complemento				VARCHAR(5)						Null,     --Se é casa, apto...
 	Numero					INT								Not Null, --Numero da casa, apto..
