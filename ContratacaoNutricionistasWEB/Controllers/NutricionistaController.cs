@@ -4,18 +4,18 @@
  * Data: 30/05/2020
  * Implementação: Implementação Inicial do controlador de nutricionista
  */
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 30/05/2020
+* Implementação: Implementação Inicial de método para alterar os dados do nutricionista
+*/
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ContratacaoNutricionistas.Domain.Entidades.Paciente.Usuario;
 using ContratacaoNutricionistas.Domain.Interfaces.Nutricionista;
 using ContratacaoNutricionistasWEB.Models.Nutricionista;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using ModulosHelper.Extensions;
 
 namespace ContratacaoNutricionistasWEB.Controllers
 {
@@ -42,25 +42,6 @@ namespace ContratacaoNutricionistasWEB.Controllers
         }
         #endregion
 
-        #region Constantes
-        /// <summary>
-        /// Lista de tipo de pessoa
-        /// </summary>
-        private List<SelectListItem> ListaTipoPessoa => new List<SelectListItem>()
-        {
-            new SelectListItem()
-            {
-                Text = ContratacaoNutricionistas.Domain.Enumerados.Usuario.TipoPessoaEnum.NaoDefinido.GetDescription(),
-                Value = ContratacaoNutricionistas.Domain.Enumerados.Usuario.TipoPessoaEnum.NaoDefinido.GetDefaultValue()
-            },
-            new SelectListItem()
-            {
-                Text = ContratacaoNutricionistas.Domain.Enumerados.Usuario.TipoPessoaEnum.Fisica.GetDescription(),
-                Value = ContratacaoNutricionistas.Domain.Enumerados.Usuario.TipoPessoaEnum.Fisica.GetDefaultValue()
-            }
-        };
-        #endregion
-
 
         #region Métodos
         /// <summary>
@@ -70,8 +51,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
         [HttpGet]
         public IActionResult Cadastro()
         {
-            /*Lista de tipo de pessoas, passada para montar o combo em tela*/
-            ViewData[Constantes.ViewDataListaTipoPessoa] = ListaTipoPessoa;
+
 
             return View(new NutricionistaCadastroVM());
         }
@@ -79,7 +59,6 @@ namespace ContratacaoNutricionistasWEB.Controllers
         [HttpPost]
         public IActionResult Cadastro(NutricionistaCadastroVM pModel)
         {
-            ViewData[Constantes.ViewDataListaTipoPessoa] = ListaTipoPessoa;
 
             try
             {
@@ -121,6 +100,57 @@ namespace ContratacaoNutricionistasWEB.Controllers
                 ViewData[Constantes.ViewDataMensagemErro] = ex.Message;
                 ModelState.ClearValidationState(nameof(pModel.Login));
                 pModel.Login = string.Empty;
+                return View(pModel);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult AlterarDados(int ID)
+        {
+            /*Buscar do banco*/
+            NutricionistaAlteracaoVM nutricionistaAlteracaoVM = new NutricionistaAlteracaoVM()
+            {
+                ID = 1,
+                Login = "Nutricionista",
+                CRM = "1234",
+                Nome = "Nutricionista",
+                Senha = "123",
+                SenhaConfirmacao = "123",
+                Telefone = "(011)4242-2517"
+            };
+
+            return View(nutricionistaAlteracaoVM);
+        }
+
+        /// <summary>
+        /// Altera os dados do nutricionista
+        /// </summary>
+        /// <param name="pModel">Modelo para alterar</param>
+        /// <returns>Retorna para a própria tela com mensagem de sucesso ou erro</returns>
+        [HttpPost]
+        public IActionResult AlterarDados(NutricionistaAlteracaoVM pModel)
+        {
+            try
+            {
+                ViewData[Constantes.ViewDataMensagemErro] = ViewData[Constantes.ViewDataMensagemRetorno] = null;
+                /*Verifica se o modelo é valido, de acordo com os atributos da classe passado no parâmetro*/
+                if (!ModelState.IsValid)
+                    return View(pModel);
+
+                /*Buscar senha e confirmação de senha*/
+
+                /*Verificar se o usuário preencheu a senha, se preencheu, substitui, se não, mantem a senha do banco*/
+
+                /*Alterar os dados*/
+
+                ViewData[Constantes.ViewDataMensagemRetorno] = "Dados do paciente alterado com sucesso";
+
+                /*Redireciona para a página Index.cshtml da pasta Login*/
+                return View(pModel);
+            }
+            catch (Exception ex)
+            {
+                ViewData[Constantes.ViewDataMensagemErro] = ex.Message;
                 return View(pModel);
             }
         }

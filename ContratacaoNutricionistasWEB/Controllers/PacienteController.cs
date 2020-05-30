@@ -4,15 +4,18 @@
  * Data: 30/05/2020
  * Implementação: Implementação Inicial do controlador de nutricionista
  */
+
+/*
+ * Programador: Pedro Henrique Pires
+ * Data: 30/05/2020
+ * Implementação: Implementação para alteração de nutricionista
+ */
 #endregion
 
 using ContratacaoNutricionistas.Domain.Interfaces.Paciente;
 using ContratacaoNutricionistasWEB.Models.Paciente;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using ModulosHelper.Extensions;
 using System;
-using System.Collections.Generic;
 
 namespace ContratacaoNutricionistasWEB.Controllers
 {
@@ -40,36 +43,13 @@ namespace ContratacaoNutricionistasWEB.Controllers
         private readonly IServicePaciente _ServicePaciente;
         #endregion
 
-        #region Constantes
-        
-
-        /// <summary>
-        /// Lista de tipo de pessoa
-        /// </summary>
-        private List<SelectListItem> ListaTipoPessoa => new List<SelectListItem>()
-        {
-            new SelectListItem()
-            {
-                Text = ContratacaoNutricionistas.Domain.Enumerados.Usuario.TipoPessoaEnum.NaoDefinido.GetDescription(),
-                Value = ContratacaoNutricionistas.Domain.Enumerados.Usuario.TipoPessoaEnum.NaoDefinido.GetDefaultValue()
-            },
-            new SelectListItem()
-            {
-                Text = ContratacaoNutricionistas.Domain.Enumerados.Usuario.TipoPessoaEnum.Fisica.GetDescription(),
-                Value = ContratacaoNutricionistas.Domain.Enumerados.Usuario.TipoPessoaEnum.Fisica.GetDefaultValue()
-            }
-        };
-        #endregion
-
         /// <summary>
         /// View para cadastro, retorna a view Cadastro.cshtml da pasta Paciente
         /// </summary>
         /// <returns>Cadastro.cshtml da pasta Paciente</returns>
+        [HttpGet]
         public IActionResult Cadastro()
         {
-            /*Utilizada para montar o combo de tipo de pessoa*/
-            ViewData[Constantes.ViewDataListaTipoPessoa] = ListaTipoPessoa;
-
             return View();
         }
 
@@ -81,8 +61,6 @@ namespace ContratacaoNutricionistasWEB.Controllers
         [HttpPost]
         public IActionResult Cadastro(PacienteCadastroVM pModel)
         {
-            ViewData[Constantes.ViewDataListaTipoPessoa] = ListaTipoPessoa;
-
             try
             {
                 ViewData[Constantes.ViewDataMensagemErro] = ViewData[Constantes.ViewDataMensagemRetorno] = null;
@@ -120,6 +98,61 @@ namespace ContratacaoNutricionistasWEB.Controllers
                 ViewData[Constantes.ViewDataMensagemErro] = ex.Message;
                 ModelState.ClearValidationState(nameof(pModel.Login));
                 pModel.Login = string.Empty;
+                return View(pModel);
+            }
+        }
+
+        /// <summary>
+        /// Método que altera os dados do paciente
+        /// </summary>
+        /// <param name="ID">ID do paciente</param>
+        /// <returns>Retorna a tela AlterarDados.cshtml da pasta Paciente</returns>
+        [HttpGet]
+        public IActionResult AlterarDados(int ID)
+        {
+            /*Buscar os dados do banco*/
+            PacienteAlteracaoVM pacienteAlteracaoVM = new PacienteAlteracaoVM()
+            {
+                ID = 1,
+                Login = "Pedro",
+                Telefone = "(011)4242-2517",
+                Nome = "Pedro Pires",
+                Senha = "123",
+                SenhaConfirmacao = "123"
+            };
+
+            return View(pacienteAlteracaoVM);
+        }
+
+        /// <summary>
+        /// Método que realiza a alteração dos dados do paciente
+        /// </summary>
+        /// <param name="pModel">Paciente a ser alterado</param>
+        /// <returns>Retorna para a mesma tela (AlterarDados.cshtml) com a mensagem de sucesso ou de erro.</returns>
+        [HttpPost]
+        public IActionResult AlterarDados(PacienteAlteracaoVM pModel)
+        {
+            try
+            {
+                ViewData[Constantes.ViewDataMensagemErro] = ViewData[Constantes.ViewDataMensagemRetorno] = null;
+                /*Verifica se o modelo é valido, de acordo com os atributos da classe passado no parâmetro*/
+                if (!ModelState.IsValid)
+                    return View(pModel);
+
+                /*Buscar senha e confirmação de senha*/
+
+                /*Verificar se o usuário preencheu a senha, se preencheu, substitui, se não, mantem a senha do banco*/
+
+                /*Alterar os dados*/
+
+                ViewData[Constantes.ViewDataMensagemRetorno] = "Dados do paciente alterado com sucesso";
+                
+                /*Redireciona para a página Index.cshtml da pasta Login*/
+                return View(pModel);
+            }
+            catch (Exception ex)
+            {
+                ViewData[Constantes.ViewDataMensagemErro] = ex.Message;
                 return View(pModel);
             }
         }
