@@ -13,17 +13,24 @@ using System;
 
 namespace ContratacaoNutricionistas.Domain.Entidades.Nutricionista
 {
-    public class NutricionistaCadastro : UsuarioCadastroAlteracao
+    public class NutricionistaAlteracao : UsuarioAlteracao
     {
-        public NutricionistaCadastro(string pNome, string pTelefone, string pCRM, string pLogin, string pSenha, CPF pCPF)
+        public NutricionistaAlteracao(int pID, string pNome, string pTelefone, string pCRM, string pLogin, string pSenha, CPF pCPF)
         {
-            ValidarDados(pNome, pCRM, pTelefone, pLogin, pSenha, pCPF);
+            ValidarDados(pID,pNome, pCRM, pTelefone, pLogin, pSenha, pCPF);
+            ID = pID;
             Nome = pNome;
             Telefone = pTelefone;
             Login = pLogin;
             Senha = pSenha;
             CpfObjeto = pCPF;
         }
+
+        /// <summary>
+        /// Id do usuário
+        /// </summary>
+        [Coluna(pNomeColuna:"ID_USUARIO",pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Integer)]
+        public override int ID { get; set; }
 
         /// <summary>
         /// Nome do nutricionista
@@ -34,7 +41,7 @@ namespace ContratacaoNutricionistas.Domain.Entidades.Nutricionista
         /// <summary>
         /// CRM do nutricionista
         /// </summary>
-        [Coluna(pNomeColuna:"CRM",pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Varchar, pTamanhoCampo:50)]
+        [Coluna(pNomeColuna: "CRM", pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Varchar, pTamanhoCampo: 50)]
         public string CRM { get; set; }
 
         /// <summary>
@@ -72,8 +79,12 @@ namespace ContratacaoNutricionistas.Domain.Entidades.Nutricionista
         /// </summary>
         public override CPF CpfObjeto { get; set; }
 
-        private void ValidarDados(string pNome,string pCRM, string pTelefone, string pLogin, string pSenha, CPF pCPF)
+        private void ValidarDados(int pID,string pNome, string pCRM, string pTelefone, string pLogin, string pSenha, CPF pCPF)
         {
+            if (pID == 0)
+                throw new ArgumentException($"O {nameof(ID)} é obrigatório.");
+            else if (pID < 0)
+                throw new ArgumentException("O valor do ID é inválido");
             if (!string.IsNullOrEmpty(pNome))
                 throw new ArgumentException($"O {nameof(Nome)} é obrigatório.");
             if (!string.IsNullOrEmpty(pTelefone))

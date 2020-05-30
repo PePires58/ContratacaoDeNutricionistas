@@ -4,12 +4,18 @@
  * Data: 30/05/2020
  * Implementação: Implementação Inicial da classe de CPF
  */
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 30/05/2020
+* Implementação: Ajuste no namespace.
+*/
 #endregion
 
 using System;
 using System.Text.RegularExpressions;
 
-namespace ContratacaoNutricionistas.Domain.Entidades.Paciente.Usuario
+namespace ContratacaoNutricionistas.Domain.Entidades.Usuario
 {
     public sealed class CPF
     {

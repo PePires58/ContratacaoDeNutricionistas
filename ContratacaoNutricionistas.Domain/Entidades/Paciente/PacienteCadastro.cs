@@ -4,9 +4,14 @@
  * Data: 30/05/2020
  * Implementação: Implementação Inicial da classe de cadastro de Paciente.
  */
+/*
+* Programador: Pedro Henrique Pires
+* Data: 30/05/2020
+* Implementação: Ajustando referências.
+*/
 #endregion
 
-using ContratacaoNutricionistas.Domain.Entidades.Paciente.Usuario;
+using ContratacaoNutricionistas.Domain.Entidades.Usuario;
 using ContratacaoNutricionistas.Domain.Enumerados.Usuario;
 using DataBaseHelper.Atributos;
 using System;

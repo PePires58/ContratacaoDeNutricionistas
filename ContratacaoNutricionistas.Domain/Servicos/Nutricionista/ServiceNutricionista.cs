@@ -1,8 +1,13 @@
-﻿using ContratacaoNutricionistas.Domain.Entidades.Nutricionista;
+﻿#region Histórico de manutenção
+/*
+ * Programador: Pedro Henrique Pires
+ * Data: 30/05/2020
+ * Implementação: Implementação Inicial da classe de serviço de nutricionista
+ */
+#endregion
+using ContratacaoNutricionistas.Domain.Entidades.Nutricionista;
 using ContratacaoNutricionistas.Domain.Interfaces.Nutricionista;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ContratacaoNutricionistas.Domain.Servicos.Nutricionista
 {
@@ -12,7 +17,7 @@ namespace ContratacaoNutricionistas.Domain.Servicos.Nutricionista
         /// <summary>
         /// Interface que faz os comandos com o banco de dados para nutricionista
         /// </summary>
-        private readonly INutricionistaRepository _PacienteRepository;
+        private readonly INutricionistaRepository _NutricionistaRepository;
         #endregion
 
         #region Construtor
@@ -22,7 +27,7 @@ namespace ContratacaoNutricionistas.Domain.Servicos.Nutricionista
         /// <param name="pPacienteRepository">Interface que faz os comandos com o banco de dados para nutricionista</param>
         public ServiceNutricionista(INutricionistaRepository pPacienteRepository)
         {
-            _PacienteRepository = pPacienteRepository;
+            _NutricionistaRepository = pPacienteRepository;
         }
         #endregion
 
@@ -34,7 +39,33 @@ namespace ContratacaoNutricionistas.Domain.Servicos.Nutricionista
         /// <param name="pNutricionistaCadastro">Nutricionista a ser cadastrado</param>
         public void CadastrarNutricionista(NutricionistaCadastro pNutricionistaCadastro)
         {
-            _PacienteRepository.CadastrarNutricionista(pNutricionistaCadastro);
+            _NutricionistaRepository.CadastrarNutricionista(pNutricionistaCadastro);
+        }
+
+        /// <summary>
+        /// Consulta o nutricionista pelo ID
+        /// </summary>
+        /// <param name="pID">ID</param>
+        /// <returns>Nutricionista ou null</returns>
+        public NutricionistaAlteracao ConsultarNutricionistaPorID(int pID)
+        {
+            if (pID == 0)
+                throw new ArgumentException("O ID é obrigatório.");
+            else if (pID < 0)
+                throw new ArgumentException("O valor do ID é inválido");
+
+            return _NutricionistaRepository.ConsultarNutricionistaPorID(pID);
+        }
+
+        /// <summary>
+        /// Altera os dados do nutricionista
+        /// </summary>
+        /// <param name="pNutricionistaAlteracao">Nutricionista para ser alterado</param>
+        public void AlterarDadosNutricionista(NutricionistaAlteracao pNutricionistaAlteracao)
+        {
+            if (pNutricionistaAlteracao == null)
+                throw new ArgumentException("O nutricionista deve ser preenchido");
+            _NutricionistaRepository.AlterarDadosNutricionista(pNutricionistaAlteracao);
         }
         #endregion
 

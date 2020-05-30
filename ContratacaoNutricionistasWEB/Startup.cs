@@ -4,14 +4,23 @@
  * Data: 30/05/2020
  * Implementação: Implementação Inicial da classe de configuração do site
  */
+/*
+* Programador: Pedro Henrique Pires
+* Data: 30/05/2020
+* Implementação: Inclusão de classes de serviço e repositório de nutricionista.
+*/
+
 #endregion
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ContratacaoNutricionistas.Domain.Interfaces.Nutricionista;
 using ContratacaoNutricionistas.Domain.Interfaces.Paciente;
+using ContratacaoNutricionistas.Domain.Repository.Nutricionista;
 using ContratacaoNutricionistas.Domain.Repository.Paciente;
+using ContratacaoNutricionistas.Domain.Servicos.Nutricionista;
 using ContratacaoNutricionistas.Domain.Servicos.Paciente;
 using DataBaseHelper;
 using DataBaseHelper.Interfaces;
@@ -52,6 +61,8 @@ namespace ContratacaoNutricionistasWEB
             services.AddSingleton<IUnitOfWork>(new UnitOfWork(Configuration.GetConnectionString("DefaultConnection")));
             services.AddSingleton<IServicePaciente, ServicePaciente>();
             services.AddSingleton<IPacienteRepository, PacienteRepository>();
+            services.AddSingleton<IServiceNutricionista, ServiceNutricionista>();
+            services.AddSingleton<INutricionistaRepository, NutricionistaRepository>();
             #endregion
         }
 

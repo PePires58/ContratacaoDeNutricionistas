@@ -10,9 +10,16 @@
 * Data: 30/05/2020
 * Implementação: Implementação Inicial de método para alterar os dados do nutricionista
 */
+
+/*
+ * Programador: Pedro Henrique Pires
+ * Data: 30/05/2020
+ * Implementação: Implementação de métodos de alterar os dados do nutricionista.
+ */
 #endregion
 
 using System;
+using ContratacaoNutricionistas.Domain.Entidades.Nutricionista;
 using ContratacaoNutricionistas.Domain.Interfaces.Nutricionista;
 using ContratacaoNutricionistasWEB.Models.Nutricionista;
 using Microsoft.AspNetCore.Mvc;
@@ -51,15 +58,12 @@ namespace ContratacaoNutricionistasWEB.Controllers
         [HttpGet]
         public IActionResult Cadastro()
         {
-
-
             return View(new NutricionistaCadastroVM());
         }
 
         [HttpPost]
         public IActionResult Cadastro(NutricionistaCadastroVM pModel)
         {
-
             try
             {
                 ViewData[Constantes.ViewDataMensagemErro] = ViewData[Constantes.ViewDataMensagemRetorno] = null;
@@ -107,7 +111,6 @@ namespace ContratacaoNutricionistasWEB.Controllers
         [HttpGet]
         public IActionResult AlterarDados(int ID)
         {
-            /*Buscar do banco*/
             NutricionistaAlteracaoVM nutricionistaAlteracaoVM = new NutricionistaAlteracaoVM()
             {
                 ID = 1,
@@ -118,6 +121,12 @@ namespace ContratacaoNutricionistasWEB.Controllers
                 SenhaConfirmacao = "123",
                 Telefone = "(011)4242-2517"
             };
+
+            /*Buscar do banco*/
+            //_ServiceNutricionista.ConsultarNutricionistaPorID(ID);
+
+            if (nutricionistaAlteracaoVM == null)
+                return NoContent();
 
             return View(nutricionistaAlteracaoVM);
         }
@@ -138,12 +147,25 @@ namespace ContratacaoNutricionistasWEB.Controllers
                     return View(pModel);
 
                 /*Buscar senha e confirmação de senha*/
+                //NutricionistaAlteracao nutricionistaAlteracao = _ServiceNutricionista.ConsultarNutricionistaPorID(pModel.ID);
 
-                /*Verificar se o usuário preencheu a senha, se preencheu, substitui, se não, mantem a senha do banco*/
+                //if (nutricionistaAlteracao == null)
+                //    return NoContent();
+                //if (!nutricionistaAlteracao.Senha.Equals(pModel.Senha))
+                //    throw new Exception("A senha para alteração dos dados é inválida");
 
-                /*Alterar os dados*/
+                ///*Alterar os dados*/
+                //_ServiceNutricionista.AlterarDadosNutricionista(new NutricionistaAlteracao(
+                //    pModel.ID,
+                //    pModel.Nome,
+                //    pModel.Telefone,
+                //    pModel.CRM,
+                //    pModel.Login,
+                //    pModel.Senha,
+                //    nutricionistaAlteracao.CpfObjeto
+                //    ));
 
-                ViewData[Constantes.ViewDataMensagemRetorno] = "Dados do paciente alterado com sucesso";
+                ViewData[Constantes.ViewDataMensagemRetorno] = "Dados do nutricionista alterados com sucesso";
 
                 /*Redireciona para a página Index.cshtml da pasta Login*/
                 return View(pModel);
@@ -151,6 +173,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
             catch (Exception ex)
             {
                 ViewData[Constantes.ViewDataMensagemErro] = ex.Message;
+                pModel.Senha = pModel.SenhaConfirmacao = string.Empty;
                 return View(pModel);
             }
         }
