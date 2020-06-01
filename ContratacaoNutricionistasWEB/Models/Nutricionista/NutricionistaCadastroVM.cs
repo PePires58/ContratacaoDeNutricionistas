@@ -24,8 +24,8 @@ namespace ContratacaoNutricionistasWEB.Models.Nutricionista
         /// <summary>
         /// CRM do nutricionista
         /// </summary>
-        [Display(Name = "CRM", Prompt = "Ex.: 123123123")]
-        [Required(ErrorMessage = "O número do CRM é obrigatório")]
+        [Display(Name = "CRN", Prompt = "Ex.: 123123123")]
+        [Required(ErrorMessage = "O número do CRN é obrigatório")]
         [MaxLength(15, ErrorMessage = "O tamanho máximo do campo CRM é 15 caracteres")]
         public string CRM { get; set; }
     }

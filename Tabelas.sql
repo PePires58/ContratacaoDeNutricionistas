@@ -6,10 +6,9 @@ Use ContratacaoDeNutricionistas
 EXCLUIR TABELAS:
  
 Drop Table usuario_tb
-Drop Table agenda_tb
 Drop Table endereco_tb
-Drop Table paciente_tb
-Drop Table nutricionista_tb
+Drop Table agenda_tb
+Drop Table contrato_tb
 
 */
 
@@ -17,7 +16,7 @@ Drop Table nutricionista_tb
 Create Table usuario_tb (
 	id_usuario				INT Identity(1,1) Primary Key	Not Null, --Identificador de cada usuário(chave primaria).
 	CPF						VARCHAR(14)						Not Null, --CPF do usuario.						 
-	CRM						INT Null						Null,	  --CRM do nutricionista.
+	CRN						INT Null						Null,	  --CRN do nutricionista.
 	Nome					VARCHAR(50)						Not Null, --Nome do usuário
 	Telefone				VARCHAR(12)						Not Null, --Telefone para contato.
 	tp_usuario				INT								Not Null, --0 - Paciente ou 1 - Nutricionista
@@ -29,7 +28,7 @@ Create Table usuario_tb (
 --Tabela endereço do Nutricionista
 Create Table endereco_tb (
 	id_endereco				INT Identity(1,1) Primary Key	Not Null, --Identificação do endereco(acho que não deveria ter)(chave primaria).
-	id_nutri				INT								Not Null, --Id da(o) nutricionista.
+	id_usuario				INT								Not Null, --Id da(o) usuário.
 	Rua						VARCHAR(100)					Not Null, --Nome da rua.
 	Complemento				VARCHAR(5)						Null,     --Se é casa, apto...
 	Numero					INT								Not Null, --Numero da casa, apto..
@@ -51,7 +50,15 @@ Create Table agenda_tb (
 	Constraint FK_id_endereco_endereco_tb Foreign Key (id_endereco) References endereco_tb (id_endereco) --Chave estrangeira
 )
 
-
+--Tabela do Contratante
+Create Table Contratos (
+	id_contrato				INT Identity(1,1) Primary Key	Not Null, -- Identificar o contratante
+	id_usuario				INT								Not Null, --Id da(o) nutricionista.
+	id_agenda				INT								Not Null, --Identificar agenda
+	Status					INT								Not Null, --Se a consulta foi realizada, cancelada...
+	Constraint FK_id_usuario_usuario_tb3 Foreign Key (id_usuario) References usuario_tb (id_usuario), --Chave estrangeira
+	Constraint FK_id_agenda_agenda_tb Foreign Key (id_agenda) References agenda_tb (id_agenda), --Chave estrangeira
+)
 
 
 
