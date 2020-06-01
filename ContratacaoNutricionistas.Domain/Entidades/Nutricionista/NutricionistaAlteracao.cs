@@ -4,6 +4,12 @@
  * Data: 30/05/2020
  * Implementação: Implementação Inicial da classe de alteração de nutricionista.
  */
+
+ /*
+ * Programador: Pedro Henrique Pires
+ * Data: 01/06/2020
+ * Implementação: Ajuste dos atributos para realizar insert correto.
+ */
 #endregion
 using ContratacaoNutricionistas.Domain.Entidades.Paciente.Usuario;
 using ContratacaoNutricionistas.Domain.Entidades.Usuario;
@@ -13,16 +19,18 @@ using System;
 
 namespace ContratacaoNutricionistas.Domain.Entidades.Nutricionista
 {
+    [Tabela(pNomeTabela: "USUARIO_TB")]
     public class NutricionistaAlteracao : UsuarioAlteracao
     {
-        public NutricionistaAlteracao(int pID, string pNome, string pTelefone, string pCRM, string pLogin, string pSenha, CPF pCPF)
+        public NutricionistaAlteracao(int pID, string pNome, string pTelefone, int pCRN, string pLogin, string pSenha, CPF pCPF)
         {
-            ValidarDados(pID,pNome, pCRM, pTelefone, pLogin, pSenha, pCPF);
+            ValidarDados(pID,pNome, pCRN, pTelefone, pLogin, pSenha, pCPF);
             ID = pID;
             Nome = pNome;
             Telefone = pTelefone;
             Login = pLogin;
             Senha = pSenha;
+            CRN = pCRN;
             CpfObjeto = pCPF;
         }
 
@@ -39,15 +47,15 @@ namespace ContratacaoNutricionistas.Domain.Entidades.Nutricionista
         public override string Nome { get; set; }
 
         /// <summary>
-        /// CRM do nutricionista
+        /// CRN do nutricionista
         /// </summary>
-        [Coluna(pNomeColuna: "CRM", pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Varchar, pTamanhoCampo: 50)]
-        public string CRM { get; set; }
+        [Coluna(pNomeColuna: "CRN", pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Integer)]
+        public int CRN { get; set; }
 
         /// <summary>
         /// Telefone
         /// </summary>
-        [Coluna(pNomeColuna: "TELEFONE", pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Varchar, pTamanhoCampo: 12)]
+        [Coluna(pNomeColuna: "TELEFONE", pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Varchar, pTamanhoCampo: 15)]
         public override string Telefone { get; set; }
 
         /// <summary>
@@ -59,19 +67,19 @@ namespace ContratacaoNutricionistas.Domain.Entidades.Nutricionista
         /// <summary>
         /// Senha
         /// </summary>
-        [Coluna(pNomeColuna: "SENHA", pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Varchar, pTamanhoCampo: 20)]
+        [Coluna(pNomeColuna: "SENHA", pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Varchar, pTamanhoCampo: 8)]
         public override string Senha { get; set; }
 
         /// <summary>
         /// CPF ou CNPJ
         /// </summary>
         [Coluna(pNomeColuna: "CPF", pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Varchar, pTamanhoCampo: 18)]
-        private string CPF { get { return CpfObjeto.Numero; } set { CpfObjeto.Numero = value; } }
+        public string CPF { get { return CpfObjeto.Numero; } set { CpfObjeto.Numero = value; } }
 
         /// <summary>
         /// Tipo de usuário
         /// </summary>
-        [Coluna(pNomeColuna: "TP_USUARIO", pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Varchar, pTamanhoCampo: 20)]
+        [Coluna(pNomeColuna: "TP_USUARIO", pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Enum)]
         public override TipoUsuarioEnum TipoUsuario => TipoUsuarioEnum.Nutricionista;
 
         /// <summary>
@@ -79,19 +87,23 @@ namespace ContratacaoNutricionistas.Domain.Entidades.Nutricionista
         /// </summary>
         public override CPF CpfObjeto { get; set; }
 
-        private void ValidarDados(int pID,string pNome, string pCRM, string pTelefone, string pLogin, string pSenha, CPF pCPF)
+        private void ValidarDados(int pID,string pNome, int pCRN, string pTelefone, string pLogin, string pSenha, CPF pCPF)
         {
             if (pID == 0)
                 throw new ArgumentException($"O {nameof(ID)} é obrigatório.");
             else if (pID < 0)
                 throw new ArgumentException("O valor do ID é inválido");
-            if (!string.IsNullOrEmpty(pNome))
+            if (pCRN == 0)
+                throw new ArgumentException($"O {nameof(CRN)} é obrigatório.");
+            else if (pCRN.ToString().Length > 5)
+                throw new ArgumentException($"O {nameof(CRN)} deve ter no máximo 5 caracteres");
+            if (string.IsNullOrEmpty(pNome))
                 throw new ArgumentException($"O {nameof(Nome)} é obrigatório.");
-            if (!string.IsNullOrEmpty(pTelefone))
+            if (string.IsNullOrEmpty(pTelefone))
                 throw new ArgumentException($"O {nameof(Telefone)} é obrigatório.");
-            if (!string.IsNullOrEmpty(pLogin))
+            if (string.IsNullOrEmpty(pLogin))
                 throw new ArgumentException($"O {nameof(Login)} é obrigatório.");
-            if (!string.IsNullOrEmpty(pSenha))
+            if (string.IsNullOrEmpty(pSenha))
                 throw new ArgumentException($"A {nameof(Senha)} é obrigatória.");
             if (pCPF == null)
                 throw new ArgumentException($"O {nameof(CPF)} é obrigatório.");

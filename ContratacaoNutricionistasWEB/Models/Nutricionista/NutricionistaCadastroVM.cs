@@ -1,9 +1,16 @@
-﻿#region MyRegion
+﻿#region Histórico de manutenção
 /*
  * Programador: Pedro Henrique Pires
  * Data: 30/05/2020
  * Implementação: Implementação Inicial da classe de cadastro de nutricionista para a tela.
  */
+
+   /*
+ * Programador: Pedro Henrique Pires
+ * Data: 01/06/2020
+ * Implementação: CRM -> CRN.
+ */
+
 #endregion
 using System.ComponentModel.DataAnnotations;
 
@@ -22,11 +29,11 @@ namespace ContratacaoNutricionistasWEB.Models.Nutricionista
         #endregion
 
         /// <summary>
-        /// CRM do nutricionista
+        /// CRN do nutricionista
         /// </summary>
-        [Display(Name = "CRM", Prompt = "Ex.: 123123123")]
-        [Required(ErrorMessage = "O número do CRM é obrigatório")]
-        [MaxLength(15, ErrorMessage = "O tamanho máximo do campo CRM é 15 caracteres")]
-        public string CRM { get; set; }
+        [Display(Name = "CRN", Prompt = "Ex.: 12345")]
+        [Required(ErrorMessage = "O número do CRN é obrigatório")]
+        [MaxLength(5, ErrorMessage = "O tamanho máximo do campo CRN é 5 caracteres")]
+        public string CRN { get; set; }
     }
 }

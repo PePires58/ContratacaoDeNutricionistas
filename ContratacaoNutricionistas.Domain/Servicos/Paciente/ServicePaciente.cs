@@ -4,10 +4,17 @@
  * Data: 30/05/2020
  * Implementação: Implementação Inicial da classe de serviço de paciente
  */
+
+  /*
+ * Programador: Pedro Henrique Pires
+ * Data: 01/06/2020
+ * Implementação: Implementação dos métodos de alteração e consulta.
+ */
 #endregion
 
 using ContratacaoNutricionistas.Domain.Entidades.Paciente;
 using ContratacaoNutricionistas.Domain.Interfaces.Paciente;
+using ContratacaoNutricionistas.Domain.Interfaces.Usuario;
 using DataBaseHelper.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -25,6 +32,11 @@ namespace ContratacaoNutricionistas.Domain.Servicos.Paciente
         /// Interface que faz os comandos com o banco de dados para paciente
         /// </summary>
         private readonly IPacienteRepository _PacienteRepository;
+
+        /// <summary>
+        /// Interface dos serviços do paciente
+        /// </summary>
+        private readonly IServiceUsuario _ServiceUsuario;
         #endregion
 
         #region Construtor
@@ -32,10 +44,12 @@ namespace ContratacaoNutricionistas.Domain.Servicos.Paciente
         /// Construtor
         /// </summary>
         /// <param name="pPacienteRepository">Interface que faz os comandos com o banco de dados para paciente</param>
-        public ServicePaciente(IPacienteRepository pPacienteRepository)
+        public ServicePaciente(IPacienteRepository pPacienteRepository, IServiceUsuario pServiceUsuario)
         {
             _PacienteRepository = pPacienteRepository;
+            _ServiceUsuario = pServiceUsuario;
         }
+
         #endregion
 
         #region Métodos
@@ -46,22 +60,38 @@ namespace ContratacaoNutricionistas.Domain.Servicos.Paciente
         /// <param name="pModel"></param>
         public void Cadastra(PacienteCadastro pModel)
         {
-            if (!LoginExistente(pModel.Login))
+            if (!_ServiceUsuario.LoginExiste(pModel.Login))
                 _PacienteRepository.CadastrarPaciente(pModel);
             else
                 throw new Exception($"O login: { pModel }, já existe!");
         }
 
-        /*Esse método será migrado para um serviço específico. 
-         * Pois o login é tanto para paciente quanto para nutricionista*/
-        public bool LoginExistente(string pLogin)
+        /// <summary>
+        /// Método que consulta um paciente pelo ID
+        /// </summary>
+        /// <param name="pID">ID do paciente</param>
+        /// <returns>Paciente para a alteração ou NULL</returns>
+        public PacienteAlteracao ConsultarPacientePorID(int pID)
         {
-            if (string.IsNullOrEmpty(pLogin))
-                throw new ArgumentException(message: "O login é obrigatório para verificar a existência");
+            if (pID == 0)
+                throw new ArgumentException("O ID do paciente é obrigatório");
+            else if (pID < 0)
+                throw new ArgumentException("Valor do ID é inválido");
 
-            return _PacienteRepository.LoginExiste(pLogin);
+            return _PacienteRepository.ConsultarPacientePorID(pID);
         }
 
+
+        /// <summary>
+        /// Altera os dados do paciente
+        /// </summary>
+        /// <param name="pacienteAlteracao">Paciente a ser alterado</param>
+        public void AlterarDados(PacienteAlteracao pacienteAlteracao)
+        {
+            if (pacienteAlteracao == null)
+                throw new ArgumentException("Os dados do paciente devem ser preenchidos");
+            _PacienteRepository.AlterarDados(pacienteAlteracao);
+        }
 
         #endregion
 

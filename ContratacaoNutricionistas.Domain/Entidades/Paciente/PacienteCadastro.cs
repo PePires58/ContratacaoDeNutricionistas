@@ -9,6 +9,12 @@
 * Data: 30/05/2020
 * Implementação: Ajustando referências.
 */
+
+ /*
+ * Programador: Pedro Henrique Pires
+ * Data: 01/06/2020
+ * Implementação: Ajuste dos atributos para realizar insert correto.
+ */
 #endregion
 
 using ContratacaoNutricionistas.Domain.Entidades.Usuario;
@@ -21,7 +27,7 @@ namespace ContratacaoNutricionistas.Domain.Entidades.Paciente
     /// <summary>
     /// Nome da tabela de cadastro de paciente
     /// </summary>
-    [Tabela(pNomeTabela:"PACIENTE_TB", pTemporaria:false)]
+    [Tabela(pNomeTabela: "USUARIO_TB")]
     public class PacienteCadastro : Usuario.UsuarioCadastroAlteracao
     {
         public PacienteCadastro(string pNome, string pTelefone, string pLogin, string pSenha, CPF pCPF)
@@ -43,7 +49,7 @@ namespace ContratacaoNutricionistas.Domain.Entidades.Paciente
         /// <summary>
         /// Telefone
         /// </summary>
-        [Coluna(pNomeColuna: "TELEFONE", pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Varchar, pTamanhoCampo: 12)]
+        [Coluna(pNomeColuna: "TELEFONE", pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Varchar, pTamanhoCampo: 15)]
         public override string Telefone { get; set; }
 
         /// <summary>
@@ -55,19 +61,19 @@ namespace ContratacaoNutricionistas.Domain.Entidades.Paciente
         /// <summary>
         /// Senha
         /// </summary>
-        [Coluna(pNomeColuna: "SENHA", pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Varchar, pTamanhoCampo: 20)]
+        [Coluna(pNomeColuna: "SENHA", pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Varchar, pTamanhoCampo: 8)]
         public override string Senha { get; set; }
 
         /// <summary>
         /// CPF ou CNPJ
         /// </summary>
-        [Coluna(pNomeColuna:"CPF", pTipoDadosBanco:DataBaseHelper.Enumerados.TipoDadosBanco.Varchar, pTamanhoCampo:18)]
-        private string CPF { get { return CpfObjeto.Numero; } set { CpfObjeto.Numero = value; } }
+        [Coluna(pNomeColuna:"CPF", pTipoDadosBanco:DataBaseHelper.Enumerados.TipoDadosBanco.Varchar, pTamanhoCampo:14)]
+        public string CPF { get { return CpfObjeto.Numero; } set { CpfObjeto.Numero = value; } }
 
         /// <summary>
         /// Tipo de usuário
         /// </summary>
-        [Coluna(pNomeColuna: "TP_USUARIO", pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Varchar, pTamanhoCampo: 20)]
+        [Coluna(pNomeColuna: "TP_USUARIO", pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Enum)]
         public override TipoUsuarioEnum TipoUsuario => TipoUsuarioEnum.Paciente;
 
         /// <summary>
@@ -77,13 +83,13 @@ namespace ContratacaoNutricionistas.Domain.Entidades.Paciente
 
         private void ValidarDados(string pNome, string pTelefone, string pLogin, string pSenha, CPF pCPF)
         {
-            if (!string.IsNullOrEmpty(pNome))
+            if (string.IsNullOrEmpty(pNome))
                 throw new ArgumentException($"O {nameof(Nome)} é obrigatório.");
-            if (!string.IsNullOrEmpty(pTelefone))
+            if (string.IsNullOrEmpty(pTelefone))
                 throw new ArgumentException($"O {nameof(Telefone)} é obrigatório.");
-            if (!string.IsNullOrEmpty(pLogin))
+            if (string.IsNullOrEmpty(pLogin))
                 throw new ArgumentException($"O {nameof(Login)} é obrigatório.");
-            if (!string.IsNullOrEmpty(pSenha))
+            if (string.IsNullOrEmpty(pSenha))
                 throw new ArgumentException($"A {nameof(Senha)} é obrigatória.");
             if (pCPF == null)
                 throw new ArgumentException($"O {nameof(CPF)} é obrigatório.");

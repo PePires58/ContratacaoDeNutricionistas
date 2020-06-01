@@ -1,30 +1,25 @@
 ﻿#region Histórico de manutenção
-/*
- * Programador: Pedro Henrique Pires
- * Data: 30/05/2020
- * Implementação: Implementação Inicial da classe de alteração de nutricionista.
- */
-
-  /*
+ /*
  * Programador: Pedro Henrique Pires
  * Data: 01/06/2020
- * Implementação: Ajuste dos atributos para realizar insert correto.
+ * Implementação: Implementação inicial.
  */
 #endregion
-using ContratacaoNutricionistas.Domain.Entidades.Paciente.Usuario;
 using ContratacaoNutricionistas.Domain.Entidades.Usuario;
 using ContratacaoNutricionistas.Domain.Enumerados.Usuario;
 using DataBaseHelper.Atributos;
 using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace ContratacaoNutricionistas.Domain.Entidades.Nutricionista
+namespace ContratacaoNutricionistas.Domain.Entidades.Paciente
 {
     [Tabela(pNomeTabela: "USUARIO_TB")]
-    public class NutricionistaCadastro : UsuarioCadastroAlteracao
+    public class PacienteAlteracao : Usuario.UsuarioAlteracao
     {
-        public NutricionistaCadastro(string pNome, string pTelefone, int pCRN, string pLogin, string pSenha, CPF pCPF)
+        public PacienteAlteracao(int pID, string pNome, string pTelefone, string pLogin, string pSenha, CPF pCPF)
         {
-            ValidarDados(pNome, pCRN, pTelefone, pLogin, pSenha, pCPF);
+            ValidarDados(pID, pNome, pTelefone, pLogin, pSenha, pCPF);
             Nome = pNome;
             Telefone = pTelefone;
             Login = pLogin;
@@ -33,16 +28,16 @@ namespace ContratacaoNutricionistas.Domain.Entidades.Nutricionista
         }
 
         /// <summary>
-        /// Nome do nutricionista
+        /// ID do paciente
+        /// </summary>
+        [Coluna(pNomeColuna: "ID_USUARIO", pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Integer)]
+        public override int ID { get; set; }
+
+        /// <summary>
+        /// Nome do paciente
         /// </summary>
         [Coluna(pNomeColuna: "NOME", pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Varchar, pTamanhoCampo: 50)]
         public override string Nome { get; set; }
-
-        /// <summary>
-        /// CRN do nutricionista
-        /// </summary>
-        [Coluna(pNomeColuna:"CRN",pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Varchar, pTamanhoCampo:50)]
-        public string CRN { get; set; }
 
         /// <summary>
         /// Telefone
@@ -72,15 +67,19 @@ namespace ContratacaoNutricionistas.Domain.Entidades.Nutricionista
         /// Tipo de usuário
         /// </summary>
         [Coluna(pNomeColuna: "TP_USUARIO", pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Enum)]
-        public override TipoUsuarioEnum TipoUsuario => TipoUsuarioEnum.Nutricionista;
+        public override TipoUsuarioEnum TipoUsuario => TipoUsuarioEnum.Paciente;
 
         /// <summary>
         /// Objeto de CPF
         /// </summary>
         public override CPF CpfObjeto { get; set; }
 
-        private void ValidarDados(string pNome,int pCRN, string pTelefone, string pLogin, string pSenha, CPF pCPF)
+        private void ValidarDados(int pID,string pNome, string pTelefone, string pLogin, string pSenha, CPF pCPF)
         {
+            if (pID == 0)
+                throw new ArgumentException($"O {nameof(ID)} é obrigatório.");
+            else if (pID < 0)
+                throw new ArgumentException("O valor do ID é inválido");
             if (string.IsNullOrEmpty(pNome))
                 throw new ArgumentException($"O {nameof(Nome)} é obrigatório.");
             if (string.IsNullOrEmpty(pTelefone))

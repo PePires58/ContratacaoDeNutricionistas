@@ -4,6 +4,12 @@
  * Data: 30/05/2020
  * Implementação: Implementação Inicial da Interface que faz os serviços para o Paciente
  */
+
+  /*
+ * Programador: Pedro Henrique Pires
+ * Data: 01/06/2020
+ * Implementação: Inclusão de métodos de alteração e consulta.
+ */
 #endregion
 
 using ContratacaoNutricionistas.Domain.Entidades.Paciente;
@@ -22,10 +28,16 @@ namespace ContratacaoNutricionistas.Domain.Interfaces.Paciente
         void Cadastra(PacienteCadastro pModel);
 
         /// <summary>
-        /// Verifica se o login existe
+        /// Retorna um paciente para alteração pelo ID
         /// </summary>
-        /// <param name="pLogin">Login existe</param>
-        /// <returns></returns>
-        bool LoginExistente(string pLogin);
+        /// <param name="pID">ID do paciente</param>
+        /// <returns>Paciente ou NULL</returns>
+        PacienteAlteracao ConsultarPacientePorID(int pID);
+
+        /// <summary>
+        /// Altera os dados do paciente
+        /// </summary>
+        /// <param name="pacienteAlteracao">Paciente a ser alterado</param>
+        void AlterarDados(PacienteAlteracao pacienteAlteracao);
     }
 }

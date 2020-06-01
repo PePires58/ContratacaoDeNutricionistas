@@ -10,6 +10,12 @@
 * Data: 30/05/2020
 * Implementação: Implementação de métodos de alteração e consulta.
 */
+
+ /*
+ * Programador: Pedro Henrique Pires
+ * Data: 01/06/2020
+ * Implementação: Ajuste nos métodos de alteração e consulta.
+ */
 #endregion
 
 
@@ -68,37 +74,52 @@ namespace ContratacaoNutricionistas.Domain.Repository.Nutricionista
 
             StringBuilder stringBuilder = new StringBuilder();
 
-            /*Montar query com o stringbuilder*/
-            //stringBuilder.AppendLine("SELECT...");
+            stringBuilder.AppendLine("DECLARE @ID INT");
+            stringBuilder.AppendLine($"SET @ID = {pID}");
+            stringBuilder.AppendLine("SELECT");
+            stringBuilder.AppendLine("  TB.ID_USUARIO,");
+            stringBuilder.AppendLine("  TB.CPF,");
+            stringBuilder.AppendLine("  TB.NOME,");
+            stringBuilder.AppendLine("  TB.CRN,");
+            stringBuilder.AppendLine("  TB.TELEFONE,");
+            stringBuilder.AppendLine("  TB.LOGIN,");
+            stringBuilder.AppendLine("  TB.SENHA");
+            stringBuilder.AppendLine("FROM USUARIO_TB TB WITH(NOLOCK)");
+            stringBuilder.AppendLine("WHERE TB.ID_USUARIO = @ID");
 
             DataSet ds = _UnitOfWork.Consulta(stringBuilder.ToString());
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
-                int ID = 0;
+                int ID = 0, CRN = 0;
                 string Nome = string.Empty,
-                    CRM = string.Empty,
                     Telefone = string.Empty,
-                    Login = string.Empty, 
-                    Senha = string.Empty;
-                Entidades.Usuario.CPF CpfObjeto = null;
+                    Login = string.Empty,
+                    Senha = string.Empty,
+                    CPF = string.Empty;
 
                 if (ds.Tables[0].Rows[0]["ID_USUARIO"] != DBNull.Value)
-                    ID = Convert.ToInt32(ds.Tables[0].Rows[0]["ID_USUARIO"].ToString());
+                    ID = Convert.ToInt32(ds.Tables[0].Rows[0]["ID_USUARIO"]);
+                if (ds.Tables[0].Rows[0]["CRN"] != DBNull.Value)
+                    CRN = Convert.ToInt32(ds.Tables[0].Rows[0]["CRN"]);
                 if (ds.Tables[0].Rows[0]["CPF"] != DBNull.Value)
-                {
-                    CpfObjeto = new Entidades.Usuario.CPF(ds.Tables[0].Rows[0]["CPF"].ToString(), false);
-                }
-
-                /*Continuar com demais campos*/
+                    CPF = ds.Tables[0].Rows[0]["CPF"].ToString();
+                if (ds.Tables[0].Rows[0]["NOME"] != DBNull.Value)
+                    Nome = ds.Tables[0].Rows[0]["NOME"].ToString();
+                if (ds.Tables[0].Rows[0]["TELEFONE"] != DBNull.Value)
+                    Nome = ds.Tables[0].Rows[0]["TELEFONE"].ToString();
+                if (ds.Tables[0].Rows[0]["LOGIN"] != DBNull.Value)
+                    Nome = ds.Tables[0].Rows[0]["LOGIN"].ToString();
+                if (ds.Tables[0].Rows[0]["SENHA"] != DBNull.Value)
+                    Nome = ds.Tables[0].Rows[0]["SENHA"].ToString();
 
                 nutricionistaAlteracao = new NutricionistaAlteracao(
                     ID,
                     Nome,
                     Telefone,
-                    CRM,
+                    CRN,
                     Login,
                     Senha,
-                    CpfObjeto
+                    new Entidades.Usuario.CPF(CPF,false)
                     );
             }
             else
@@ -114,9 +135,26 @@ namespace ContratacaoNutricionistas.Domain.Repository.Nutricionista
         public void AlterarDadosNutricionista(NutricionistaAlteracao pNutricionistaAlteracao)
         {
             StringBuilder stringBuilder = new StringBuilder();
-            /*Montar comando*/
 
-            //_UnitOfWork.Executar(stringBuilder.ToString());
+            stringBuilder.AppendLine("DECLARE @ID INT, DECLARE @CRN INT");
+            stringBuilder.AppendLine("DECLARE @CPF VARCHAR(14),@NOME VARCHAR(50), @TELEFONE VARCHAR(15), @SENHA VARCHAR(8)");
+            stringBuilder.AppendLine($"SET @ID = {pNutricionistaAlteracao.ID}");
+            stringBuilder.AppendLine($"SET @CRN = {pNutricionistaAlteracao.CRN}");
+            stringBuilder.AppendLine($"SET @CPF = '{pNutricionistaAlteracao.CpfObjeto.Numero}'");
+            stringBuilder.AppendLine($"SET @NOME = '{pNutricionistaAlteracao.Nome}'");
+            stringBuilder.AppendLine($"SET @TELEFONE = '{pNutricionistaAlteracao.Telefone}'");
+            stringBuilder.AppendLine($"SET @SENHA = '{pNutricionistaAlteracao.Senha}'");
+            stringBuilder.AppendLine("UPDATE USUARIO_TB");
+            stringBuilder.AppendLine("SET");
+            stringBuilder.AppendLine("    ID_USUARIO = @ID,");
+            stringBuilder.AppendLine("    CPF = @CPF,");
+            stringBuilder.AppendLine("    NOME = @NOME,");
+            stringBuilder.AppendLine("    TELEFONE = @TELEFONE,");
+            stringBuilder.AppendLine("    SENHA = @SENHA,");
+            stringBuilder.AppendLine("    CRN = @CRN");
+            stringBuilder.AppendLine("WHERE TB.ID_USUARIO = @ID");
+
+            _UnitOfWork.Executar(stringBuilder.ToString());
         }
     }
 }

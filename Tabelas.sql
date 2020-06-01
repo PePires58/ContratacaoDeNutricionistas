@@ -1,53 +1,48 @@
-Create Database ContratacaoDeNutricionistas 
-
-Use ContratacaoDeNutricionistas
-
---Tabela usuario
-Create Table usuario_tb (
-	id_usuario				INT Identity(1,1) Primary Key	Not Null, --Identificador de cada usuário(chave primaria).
-	CPF						VARCHAR(14)						Not Null, --CPF do usuario.						 
-	CRN						INT Null						Null,	  --CRN do nutricionista.
-	Nome					VARCHAR(50)						Not Null, --Nome do usuário
-	Telefone				VARCHAR(12)						Not Null, --Telefone para contato.
-	tp_usuario				INT								Not Null, --0 - Paciente ou 1 - Nutricionista
-	Avaliacao				FLOAT						    Null,     --Acho que deveria ser Numeric(2,2)
-	Login					VARCHAR(20)						Not Null, --Para o acesso.
-	senha					VARCHAR(8)						Not Null  --Senha para o acesso.
+--TABELA USUARIO
+CREATE TABLE USUARIO_TB (
+	ID_USUARIO				INT IDENTITY(1,1) PRIMARY KEY	NOT NULL, --IDENTIFICADOR DE CADA USUÁRIO(CHAVE PRIMARIA).
+	CPF						VARCHAR(14)						NOT NULL, --CPF DO USUARIO.						 
+	CRN						INT     						NULL,	  --CRN DO NUTRICIONISTA.
+	NOME					VARCHAR(50)						NOT NULL, --NOME DO USUÁRIO
+	TELEFONE				VARCHAR(15)						NOT NULL, --TELEFONE PARA CONTATO.
+	TP_USUARIO				CHAR(1)                                                 NOT NULL, --0 - PACIENTE OU 1 - NUTRICIONISTA
+	LOGIN					VARCHAR(20)						NOT NULL, --PARA O ACESSO.
+	SENHA					VARCHAR(8)						NOT NULL  --SENHA PARA O ACESSO.
 )
 
---Tabela endereço do Nutricionista
-Create Table endereco_tb (
-	id_endereco				INT Identity(1,1) Primary Key	Not Null, --Identificação do endereco(acho que não deveria ter)(chave primaria).
-	id_usuario				INT								Not Null, --Id da(o) usuário.
-	Rua						VARCHAR(100)					Not Null, --Nome da rua.
-	Complemento				VARCHAR(5)						Null,     --Se é casa, apto...
-	Numero					INT								Not Null, --Numero da casa, apto..
-	Bairro					VARCHAR(50)						Not Null, --Nome do bairro.
-	Cidade					VARCHAR(30)						Not Null, --Nome da cidade.
-	Estado					VARCHAR(2)						Not Null, --Sigla do estado.
-	CEP						VARCHAR(8)						Not Null, --numero do CEP.
-	Constraint FK_id_usuario_usuario_tb2 Foreign Key (id_usuario) References usuario_tb (id_usuario), --Chave estrangeira
+--TABELA ENDEREÇO DO NUTRICIONISTA
+CREATE TABLE ENDERECO_TB (
+	ID_ENDERECO				INT IDENTITY(1,1) PRIMARY KEY	NOT NULL, --IDENTIFICAÇÃO DO ENDERECO(ACHO QUE NÃO DEVERIA TER)(CHAVE PRIMARIA).
+	ID_USUARIO				INT								NOT NULL, --ID DA(O) USUÁRIO.
+	RUA						VARCHAR(100)					NOT NULL, --NOME DA RUA.
+	COMPLEMENTO				VARCHAR(5)						NULL,     --SE É CASA, APTO...
+	NUMERO					INT								NOT NULL, --NUMERO DA CASA, APTO..
+	BAIRRO					VARCHAR(50)						NOT NULL, --NOME DO BAIRRO.
+	CIDADE					VARCHAR(30)						NOT NULL, --NOME DA CIDADE.
+	ESTADO					VARCHAR(2)						NOT NULL, --SIGLA DO ESTADO.
+	CEP						VARCHAR(8)						NOT NULL, --NUMERO DO CEP.
+	CONSTRAINT FK_ID_USUARIO_USUARIO_TB2 FOREIGN KEY (ID_USUARIO) REFERENCES USUARIO_TB (ID_USUARIO), --CHAVE ESTRANGEIRA
 )
 
---Tabela de Agendamentos
-Create Table agenda_tb (
-	id_agenda				INT Identity(1,1) Primary Key	Not Null, --Identificar agenda do nutricionista(também acho que não deveria ter).(chave primaria)
-	id_usuario				INT								Not Null, --Id da(o) nutricionista.
-	id_endereco				INT								Not Null, --id do endereço do nutricionista.
-	dt_inicio				Date							Not Null, --Data inicio do agendamento.
-	dt_fim					Date							Not Null, --Data fim do agendamento.
-	Constraint FK_id_usuario_usuario_tb2 Foreign Key (id_usuario) References usuario_tb (id_usuario), --Chave estrangeira
-	Constraint FK_id_endereco_endereco_tb Foreign Key (id_endereco) References endereco_tb (id_endereco) --Chave estrangeira
+--TABELA DE AGENDAMENTOS
+CREATE TABLE AGENDA_TB (
+	ID_AGENDA				INT IDENTITY(1,1) PRIMARY KEY	NOT NULL, --IDENTIFICAR AGENDA DO NUTRICIONISTA(TAMBÉM ACHO QUE NÃO DEVERIA TER).(CHAVE PRIMARIA)
+	ID_USUARIO				INT								NOT NULL, --ID DA(O) NUTRICIONISTA.
+	ID_ENDERECO				INT								NOT NULL, --ID DO ENDEREÇO DO NUTRICIONISTA.
+	DT_INICIO				DATE							NOT NULL, --DATA INICIO DO AGENDAMENTO.
+	DT_FIM					DATE							NOT NULL, --DATA FIM DO AGENDAMENTO.
+	CONSTRAINT FK_ID_USUARIO_USUARIO_TB3 FOREIGN KEY (ID_USUARIO) REFERENCES USUARIO_TB (ID_USUARIO), --CHAVE ESTRANGEIRA
+	CONSTRAINT FK_ID_ENDERECO_ENDERECO_TB FOREIGN KEY (ID_ENDERECO) REFERENCES ENDERECO_TB (ID_ENDERECO) --CHAVE ESTRANGEIRA
 )
 
---Tabela do Contratante
-Create Table Contratos (
-	id_contrato				INT Identity(1,1) Primary Key	Not Null, -- Identificar o contratante
-	id_usuario				INT								Not Null, --Id da(o) nutricionista.
-	id_agenda				INT								Not Null, --Identificar agenda
-	Status					INT								Not Null, --Se a consulta foi realizada, cancelada...
-	Constraint FK_id_usuario_usuario_tb3 Foreign Key (id_usuario) References usuario_tb (id_usuario), --Chave estrangeira
-	Constraint FK_id_agenda_agenda_tb Foreign Key (id_agenda) References agenda_tb (id_agenda), --Chave estrangeira
+--TABELA DO CONTRATANTE
+CREATE TABLE CONTRATOS (
+	ID_CONTRATO				INT IDENTITY(1,1) PRIMARY KEY	NOT NULL, -- IDENTIFICAR O CONTRATANTE
+	ID_USUARIO				INT								NOT NULL, --ID DA(O) NUTRICIONISTA.
+	ID_AGENDA				INT								NOT NULL, --IDENTIFICAR AGENDA
+	STATUS					INT								NOT NULL, --SE A CONSULTA FOI REALIZADA, CANCELADA...
+	CONSTRAINT FK_ID_USUARIO_USUARIO_TB4 FOREIGN KEY (ID_USUARIO) REFERENCES USUARIO_TB (ID_USUARIO), --CHAVE ESTRANGEIRA
+	CONSTRAINT FK_ID_AGENDA_AGENDA_TB FOREIGN KEY (ID_AGENDA) REFERENCES AGENDA_TB (ID_AGENDA), --CHAVE ESTRANGEIRA
 )
 
 

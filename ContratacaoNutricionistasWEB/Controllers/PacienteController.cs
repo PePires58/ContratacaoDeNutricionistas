@@ -10,9 +10,18 @@
  * Data: 30/05/2020
  * Implementação: Implementação para alteração de nutricionista
  */
+
+   /*
+ * Programador: Pedro Henrique Pires
+ * Data: 01/06/2020
+ * Implementação: Ajuste nos métodos de alteração e consulta e inclusão do serviço de usuário.
+ */
 #endregion
 
+using ContratacaoNutricionistas.Domain.Entidades.Paciente;
+using ContratacaoNutricionistas.Domain.Entidades.Usuario;
 using ContratacaoNutricionistas.Domain.Interfaces.Paciente;
+using ContratacaoNutricionistas.Domain.Interfaces.Usuario;
 using ContratacaoNutricionistasWEB.Models.Paciente;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -30,9 +39,11 @@ namespace ContratacaoNutricionistasWEB.Controllers
         /// Construtor
         /// </summary>
         /// <param name="pIServicePaciente">Serviço de paciente</param>
-        public PacienteController(IServicePaciente pIServicePaciente)
+        /// <param name="pServiceUsuario">Serviço de usuário</param>
+        public PacienteController(IServicePaciente pIServicePaciente, IServiceUsuario pServiceUsuario)
         {
             _ServicePaciente = pIServicePaciente;
+            _ServiceUsuario = pServiceUsuario;
         }
         #endregion
 
@@ -41,6 +52,11 @@ namespace ContratacaoNutricionistasWEB.Controllers
         /// Serviços referente ao paciente
         /// </summary>
         private readonly IServicePaciente _ServicePaciente;
+
+        /// <summary>
+        /// Serviços referente ao usuário
+        /// </summary>
+        private readonly IServiceUsuario _ServiceUsuario;
         #endregion
 
         /// <summary>
@@ -67,26 +83,22 @@ namespace ContratacaoNutricionistasWEB.Controllers
                 /*Verifica se o modelo é valido, de acordo com os atributos da classe passado no parâmetro*/
                 if (!ModelState.IsValid)
                     return View(pModel);
-                
+
 
                 /*Valida se já existe login cadastrado*/
-                //if (_ServicePaciente.LoginExistente(pModel.Login))
-                //{
-                //    ViewData[ViewDataMensagemErro] = $"O login: {pModel}, já existe!";
-                //    ModelState.ClearValidationState(nameof(pModel.Login));
-                //    pModel.Login = string.Empty;
-                //    return View(pModel);
-                //}
+                if (_ServiceUsuario.LoginExiste(pModel.Login))
+                    throw new Exception($"O login: {pModel.Login}, já existe!");
 
                 ///*Cadastro o paciente*/
-                //_ServicePaciente.Cadastra(new ContratacaoNutricionistas.Domain.Entidades.Paciente.PacienteCadastro
-                //(
-                //    pModel.Nome,
-                //    pModel.Telefone,
-                //    pModel.Login,
-                //    pModel.Senha,
-                //    new CPF(pModel.CPF, false)
-                // ));
+                _ServicePaciente.Cadastra(new PacienteCadastro
+                (
+                    pModel.Nome,
+                    pModel.Telefone,
+                    pModel.Login,
+                    pModel.Senha,
+                    new CPF(pModel.CPF, false)
+                 ));
+
                 /*Escreve uma mensagem de retorno para a tela de Login*/
                 ViewData[Constantes.ViewDataMensagemRetorno] = $"Usuário {pModel.Login} cadastrado com sucesso";
                 /*Redireciona para a página Index.cshtml da pasta Login*/
@@ -110,16 +122,28 @@ namespace ContratacaoNutricionistasWEB.Controllers
         [HttpGet]
         public IActionResult AlterarDados(int ID)
         {
-            /*Buscar os dados do banco*/
-            PacienteAlteracaoVM pacienteAlteracaoVM = new PacienteAlteracaoVM()
+            if (ID == 0 || ID < 0)
+                return BadRequest();
+
+            PacienteAlteracaoVM pacienteAlteracaoVM = null;
+
+            PacienteAlteracao pacienteAlteracao = _ServicePaciente.ConsultarPacientePorID(ID);
+
+            if (pacienteAlteracao != null)
             {
-                ID = 1,
-                Login = "Pedro",
-                Telefone = "(011)4242-2517",
-                Nome = "Pedro Pires",
-                Senha = "123",
-                SenhaConfirmacao = "123"
-            };
+                pacienteAlteracaoVM = new PacienteAlteracaoVM()
+                {
+                    ID = pacienteAlteracao.ID,
+                    Login = pacienteAlteracao.Login,
+                    Nome = pacienteAlteracao.Nome,
+                    Senha = pacienteAlteracao.Senha,
+                    SenhaConfirmacao = pacienteAlteracao.Senha,
+                    Telefone = pacienteAlteracao.Telefone
+                };
+            }
+
+            if (pacienteAlteracaoVM == null)
+                return NoContent();
 
             return View(pacienteAlteracaoVM);
         }
@@ -139,11 +163,19 @@ namespace ContratacaoNutricionistasWEB.Controllers
                 if (!ModelState.IsValid)
                     return View(pModel);
 
-                /*Buscar senha e confirmação de senha*/
+                PacienteAlteracao pacienteAlteracao = _ServicePaciente.ConsultarPacientePorID(pModel.ID);
 
-                /*Verificar se o usuário preencheu a senha, se preencheu, substitui, se não, mantem a senha do banco*/
+                if (pacienteAlteracao == null)
+                    return NoContent();
+                else if (!pacienteAlteracao.Senha.Equals(pModel.Senha))
+                    throw new Exception(Constantes.MensagemErroSenhaInvalidaAlteracaoDados);
 
-                /*Alterar os dados*/
+                _ServicePaciente.AlterarDados(new PacienteAlteracao(pModel.ID,
+                    pModel.Nome,
+                    pModel.Telefone,
+                    pModel.Login,
+                    pModel.Senha,
+                    pacienteAlteracao.CpfObjeto));
 
                 ViewData[Constantes.ViewDataMensagemRetorno] = "Dados do paciente alterado com sucesso";
                 

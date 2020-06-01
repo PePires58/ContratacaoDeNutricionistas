@@ -10,6 +10,11 @@
 * Implementação: Inclusão de classes de serviço e repositório de nutricionista.
 */
 
+  /*
+ * Programador: Pedro Henrique Pires
+ * Data: 01/06/2020
+ * Implementação: Inclusão de classe de serviço e repositório para usuário.
+ */
 #endregion
 
 using System;
@@ -18,10 +23,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using ContratacaoNutricionistas.Domain.Interfaces.Nutricionista;
 using ContratacaoNutricionistas.Domain.Interfaces.Paciente;
+using ContratacaoNutricionistas.Domain.Interfaces.Usuario;
 using ContratacaoNutricionistas.Domain.Repository.Nutricionista;
 using ContratacaoNutricionistas.Domain.Repository.Paciente;
+using ContratacaoNutricionistas.Domain.Repository.Usuario;
 using ContratacaoNutricionistas.Domain.Servicos.Nutricionista;
 using ContratacaoNutricionistas.Domain.Servicos.Paciente;
+using ContratacaoNutricionistas.Domain.Servicos.Usuario;
 using DataBaseHelper;
 using DataBaseHelper.Interfaces;
 using Microsoft.AspNetCore.Builder;
@@ -63,6 +71,8 @@ namespace ContratacaoNutricionistasWEB
             services.AddSingleton<IPacienteRepository, PacienteRepository>();
             services.AddSingleton<IServiceNutricionista, ServiceNutricionista>();
             services.AddSingleton<INutricionistaRepository, NutricionistaRepository>();
+            services.AddSingleton<IServiceUsuario, ServiceUsuario>();
+            services.AddSingleton<IUsuarioRepository, UsuarioRepository>();
             #endregion
         }
 

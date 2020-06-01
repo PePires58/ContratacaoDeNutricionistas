@@ -16,11 +16,20 @@
  * Data: 30/05/2020
  * Implementação: Implementação de métodos de alterar os dados do nutricionista.
  */
+
+  /*
+ * Programador: Pedro Henrique Pires
+ * Data: 01/06/2020
+ * Implementação: Ajuste nos métodos de alteração e consulta e inclusão do serviço de usuário.
+ */
+
 #endregion
 
 using System;
 using ContratacaoNutricionistas.Domain.Entidades.Nutricionista;
+using ContratacaoNutricionistas.Domain.Entidades.Usuario;
 using ContratacaoNutricionistas.Domain.Interfaces.Nutricionista;
+using ContratacaoNutricionistas.Domain.Interfaces.Usuario;
 using ContratacaoNutricionistasWEB.Models.Nutricionista;
 using Microsoft.AspNetCore.Mvc;
 
@@ -36,6 +45,10 @@ namespace ContratacaoNutricionistasWEB.Controllers
         /// Serviços referente ao Nutricionista
         /// </summary>
         private readonly IServiceNutricionista _ServiceNutricionista;
+        /// <summary>
+        /// Serviços referente ao usuário
+        /// </summary>
+        private readonly IServiceUsuario _ServiceUsuario;
         #endregion
 
         #region Construtores
@@ -43,9 +56,11 @@ namespace ContratacaoNutricionistasWEB.Controllers
         /// Construtor da classe
         /// </summary>
         /// <param name="pServiceNutricionista">Serviços referênte ao nutricionista</param>
-        public NutricionistaController(IServiceNutricionista pServiceNutricionista)
+        /// <param name="pServiceUsuario">Serviço de usuário</param>
+        public NutricionistaController(IServiceNutricionista pServiceNutricionista, IServiceUsuario pServiceUsuario)
         {
             _ServiceNutricionista = pServiceNutricionista;
+            _ServiceUsuario = pServiceUsuario;
         }
         #endregion
 
@@ -74,24 +89,19 @@ namespace ContratacaoNutricionistasWEB.Controllers
 
 
                 /*Valida se já existe login cadastrado*/
-                //if (_ServicePaciente.LoginExistente(pModel.Login))
-                //{
-                //    ViewData[ViewDataMensagemErro] = $"O login: {pModel}, já existe!";
-                //    ModelState.ClearValidationState(nameof(pModel.Login));
-                //    pModel.Login = string.Empty;
-                //    return View(pModel);
-                //}
+                if (_ServiceUsuario.LoginExiste(pModel.Login))
+                    throw new Exception($"O login: {pModel.Login}, já existe!");
 
                 /*Cadastro o nutricionista*/
-                //_ServiceNutricionista.CadastrarNutricionista(new ContratacaoNutricionistas.Domain.Entidades.Nutricionista.NutricionistaCadastro
-                //(
-                //    pModel.Nome,
-                //    pModel.CRM,
-                //    pModel.Telefone,
-                //    pModel.Login,
-                //    pModel.Senha,
-                //    new CPF(pModel.CPF, false)
-                // ));
+                _ServiceNutricionista.CadastrarNutricionista(new NutricionistaCadastro
+                (
+                    pModel.Nome,
+                    pModel.Telefone,
+                    Convert.ToInt32(pModel.CRN),
+                    pModel.Login,
+                    pModel.Senha,
+                    new CPF(pModel.CPF, false)
+                 ));
 
                 /*Escreve uma mensagem de retorno para a tela de Login*/
                 ViewData[Constantes.ViewDataMensagemRetorno] = $"Usuário {pModel.Login} cadastrado com sucesso";
@@ -111,19 +121,27 @@ namespace ContratacaoNutricionistasWEB.Controllers
         [HttpGet]
         public IActionResult AlterarDados(int ID)
         {
-            NutricionistaAlteracaoVM nutricionistaAlteracaoVM = new NutricionistaAlteracaoVM()
-            {
-                ID = 1,
-                Login = "Nutricionista",
-                CRM = "1234",
-                Nome = "Nutricionista",
-                Senha = "123",
-                SenhaConfirmacao = "123",
-                Telefone = "(011)4242-2517"
-            };
+            if (ID == 0 || ID < 0)
+                return BadRequest();
+
+            NutricionistaAlteracaoVM nutricionistaAlteracaoVM = null;
 
             /*Buscar do banco*/
-            //_ServiceNutricionista.ConsultarNutricionistaPorID(ID);
+            NutricionistaAlteracao nutricionistaAlteracao = _ServiceNutricionista.ConsultarNutricionistaPorID(ID);
+
+            if (nutricionistaAlteracao != null)
+            {
+                nutricionistaAlteracaoVM = new NutricionistaAlteracaoVM()
+                {
+                    ID = nutricionistaAlteracao.ID,
+                    CRN = nutricionistaAlteracao.CRN.ToString(),
+                    Login = nutricionistaAlteracao.Login,
+                    Nome = nutricionistaAlteracao.Nome,
+                    Senha = nutricionistaAlteracao.Senha,
+                    SenhaConfirmacao = nutricionistaAlteracao.Senha,
+                    Telefone = nutricionistaAlteracao.Telefone
+                };
+            }
 
             if (nutricionistaAlteracaoVM == null)
                 return NoContent();
@@ -147,23 +165,23 @@ namespace ContratacaoNutricionistasWEB.Controllers
                     return View(pModel);
 
                 /*Buscar senha e confirmação de senha*/
-                //NutricionistaAlteracao nutricionistaAlteracao = _ServiceNutricionista.ConsultarNutricionistaPorID(pModel.ID);
+                NutricionistaAlteracao nutricionistaAlteracao = _ServiceNutricionista.ConsultarNutricionistaPorID(pModel.ID);
 
-                //if (nutricionistaAlteracao == null)
-                //    return NoContent();
-                //if (!nutricionistaAlteracao.Senha.Equals(pModel.Senha))
-                //    throw new Exception("A senha para alteração dos dados é inválida");
+                if (nutricionistaAlteracao == null)
+                    return NoContent();
+                if (!nutricionistaAlteracao.Senha.Equals(pModel.Senha))
+                    throw new Exception(Constantes.MensagemErroSenhaInvalidaAlteracaoDados);
 
-                ///*Alterar os dados*/
-                //_ServiceNutricionista.AlterarDadosNutricionista(new NutricionistaAlteracao(
-                //    pModel.ID,
-                //    pModel.Nome,
-                //    pModel.Telefone,
-                //    pModel.CRM,
-                //    pModel.Login,
-                //    pModel.Senha,
-                //    nutricionistaAlteracao.CpfObjeto
-                //    ));
+                /*Alterar os dados*/
+                _ServiceNutricionista.AlterarDadosNutricionista(new NutricionistaAlteracao(
+                    pModel.ID,
+                    pModel.Nome,
+                    pModel.Telefone,
+                    Convert.ToInt32(pModel.CRN),
+                    pModel.Login,
+                    pModel.Senha,
+                    nutricionistaAlteracao.CpfObjeto
+                    ));
 
                 ViewData[Constantes.ViewDataMensagemRetorno] = "Dados do nutricionista alterados com sucesso";
 
