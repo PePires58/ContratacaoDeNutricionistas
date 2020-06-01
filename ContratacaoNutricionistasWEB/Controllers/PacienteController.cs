@@ -11,11 +11,18 @@
  * Implementação: Implementação para alteração de nutricionista
  */
 
-   /*
- * Programador: Pedro Henrique Pires
- * Data: 01/06/2020
- * Implementação: Ajuste nos métodos de alteração e consulta e inclusão do serviço de usuário.
- */
+/*
+* Programador: Pedro Henrique Pires
+* Data: 01/06/2020
+* Implementação: Ajuste nos métodos de alteração e consulta e inclusão do serviço de usuário.
+*/
+
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 01/06/2020
+* Implementação: Ajuste na mensagem de erro.
+*/
 #endregion
 
 using ContratacaoNutricionistas.Domain.Entidades.Paciente;
@@ -168,7 +175,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
                 if (pacienteAlteracao == null)
                     return NoContent();
                 else if (!pacienteAlteracao.Senha.Equals(pModel.Senha))
-                    throw new Exception(Constantes.MensagemErroSenhaInvalidaAlteracaoDados);
+                    throw new Exception(Constantes.MensagemErroSenhaNaoLocalizada);
 
                 _ServicePaciente.AlterarDados(new PacienteAlteracao(pModel.ID,
                     pModel.Nome,

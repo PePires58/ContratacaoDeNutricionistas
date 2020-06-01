@@ -5,11 +5,17 @@
  * Implementação: Implementação Inicial da classe de alteração de nutricionista.
  */
 
-  /*
- * Programador: Pedro Henrique Pires
- * Data: 01/06/2020
- * Implementação: Ajuste dos atributos para realizar insert correto.
- */
+/*
+* Programador: Pedro Henrique Pires
+* Data: 01/06/2020
+* Implementação: Ajuste dos atributos para realizar insert correto.
+*/
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 01/06/2020
+* Implementação: Ajuste no campo de CRN.
+*/
 #endregion
 using ContratacaoNutricionistas.Domain.Entidades.Paciente.Usuario;
 using ContratacaoNutricionistas.Domain.Entidades.Usuario;
@@ -30,6 +36,7 @@ namespace ContratacaoNutricionistas.Domain.Entidades.Nutricionista
             Login = pLogin;
             Senha = pSenha;
             CpfObjeto = pCPF;
+            CRN = pCRN;
         }
 
         /// <summary>
@@ -41,8 +48,8 @@ namespace ContratacaoNutricionistas.Domain.Entidades.Nutricionista
         /// <summary>
         /// CRN do nutricionista
         /// </summary>
-        [Coluna(pNomeColuna:"CRN",pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Varchar, pTamanhoCampo:50)]
-        public string CRN { get; set; }
+        [Coluna(pNomeColuna:"CRN",pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Integer)]
+        public int CRN { get; set; }
 
         /// <summary>
         /// Telefone
@@ -83,6 +90,10 @@ namespace ContratacaoNutricionistas.Domain.Entidades.Nutricionista
         {
             if (string.IsNullOrEmpty(pNome))
                 throw new ArgumentException($"O {nameof(Nome)} é obrigatório.");
+            if (pCRN == 0)
+                throw new ArgumentException($"O {nameof(CRN)} é obrigatório.");
+            else if (pCRN.ToString().Length > 5)
+                throw new ArgumentException($"O {nameof(CRN)} deve ter no máximo 5 caracteres");
             if (string.IsNullOrEmpty(pTelefone))
                 throw new ArgumentException($"O {nameof(Telefone)} é obrigatório.");
             if (string.IsNullOrEmpty(pLogin))

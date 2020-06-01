@@ -11,11 +11,17 @@
 * Implementação: Implementação de métodos de alteração e consulta.
 */
 
- /*
- * Programador: Pedro Henrique Pires
- * Data: 01/06/2020
- * Implementação: Ajuste nos métodos de alteração e consulta.
- */
+/*
+* Programador: Pedro Henrique Pires
+* Data: 01/06/2020
+* Implementação: Ajuste nos métodos de alteração e consulta.
+*/
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 01/06/2020
+* Implementação: Recuperando informações corretamente e ajustando comando SQL.
+*/
 #endregion
 
 
@@ -106,11 +112,11 @@ namespace ContratacaoNutricionistas.Domain.Repository.Nutricionista
                 if (ds.Tables[0].Rows[0]["NOME"] != DBNull.Value)
                     Nome = ds.Tables[0].Rows[0]["NOME"].ToString();
                 if (ds.Tables[0].Rows[0]["TELEFONE"] != DBNull.Value)
-                    Nome = ds.Tables[0].Rows[0]["TELEFONE"].ToString();
+                    Telefone = ds.Tables[0].Rows[0]["TELEFONE"].ToString();
                 if (ds.Tables[0].Rows[0]["LOGIN"] != DBNull.Value)
-                    Nome = ds.Tables[0].Rows[0]["LOGIN"].ToString();
+                    Login = ds.Tables[0].Rows[0]["LOGIN"].ToString();
                 if (ds.Tables[0].Rows[0]["SENHA"] != DBNull.Value)
-                    Nome = ds.Tables[0].Rows[0]["SENHA"].ToString();
+                    Senha = ds.Tables[0].Rows[0]["SENHA"].ToString();
 
                 nutricionistaAlteracao = new NutricionistaAlteracao(
                     ID,
@@ -136,7 +142,7 @@ namespace ContratacaoNutricionistas.Domain.Repository.Nutricionista
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine("DECLARE @ID INT, DECLARE @CRN INT");
+            stringBuilder.AppendLine("DECLARE @ID INT, @CRN INT");
             stringBuilder.AppendLine("DECLARE @CPF VARCHAR(14),@NOME VARCHAR(50), @TELEFONE VARCHAR(15), @SENHA VARCHAR(8)");
             stringBuilder.AppendLine($"SET @ID = {pNutricionistaAlteracao.ID}");
             stringBuilder.AppendLine($"SET @CRN = {pNutricionistaAlteracao.CRN}");
@@ -146,13 +152,12 @@ namespace ContratacaoNutricionistas.Domain.Repository.Nutricionista
             stringBuilder.AppendLine($"SET @SENHA = '{pNutricionistaAlteracao.Senha}'");
             stringBuilder.AppendLine("UPDATE USUARIO_TB");
             stringBuilder.AppendLine("SET");
-            stringBuilder.AppendLine("    ID_USUARIO = @ID,");
             stringBuilder.AppendLine("    CPF = @CPF,");
             stringBuilder.AppendLine("    NOME = @NOME,");
             stringBuilder.AppendLine("    TELEFONE = @TELEFONE,");
             stringBuilder.AppendLine("    SENHA = @SENHA,");
             stringBuilder.AppendLine("    CRN = @CRN");
-            stringBuilder.AppendLine("WHERE TB.ID_USUARIO = @ID");
+            stringBuilder.AppendLine("WHERE ID_USUARIO = @ID");
 
             _UnitOfWork.Executar(stringBuilder.ToString());
         }

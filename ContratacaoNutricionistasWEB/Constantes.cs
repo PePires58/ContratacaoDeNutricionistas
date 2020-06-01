@@ -10,6 +10,13 @@
  * Data: 01/06/2020
  * Implementação: Mensagem de erro para senha.
  */
+
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 01/06/2020
+* Implementação: Inclusão de constantes para erro.
+*/
 #endregion
 
 namespace ContratacaoNutricionistasWEB
@@ -36,5 +43,9 @@ namespace ContratacaoNutricionistasWEB
         /// </summary>
         public const string MensagemErroSenhaInvalidaAlteracaoDados = "A senha para alteração dos dados é inválida";
 
+        /// <summary>
+        /// Mensagem para caso não encontre a senha no banco
+        /// </summary>
+        public const string MensagemErroSenhaNaoLocalizada = "Erro ao localizar a senha, favor entrar em contato conosco!";
     }
 }
