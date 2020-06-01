@@ -22,16 +22,16 @@ namespace ContratacaoNutricionistas.Domain.Servicos.Paciente
     {
         #region Propriedades
         /// <summary>
-        /// Unidade de conexão e execução com banco de dados
+        /// Interface que faz os comandos com o banco de dados para paciente
         /// </summary>
         private readonly IPacienteRepository _PacienteRepository;
         #endregion
 
         #region Construtor
         /// <summary>
-        /// Unidade de trabalho
+        /// Construtor
         /// </summary>
-        /// <param name="pPacienteRepository"></param>
+        /// <param name="pPacienteRepository">Interface que faz os comandos com o banco de dados para paciente</param>
         public ServicePaciente(IPacienteRepository pPacienteRepository)
         {
             _PacienteRepository = pPacienteRepository;

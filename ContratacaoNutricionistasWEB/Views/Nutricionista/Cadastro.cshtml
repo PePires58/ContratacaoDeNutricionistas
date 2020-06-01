@@ -4,13 +4,13 @@
 
 <hr />
 
-@if (ViewData["MensagemErro"] != null)
+@if (ViewData[Constantes.ViewDataMensagemErro] != null)
 {
     <div class="row">
         <div class="col-md-12">
             <div class="col-md-12 alert alert-danger">
                 <span>
-                    @ViewData["MensagemErro"].ToString()
+                    @ViewData[Constantes.ViewDataMensagemErro].ToString()
                 </span>
             </div>
         </div>

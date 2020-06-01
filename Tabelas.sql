@@ -2,6 +2,7 @@ Create Database ContratacaoDeNutricionistas
 
 Use ContratacaoDeNutricionistas
 
+<<<<<<< HEAD
 /* 
 EXCLUIR TABELAS:
  
@@ -12,6 +13,8 @@ Drop Table contrato_tb
 
 */
 
+=======
+>>>>>>> cab644c701e55c56186e93341f5a8b3a372ea2ac
 --Tabela usuario
 Create Table usuario_tb (
 	id_usuario				INT Identity(1,1) Primary Key	Not Null, --Identificador de cada usuário(chave primaria).

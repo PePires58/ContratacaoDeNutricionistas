@@ -1,7 +1,12 @@
-﻿using ContratacaoNutricionistas.Domain.Entidades.Paciente;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿#region Histórico de manutenção
+/*
+ * Programador: Pedro Henrique Pires
+ * Data: 30/05/2020
+ * Implementação: Implementação Inicial da Interface que faz os serviços para o Paciente
+ */
+#endregion
+
+using ContratacaoNutricionistas.Domain.Entidades.Paciente;
 
 namespace ContratacaoNutricionistas.Domain.Interfaces.Paciente
 {

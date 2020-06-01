@@ -1,9 +1,7 @@
-﻿@model ContratacaoNutricionistasWEB.Models.Paciente.PacienteCadastroVM
+﻿@model ContratacaoNutricionistasWEB.Models.Paciente.PacienteAlteracaoVM
 
-<h2><center><b>Cadastro de Pacientes</b></center></h2>
-
+<h4>Alteração de dados</h4>
 <hr />
-
 @if (ViewData[Constantes.ViewDataMensagemErro] != null)
 {
     <div class="row">
@@ -16,48 +14,52 @@
         </div>
     </div>
 }
-
+@if (ViewData[Constantes.ViewDataMensagemRetorno] != null)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12 alert alert-success">
+                <span>
+                    @ViewData[Constantes.ViewDataMensagemRetorno].ToString()
+                </span>
+            </div>
+        </div>
+    </div>
+}
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="Cadastro" asp-controller="Paciente">
+        <form asp-action="AlterarDados" asp-controller="Paciente">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input hidden asp-for="ID" />
+            <input hidden asp-for="Login" />
+
             <div class="form-group">
                 <label asp-for="Nome" class="control-label"></label>
-                <input asp-for="Nome" class="form-control" maxlength="50" />
+                <input asp-for="Nome" class="form-control" />
                 <span asp-validation-for="Nome" class="text-danger"></span>
-            </div>
-            <div class="form-group" id="divCPF">
-                <label asp-for="CPF" class="control-label"></label>
-                <input asp-for="CPF" class="form-control" maxlength="14" />
-                <span asp-validation-for="CPF" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Telefone" class="control-label"></label>
-                <input asp-for="Telefone" class="form-control" maxlength="16" />
+                <input asp-for="Telefone" class="form-control" />
                 <span asp-validation-for="Telefone" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Login" class="control-label"></label>
-                <input asp-for="Login" class="form-control" maxlength="20" />
-                <span asp-validation-for="Login" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Senha" class="control-label"></label>
-                <input asp-for="Senha" class="form-control" maxlength="20" />
+                <input asp-for="Senha" class="form-control" />
                 <span asp-validation-for="Senha" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SenhaConfirmacao" class="control-label"></label>
-                <input asp-for="SenhaConfirmacao" class="form-control" maxlength="20" />
+                <input asp-for="SenhaConfirmacao" class="form-control" />
                 <span asp-validation-for="SenhaConfirmacao" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input id="btnCadastrar" type="submit" value="Cadastrar" class="btn btn-primary form-control" />
+                <input type="submit" value="Editar" class="btn btn-warning form-control" />
             </div>
         </form>
     </div>
 </div>
+<div>
+    <a asp-action="Index" asp-controller="Home">Voltar para página inicial</a>
+</div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

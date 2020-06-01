@@ -4,7 +4,15 @@
  * Data: 30/05/2020
  * Implementação: Implementação Inicial da classe de cadastro ou alteração de usuários
  */
+/*
+* Programador: Pedro Henrique Pires
+* Data: 30/05/2020
+* Implementação: Ajuste no namespace.
+*/
+
 #endregion
+
+using ContratacaoNutricionistas.Domain.Entidades.Usuario;
 
 namespace ContratacaoNutricionistas.Domain.Entidades.Paciente.Usuario
 {
