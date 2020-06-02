@@ -11,11 +11,15 @@
  * Implementação: Mensagem de erro para senha.
  */
 
-
 /*
 * Programador: Pedro Henrique Pires
 * Data: 01/06/2020
 * Implementação: Inclusão de constantes para erro.
+*/
+/*
+* Programador: Pedro Henrique Pires
+* Data: 01/06/2020
+* Implementação: Inclusão de constantes para o usuário logado.
 */
 #endregion
 
@@ -34,11 +38,6 @@ namespace ContratacaoNutricionistasWEB
         public const string ViewDataMensagemErro = "MensagemErro";
 
         /// <summary>
-        /// Constante para lista do tipo de pessoa
-        /// </summary>
-        public const string ViewDataListaTipoPessoa = "ListaTipoPessoa";
-
-        /// <summary>
         /// Mensagem para senha de alteração de dados for inválida
         /// </summary>
         public const string MensagemErroSenhaInvalidaAlteracaoDados = "A senha para alteração dos dados é inválida";
@@ -47,5 +46,20 @@ namespace ContratacaoNutricionistasWEB
         /// Mensagem para caso não encontre a senha no banco
         /// </summary>
         public const string MensagemErroSenhaNaoLocalizada = "Erro ao localizar a senha, favor entrar em contato conosco!";
+
+        /// <summary>
+        /// Nutricionista logado
+        /// </summary>
+        public const string NutricionistaLogado = "Nutricionista";
+
+        /// <summary>
+        /// Paciente logado
+        /// </summary>
+        public const string PacienteLogado = "Paciente";
+
+        /// <summary>
+        /// Nome do tipo da claim para usuário logado
+        /// </summary>
+        public const string IDUsuarioLogado = "ID";
     }
 }

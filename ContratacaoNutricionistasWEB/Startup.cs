@@ -21,6 +21,12 @@
 * Data: 01/06/2020
 * Implementação: Implementação de restrição de usuários logados.
 */
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 01/06/2020
+* Implementação: Implementando recurso para expirar a autenticação.
+*/
 #endregion
 
 using ContratacaoNutricionistas.Domain.Interfaces.Nutricionista;
@@ -70,6 +76,8 @@ namespace ContratacaoNutricionistasWEB
                     config.Cookie.Name = "Authentication.Cookie";
                     config.LoginPath = "/Login/Index";
                     config.AccessDeniedPath = "/Home/Index";
+                    config.ExpireTimeSpan = new System.TimeSpan(hours: 0, minutes: 10, seconds: 0);
+                    config.SlidingExpiration = true;
                 });
 
             services.AddAuthorization(option =>

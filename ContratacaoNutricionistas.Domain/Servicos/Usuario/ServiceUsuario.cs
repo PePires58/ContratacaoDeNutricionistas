@@ -11,6 +11,12 @@
 * Implementação: Implementação do método de consulta de usuário para autenticação.
 */
 
+/*
+* Programador: Pedro Henrique Pires
+* Data: 01/06/2020
+* Implementação: Incluindo ID para o usuário autenticado.
+*/
+
 #endregion
 using ContratacaoNutricionistas.Domain.Entidades.Usuario;
 using ContratacaoNutricionistas.Domain.Interfaces.Paciente;
@@ -80,6 +86,7 @@ namespace ContratacaoNutricionistas.Domain.Servicos.Usuario
                 case Enumerados.Usuario.TipoUsuarioEnum.Paciente:
                 case Enumerados.Usuario.TipoUsuarioEnum.Nutricionista:
                     listaCliams.Add(new Claim(usuarioAutenticacao.TipoUsuario.ToString(), ClaimTypes.Name, usuarioAutenticacao.Login));
+                    listaCliams.Add(new Claim("ID", ClaimTypes.Name, usuarioAutenticacao.ID.ToString()));
                     break;
                 default:
                     throw new Exception("Tipo de usuário não implementado");

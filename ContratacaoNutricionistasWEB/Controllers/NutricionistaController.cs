@@ -34,9 +34,17 @@
 * Data: 01/06/2020
 * Implementação: Implementação de restrição de usuários logados.
 */
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 01/06/2020
+* Implementação: Implementando restrição de alteração para somente os dados do usuário logado.
+*/
 #endregion
 
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 using ContratacaoNutricionistas.Domain.Entidades.Nutricionista;
 using ContratacaoNutricionistas.Domain.Entidades.Usuario;
 using ContratacaoNutricionistas.Domain.Enumerados.Usuario;
@@ -86,10 +94,10 @@ namespace ContratacaoNutricionistasWEB.Controllers
         /// <returns>Cadastro.cshtml da pasta Nutricionista</returns>
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Cadastro()
+        public async Task<IActionResult> Cadastro()
         {
             if (User.HasClaim(c => c.Type != TipoUsuarioEnum.NaoDefinido.ToString()))
-                HttpContext.SignOutAsync();
+                await HttpContext.SignOutAsync();
 
             return View(new NutricionistaCadastroVM());
         }
@@ -142,6 +150,11 @@ namespace ContratacaoNutricionistasWEB.Controllers
         {
             if (ID == 0 || ID < 0)
                 return BadRequest();
+
+            /*Se o usuário logado tenta alterar os dados de outro usuário*/
+            if (Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType)
+                != ID)
+                return RedirectToAction("Index", "Home");
 
             NutricionistaAlteracaoVM nutricionistaAlteracaoVM = null;
 

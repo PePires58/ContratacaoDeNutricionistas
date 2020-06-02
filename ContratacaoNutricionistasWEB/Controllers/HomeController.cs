@@ -4,6 +4,12 @@
 * Data: 01/06/2020
 * Implementação: Implementação inicial.
 */
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 01/06/2020
+* Implementação: Ajustando atributo de autorização.
+*/
 #endregion
 
 using System.Diagnostics;
@@ -13,10 +19,10 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ContratacaoNutricionistasWEB.Controllers
 {
-    [Authorize(Policy ="Paciente")]
-    [Authorize(Policy ="Nutricionista")]
+
     public class HomeController : Controller
     {
+        [Authorize()]
         public IActionResult Index()
         {
             return View();
