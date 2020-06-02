@@ -1,10 +1,18 @@
 ﻿#region Histórico de manutenção
- /*
- * Programador: Pedro Henrique Pires
- * Data: 01/06/2020
- * Implementação: Implementação Inicial.
- */
+/*
+* Programador: Pedro Henrique Pires
+* Data: 01/06/2020
+* Implementação: Implementação Inicial.
+*/
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 01/06/2020
+* Implementação: Implementação do método de consulta de usuário para autenticação.
+*/
 #endregion
+using ContratacaoNutricionistas.Domain.Entidades.Usuario;
+using ContratacaoNutricionistas.Domain.Enumerados.Usuario;
 using ContratacaoNutricionistas.Domain.Interfaces.Paciente;
 using DataBaseHelper.Interfaces;
 using System;
@@ -51,6 +59,44 @@ namespace ContratacaoNutricionistas.Domain.Repository.Usuario
             DataSet ds = _UnitOfWork.Consulta(stringBuilder.ToString());
 
             return ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0;
+        }
+
+        /// <summary>
+        /// Retorna um usuário de autenticação ou null
+        /// </summary>
+        /// <param name="pLogin">Login</param>
+        /// <param name="pSenha">Senha</param>
+        /// <returns>Usuário ou NULL</returns>
+        public UsuarioAutenticacao ConsultarUsuarioAutenticacao(string pLogin, string pSenha)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine("DECLARE");
+            stringBuilder.AppendLine("	@LOGIN VARCHAR(20),");
+            stringBuilder.AppendLine("	@SENHA VARCHAR(8)");
+            stringBuilder.AppendLine($"SET @LOGIN = '{pLogin}'");
+            stringBuilder.AppendLine($"SET @SENHA = '{pSenha}'");
+            stringBuilder.AppendLine("SELECT");
+            stringBuilder.AppendLine("  TB.LOGIN,");
+            stringBuilder.AppendLine("	TB.SENHA,");
+            stringBuilder.AppendLine("	TB.TP_USUARIO");
+            stringBuilder.AppendLine("FROM USUARIO_TB TB WITH(NOLOCK)");
+            stringBuilder.AppendLine("WHERE TB.LOGIN = @LOGIN AND TB.SENHA = @SENHA");
+
+            DataSet ds = _UnitOfWork.Consulta(stringBuilder.ToString());
+
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                UsuarioAutenticacao usuarioAutenticacao = usuarioAutenticacao = new UsuarioAutenticacao();
+                if (ds.Tables[0].Rows[0]["LOGIN"] != DBNull.Value)
+                    usuarioAutenticacao.Login = ds.Tables[0].Rows[0]["LOGIN"].ToString();
+                if (ds.Tables[0].Rows[0]["SENHA"] != DBNull.Value)
+                    usuarioAutenticacao.Senha = ds.Tables[0].Rows[0]["SENHA"].ToString();
+                if (ds.Tables[0].Rows[0]["TP_USUARIO"] != DBNull.Value)
+                    usuarioAutenticacao.TipoUsuario = (TipoUsuarioEnum)Convert.ToInt32(ds.Tables[0].Rows[0]["TP_USUARIO"]);
+
+                return usuarioAutenticacao;
+            }
+            return null;
         }
         #endregion
     }

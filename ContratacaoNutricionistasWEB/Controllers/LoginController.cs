@@ -4,13 +4,24 @@
  * Data: 30/05/2020
  * Implementação: Implementação Inicial do controlador de login
  */
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 01/06/2020
+* Implementação: Implementação de autenticação para Login.
+*/
 #endregion
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using ContratacaoNutricionistas.Domain.Interfaces.Usuario;
 using ContratacaoNutricionistasWEB.Models.Usuario;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ContratacaoNutricionistasWEB.Controllers
@@ -18,8 +29,28 @@ namespace ContratacaoNutricionistasWEB.Controllers
     /// <summary>
     /// Controlador de login
     /// </summary>
+    [Authorize(Policy = "Nutricionista")]
+    [Authorize(Policy = "Paciente")]
     public class LoginController : Controller
     {
+        #region Propriedades
+        /// <summary>
+        /// Serviços referente ao usuário
+        /// </summary>
+        private readonly IServiceUsuario _ServiceUsuario;
+        #endregion
+
+        #region Construtor
+        /// <summary>
+        /// Construtor da classe
+        /// </summary>
+        /// <param name="pServiceUsuario">Serviço de usuário</param>
+        public LoginController(IServiceUsuario pServiceUsuario)
+        {
+            _ServiceUsuario = pServiceUsuario;
+        }
+        #endregion
+
         /// <summary>
         /// Esse método retorna a página Index.cshtml da pasta Login
         /// </summary>
@@ -27,6 +58,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
         /// feito a partir dos controllers de Paciente ou Nutricionista após realizarem seu cadastro na plataforma)</param>
         /// <returns>A pagina Index.cshtml da pasta Login</returns>
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Index(string pMensagemSucesso)
         {
             /*ViewData é um objeto para passar dados para a .cshtml*/
@@ -40,14 +72,15 @@ namespace ContratacaoNutricionistasWEB.Controllers
         /// <param name="pModel">Objeto de Login</param>
         /// <returns>Retorna para a página inicial após realizar o login, se feito com sucesso</returns>
         [HttpPost]
-        public IActionResult Index(UsuarioLoginVM pModel)
+        [AllowAnonymous]
+        public async Task<IActionResult> Index(UsuarioLoginVM pModel)
         {
             try
             {
                 if (!ModelState.IsValid)
                     return View(pModel);
 
-                /*Realizar Login*/
+                await HttpContext.SignInAsync(_ServiceUsuario.RetornaAutenticacaoUsuario(pModel.Login, pModel.Senha));
 
                 return RedirectToAction("Index", "Home");
             }

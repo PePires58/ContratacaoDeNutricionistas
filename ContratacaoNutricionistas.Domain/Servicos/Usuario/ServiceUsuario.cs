@@ -1,15 +1,23 @@
 ﻿#region Histórico de manutenção
- /*
- * Programador: Pedro Henrique Pires
- * Data: 01/06/2020
- * Implementação: Implementação inicial.
- */
+/*
+* Programador: Pedro Henrique Pires
+* Data: 01/06/2020
+* Implementação: Implementação inicial.
+*/
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 01/06/2020
+* Implementação: Implementação do método de consulta de usuário para autenticação.
+*/
+
 #endregion
+using ContratacaoNutricionistas.Domain.Entidades.Usuario;
 using ContratacaoNutricionistas.Domain.Interfaces.Paciente;
 using ContratacaoNutricionistas.Domain.Interfaces.Usuario;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Security.Claims;
 
 namespace ContratacaoNutricionistas.Domain.Servicos.Usuario
 {
@@ -58,7 +66,51 @@ namespace ContratacaoNutricionistas.Domain.Servicos.Usuario
 
             return _UsuarioRepository.LoginExiste(pLogin);
         }
+
+        public ClaimsPrincipal RetornaAutenticacaoUsuario(string pLogin, string pSenha)
+        {
+            UsuarioAutenticacao usuarioAutenticacao = ConsultarUsuarioAutenticacao(pLogin, pSenha);
+
+            List<Claim> listaCliams = new List<Claim>();
+
+            switch (usuarioAutenticacao.TipoUsuario)
+            {
+                case Enumerados.Usuario.TipoUsuarioEnum.NaoDefinido:
+                    throw new Exception("Tipo de usuário não definido.");
+                case Enumerados.Usuario.TipoUsuarioEnum.Paciente:
+                case Enumerados.Usuario.TipoUsuarioEnum.Nutricionista:
+                    listaCliams.Add(new Claim(usuarioAutenticacao.TipoUsuario.ToString(), ClaimTypes.Name, usuarioAutenticacao.Login));
+                    break;
+                default:
+                    throw new Exception("Tipo de usuário não implementado");
+            }
+
+            ClaimsIdentity identity = new ClaimsIdentity(listaCliams, "Usuario Identity");
+
+            return new ClaimsPrincipal(new[] { identity }); ;
+        }
+
         #endregion
 
+        #region Métodos privados
+        /// <summary>
+        /// Consultar o usuário para realizar a autenticação
+        /// </summary>
+        /// <param name="pLogin">Login</param>
+        /// <param name="pSenha">Senha</param>
+        /// <returns></returns>
+        private UsuarioAutenticacao ConsultarUsuarioAutenticacao(string pLogin, string pSenha)
+        {
+            if (string.IsNullOrEmpty(pLogin))
+                throw new ArgumentException("O login é obrigatório");
+            if (string.IsNullOrEmpty(pSenha))
+                throw new ArgumentException("A senha é obrigatória");
+
+            UsuarioAutenticacao usuario = _UsuarioRepository.ConsultarUsuarioAutenticacao(pLogin, pSenha);
+            if (usuario == null)
+                throw new Exception("Usuário ou senha inválido");
+            return usuario;
+        }
+        #endregion
     }
 }

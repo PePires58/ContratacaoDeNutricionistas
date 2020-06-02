@@ -29,14 +29,22 @@
 * Implementação: Ajuste na mensagem de erro.
 */
 
+/*
+* Programador: Pedro Henrique Pires
+* Data: 01/06/2020
+* Implementação: Implementação de restrição de usuários logados.
+*/
 #endregion
 
 using System;
 using ContratacaoNutricionistas.Domain.Entidades.Nutricionista;
 using ContratacaoNutricionistas.Domain.Entidades.Usuario;
+using ContratacaoNutricionistas.Domain.Enumerados.Usuario;
 using ContratacaoNutricionistas.Domain.Interfaces.Nutricionista;
 using ContratacaoNutricionistas.Domain.Interfaces.Usuario;
 using ContratacaoNutricionistasWEB.Models.Nutricionista;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ContratacaoNutricionistasWEB.Controllers
@@ -44,6 +52,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
     /// <summary>
     /// Controlador de nutricionista
     /// </summary>
+    [Authorize(Policy ="Nutricionista")]
     public class NutricionistaController : Controller
     {
         #region Propriedades
@@ -70,19 +79,23 @@ namespace ContratacaoNutricionistasWEB.Controllers
         }
         #endregion
 
-
         #region Métodos
         /// <summary>
         /// Essa tela retorna a página de Cadastro.cshtml da pasta Nutricionista
         /// </summary>
         /// <returns>Cadastro.cshtml da pasta Nutricionista</returns>
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Cadastro()
         {
+            if (User.HasClaim(c => c.Type != TipoUsuarioEnum.NaoDefinido.ToString()))
+                HttpContext.SignOutAsync();
+
             return View(new NutricionistaCadastroVM());
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public IActionResult Cadastro(NutricionistaCadastroVM pModel)
         {
             try

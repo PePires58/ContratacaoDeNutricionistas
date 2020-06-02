@@ -22,6 +22,12 @@
 * Data: 01/06/2020
 * Implementação: Recuperando informações corretamente e ajustando comando SQL.
 */
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 01/06/2020
+* Implementação: Restringindo pelo tipo de usuário.
+*/
 #endregion
 
 
@@ -91,7 +97,7 @@ namespace ContratacaoNutricionistas.Domain.Repository.Nutricionista
             stringBuilder.AppendLine("  TB.LOGIN,");
             stringBuilder.AppendLine("  TB.SENHA");
             stringBuilder.AppendLine("FROM USUARIO_TB TB WITH(NOLOCK)");
-            stringBuilder.AppendLine("WHERE TB.ID_USUARIO = @ID");
+            stringBuilder.AppendLine("WHERE TB.ID_USUARIO = @ID AND TB.TP_USUARIO = 1");
 
             DataSet ds = _UnitOfWork.Consulta(stringBuilder.ToString());
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -157,7 +163,7 @@ namespace ContratacaoNutricionistas.Domain.Repository.Nutricionista
             stringBuilder.AppendLine("    TELEFONE = @TELEFONE,");
             stringBuilder.AppendLine("    SENHA = @SENHA,");
             stringBuilder.AppendLine("    CRN = @CRN");
-            stringBuilder.AppendLine("WHERE ID_USUARIO = @ID");
+            stringBuilder.AppendLine("WHERE ID_USUARIO = @ID AND TP_USUARIO = 1");
 
             _UnitOfWork.Executar(stringBuilder.ToString());
         }

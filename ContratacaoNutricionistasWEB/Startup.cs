@@ -10,17 +10,19 @@
 * Implementação: Inclusão de classes de serviço e repositório de nutricionista.
 */
 
-  /*
- * Programador: Pedro Henrique Pires
- * Data: 01/06/2020
- * Implementação: Inclusão de classe de serviço e repositório para usuário.
- */
+/*
+* Programador: Pedro Henrique Pires
+* Data: 01/06/2020
+* Implementação: Inclusão de classe de serviço e repositório para usuário.
+*/
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 01/06/2020
+* Implementação: Implementação de restrição de usuários logados.
+*/
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ContratacaoNutricionistas.Domain.Interfaces.Nutricionista;
 using ContratacaoNutricionistas.Domain.Interfaces.Paciente;
 using ContratacaoNutricionistas.Domain.Interfaces.Usuario;
@@ -35,7 +37,6 @@ using DataBaseHelper.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -62,6 +63,27 @@ namespace ContratacaoNutricionistasWEB
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+
+            services.AddAuthentication("CookieAuth")
+                .AddCookie("CookieAuth", config =>
+                {
+                    config.Cookie.Name = "Authentication.Cookie";
+                    config.LoginPath = "/Login/Index";
+                    config.AccessDeniedPath = "/Home/Index";
+                });
+
+            services.AddAuthorization(option =>
+            {
+                option.AddPolicy("Nutricionista", politica =>
+                {
+                    politica.RequireClaim("Nutricionista");
+                });
+
+                option.AddPolicy("Paciente", paciente =>
+                {
+                    paciente.RequireClaim("Paciente");
+                });
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -93,6 +115,7 @@ namespace ContratacaoNutricionistasWEB
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

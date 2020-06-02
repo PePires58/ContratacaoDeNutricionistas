@@ -10,6 +10,12 @@
  * Data: 01/06/2020
  * Implementação: Implementação dos métodos de alteração e consulta.
  */
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 01/06/2020
+* Implementação: Restringindo pelo tipo de usuário.
+*/
 #endregion
 
 using ContratacaoNutricionistas.Domain.Entidades.Paciente;
@@ -78,7 +84,7 @@ namespace ContratacaoNutricionistas.Domain.Repository.Paciente
             stringBuilder.AppendLine("    NOME = @NOME,");
             stringBuilder.AppendLine("    TELEFONE = @TELEFONE,");
             stringBuilder.AppendLine("    SENHA = @SENHA");
-            stringBuilder.AppendLine("WHERE ID_USUARIO = @ID");
+            stringBuilder.AppendLine("WHERE ID_USUARIO = @ID AND TP_USUARIO = 0"); 
 
             _UnitOfWork.Executar(stringBuilder.ToString());
         }
@@ -102,7 +108,7 @@ namespace ContratacaoNutricionistas.Domain.Repository.Paciente
             stringBuilder.AppendLine("  TB.LOGIN,");
             stringBuilder.AppendLine("  TB.SENHA");
             stringBuilder.AppendLine("FROM USUARIO_TB TB WITH(NOLOCK)");
-            stringBuilder.AppendLine("WHERE TB.ID_USUARIO = @ID");
+            stringBuilder.AppendLine("WHERE TB.ID_USUARIO = @ID AND TB.TP_USUARIO = 0");
 
             DataSet ds = _UnitOfWork.Consulta(stringBuilder.ToString());
 
