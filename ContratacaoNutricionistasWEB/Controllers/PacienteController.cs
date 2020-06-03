@@ -29,6 +29,12 @@
 * Data: 01/06/2020
 * Implementação: Implementação de restrição de usuários logados.
 */
+
+/*
+ * Programador: Pedro Henrique Pires
+ * Data: 03/06/2020
+ * Implementação: Implementação de restrição por usuário
+ */
 #endregion
 
 using ContratacaoNutricionistas.Domain.Entidades.Paciente;
@@ -41,6 +47,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 
 namespace ContratacaoNutricionistasWEB.Controllers
 {
@@ -145,6 +152,11 @@ namespace ContratacaoNutricionistasWEB.Controllers
         {
             if (ID == 0 || ID < 0)
                 return BadRequest();
+
+            /*Se o usuário logado tenta alterar os dados de outro usuário*/
+            if (Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType)
+                != ID)
+                return RedirectToAction("Index", "Home");
 
             PacienteAlteracaoVM pacienteAlteracaoVM = null;
 

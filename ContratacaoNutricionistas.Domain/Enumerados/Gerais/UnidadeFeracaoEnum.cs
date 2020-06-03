@@ -4,6 +4,12 @@
  * Data: 30/05/2020
  * Implementação: Implementação Inicial do enumerado de estados
  */
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 03/06/2020
+* Implementação: Incluindo valor padrão
+*/
 #endregion
 
 using System.ComponentModel;
@@ -12,60 +18,61 @@ namespace ContratacaoNutricionistas.Domain.Enumerados.Gerais
 {
     public enum UnidadeFederacaoEnum
     {
-        [Description("Acre")]
+        [Description(""), DefaultValue("")]
+        NaoDefinido,
+        [Description("Acre"), DefaultValue("AC")]
         AC,
-        [Description("Alagoas")]
+        [Description("Alagoas"), DefaultValue("AL")]
         AL,
-        [Description("Amapá")]
+        [Description("Amapá"), DefaultValue("AP")]
         AP,
-        [Description("Amazonas")]
+        [Description("Amazonas"), DefaultValue("AM")]
         AM,
-        [Description("Bahia")]
+        [Description("Bahia"), DefaultValue("BA")]
         BA,
-        [Description("Ceará")]
+        [Description("Ceará"), DefaultValue("CE")]
         CE,
-        [Description("Distrito Federal")]
+        [Description("Distrito Federal"), DefaultValue("DF")]
         DF,
-        [Description("Espirito Santo")]
+        [Description("Espirito Santo"), DefaultValue("ES")]
         ES,
-        [Description("Goiás")]
+        [Description("Goiás"), DefaultValue("GO")]
         GO,
-        [Description("Maranhão")]
+        [Description("Maranhão"), DefaultValue("MA")]
         MA,
-        [Description("Mato Grosso")]
+        [Description("Mato Grosso"), DefaultValue("MT")]
         MT,
-        [Description("Mato Grosso do Sul")]
+        [Description("Mato Grosso do Sul"), DefaultValue("MS")]
         MS,
-        [Description("Minas Gerais")]
+        [Description("Minas Gerais"), DefaultValue("MG")]
         MG,
-        [Description("Pará")]
+        [Description("Pará"), DefaultValue("PA")]
         PA,
-        [Description("Paraiba")]
+        [Description("Paraiba"), DefaultValue("PB")]
         PB,
-        [Description("Paraná")]
+        [Description("Paraná"), DefaultValue("PR")]
         PR,
-        [Description("Pernambuco")]
+        [Description("Pernambuco"), DefaultValue("PE")]
         PE,
-        [Description("Piauí")]
+        [Description("Piauí"), DefaultValue("PI")]
         PI,
-        [Description("Rio de Janeiro")]
+        [Description("Rio de Janeiro"), DefaultValue("RJ")]
         RJ,
-        [Description("Rio Grande do Norte")]
+        [Description("Rio Grande do Norte"), DefaultValue("RN")]
         RN,
-        [Description("Rio Grande do Sul")]
+        [Description("Rio Grande do Sul"), DefaultValue("RS")]
         RS,
-        [Description("Rondônia")]
+        [Description("Rondônia"), DefaultValue("RO")]
         RO,
-        [Description("Roraima")]
+        [Description("Roraima"), DefaultValue("RR")]
         RR,
-        [Description("Santa Catarina")]
+        [Description("Santa Catarina"), DefaultValue("SC")]
         SC,
-        [Description("São Paulo")]
+        [Description("São Paulo"), DefaultValue("SP")]
         SP,
-        [Description("Sergipe")]
+        [Description("Sergipe"), DefaultValue("SE")]
         SE,
-        [Description("Tocantis")]
+        [Description("Tocantis"), DefaultValue("TO")]
         TO
     }
-
 }

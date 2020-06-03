@@ -21,6 +21,12 @@
 * Data: 01/06/2020
 * Implementação: Inclusão de constantes para o usuário logado.
 */
+
+/*
+ * Programador: Pedro Henrique Pires
+ * Data: 03/06/2020
+ * Implementação: Implementação de constante de registro por página
+ */
 #endregion
 
 namespace ContratacaoNutricionistasWEB
@@ -36,6 +42,11 @@ namespace ContratacaoNutricionistasWEB
         /// Constante para acesso da ViewData
         /// </summary>
         public const string ViewDataMensagemErro = "MensagemErro";
+
+        /// <summary>
+        /// Constantes para acesso da ViewData
+        /// </summary>
+        public const string ViewDataUnidadesFeracao = "UnidadesFederacao";
 
         /// <summary>
         /// Mensagem para senha de alteração de dados for inválida
@@ -61,5 +72,10 @@ namespace ContratacaoNutricionistasWEB
         /// Nome do tipo da claim para usuário logado
         /// </summary>
         public const string IDUsuarioLogado = "ID";
+
+        /// <summary>
+        /// Quantidade de registros por página
+        /// </summary>
+        public const int QuantidadeRegistrosPorPagina = 10;
     }
 }

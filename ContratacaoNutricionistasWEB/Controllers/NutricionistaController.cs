@@ -40,13 +40,21 @@
 * Data: 01/06/2020
 * Implementação: Implementando restrição de alteração para somente os dados do usuário logado.
 */
+
+/*
+ * Programador: Pedro Henrique Pires
+ * Data: 03/06/2020
+ * Implementação: Implementação de cadastro/alteração de endereço e consulta de CEP
+ */
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ContratacaoNutricionistas.Domain.Entidades.Nutricionista;
 using ContratacaoNutricionistas.Domain.Entidades.Usuario;
+using ContratacaoNutricionistas.Domain.Enumerados.Gerais;
 using ContratacaoNutricionistas.Domain.Enumerados.Usuario;
 using ContratacaoNutricionistas.Domain.Interfaces.Nutricionista;
 using ContratacaoNutricionistas.Domain.Interfaces.Usuario;
@@ -54,13 +62,15 @@ using ContratacaoNutricionistasWEB.Models.Nutricionista;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using ModulosHelper.Extensions;
 
 namespace ContratacaoNutricionistasWEB.Controllers
 {
     /// <summary>
     /// Controlador de nutricionista
     /// </summary>
-    [Authorize(Policy ="Nutricionista")]
+    [Authorize(Policy = "Nutricionista")]
     public class NutricionistaController : Controller
     {
         #region Propriedades
@@ -87,7 +97,17 @@ namespace ContratacaoNutricionistasWEB.Controllers
         }
         #endregion
 
+        #region Constantes
+        List<SelectListItem> ListaUF => Enum.GetValues(typeof(UnidadeFederacaoEnum)).Cast<UnidadeFederacaoEnum>().Select(v => new SelectListItem
+        {
+            Text = v.GetDescription(),
+            Value = v.GetDefaultValue()
+        }).ToList();
+        #endregion
+
         #region Métodos
+
+        #region Cadastro
         /// <summary>
         /// Essa tela retorna a página de Cadastro.cshtml da pasta Nutricionista
         /// </summary>
@@ -99,9 +119,14 @@ namespace ContratacaoNutricionistasWEB.Controllers
             if (User.HasClaim(c => c.Type != TipoUsuarioEnum.NaoDefinido.ToString()))
                 await HttpContext.SignOutAsync();
 
-            return View(new NutricionistaCadastroVM());
+            return RedirectToAction("Cadastro", "Nutricionista");
         }
 
+        /// <summary>
+        /// Cadastra um nutricionista
+        /// </summary>
+        /// <param name="pModel">Nutricionista a ser cadastrado</param>
+        /// <returns>Tela de login caso sucesso ou tela de cadastro quando erro</returns>
         [HttpPost]
         [AllowAnonymous]
         public IActionResult Cadastro(NutricionistaCadastroVM pModel)
@@ -113,7 +138,6 @@ namespace ContratacaoNutricionistasWEB.Controllers
                 /*Verifica se o modelo é valido, de acordo com os atributos da classe passado no parâmetro*/
                 if (!ModelState.IsValid)
                     return View(pModel);
-
 
                 /*Valida se já existe login cadastrado*/
                 if (_ServiceUsuario.LoginExiste(pModel.Login))
@@ -144,7 +168,14 @@ namespace ContratacaoNutricionistasWEB.Controllers
                 return View(pModel);
             }
         }
+        #endregion
 
+        #region Alteração de dados
+        /// <summary>
+        /// Tela inicial para alteração de dados
+        /// </summary>
+        /// <param name="ID">ID do nutricionista</param>
+        /// <returns>AlterarDados.cshtml da pasta Nutricionista</returns>
         [HttpGet]
         public IActionResult AlterarDados(int ID)
         {
@@ -217,7 +248,6 @@ namespace ContratacaoNutricionistasWEB.Controllers
 
                 ViewData[Constantes.ViewDataMensagemRetorno] = "Dados do nutricionista alterados com sucesso";
 
-                /*Redireciona para a página Index.cshtml da pasta Login*/
                 return View(pModel);
             }
             catch (Exception ex)
@@ -227,6 +257,240 @@ namespace ContratacaoNutricionistasWEB.Controllers
                 return View(pModel);
             }
         }
+        #endregion
+
+        #region Cadastro de endereço
+        /// <summary>
+        /// Retorna a tela para cadastrar os endereços de trabalho
+        /// </summary>
+        /// <returns>CadastrarEndereco.cshtml da pasta Nutricionista</returns>
+        [HttpGet]
+        public IActionResult CadastrarEndereco()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// Cadastra o endereço do nutricionista
+        /// </summary>
+        /// <param name="pModel">Modelo a ser validado</param>
+        /// <returns>Mensagem de sucesso ou erro</returns>
+        [HttpPost]
+        public IActionResult CadastrarEndereco(EnderecoVM pModel)
+        {
+            ViewData[Constantes.ViewDataMensagemErro] = ViewData[Constantes.ViewDataMensagemRetorno] = null;
+
+            try
+            {
+                if (!ModelState.IsValid)
+                    return View(pModel);
+
+                UnidadeFederacaoEnum unidadeFeracao = Enum.GetValues(typeof(UnidadeFederacaoEnum))
+                    .Cast<UnidadeFederacaoEnum>()
+                    .FirstOrDefault(v => v.GetDescription().Equals(pModel.UF));
+
+                int IdUsuario = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType);
+
+                _ServiceNutricionista.CadastrarEndereco(new Endereco(
+                    IdUsuario,
+                    pModel.Logradouro,
+                    pModel.Bairro,
+                    pModel.Cidade,
+                    pModel.CEP,
+                    unidadeFeracao
+                    )
+                {
+                    Numero = pModel?.Numero,
+                    Complemento = pModel.Complemento == null ? string.Empty : pModel.Complemento
+                });
+
+                ViewData[Constantes.ViewDataMensagemRetorno] = $"Endereço {pModel.Logradouro}, {pModel.Numero}. {pModel.Cidade} - {unidadeFeracao.GetDefaultValue()}.{Environment.NewLine}Cadastrado com sucesso!";
+
+                ModelState.Clear();
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+                ViewData[Constantes.ViewDataMensagemErro] = ex.Message;
+                return View();
+            }
+        }
+
+        #region JsonResults
+        [HttpGet]
+        public JsonResult ConsultarEnderecoCEP(string pCEP)
+        {
+            ViewData[Constantes.ViewDataMensagemErro] = ViewData[Constantes.ViewDataMensagemRetorno] = null;
+
+            try
+            {
+                Endereco endereco = _ServiceNutricionista.ConsultarEnderecoPorCEP(pCEP,
+                    Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType));
+
+                return Json(new
+                {
+                    status = "OK",
+                    data = new EnderecoVM()
+                    {
+                        Bairro = endereco.Bairro,
+                        CEP = endereco.CEP,
+                        Cidade = endereco.Cidade,
+                        Complemento = endereco.Complemento,
+                        Logradouro = endereco.Logradouro,
+                        UF = endereco.UF.GetDescription(),
+                        Numero = endereco.Numero
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                ViewData[Constantes.ViewDataMensagemErro] = ex.Message;
+                return Json(new
+                {
+                    status = "ERROR"
+                });
+            }
+        }
+        #endregion
+
+        #endregion
+
+        #region Endereços cadastrados
+
+        /// <summary>
+        /// Lista de endereços cadastrados
+        /// </summary>
+        /// <param name="pIndiceInicial">Indice inicial</param>
+        /// <param name="pRua">Rua</param>
+        /// <param name="pCidade">Cidade</param>
+        /// <param name="pBairro">Bairro</param>
+        /// <param name="pCEP">CEP</param>
+        /// <param name="pUF">UF</param>
+        /// <returns>Uma lista de endereços</returns>
+        [HttpGet]
+        public IActionResult EnderecosCadastrados(int pIndiceInicial, string pRua, string pCidade, string pBairro, string pCEP, string pUF)
+        {
+            List<Endereco> enderecos = _ServiceNutricionista.EnderecosCadastrados(
+                Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType),
+                pRua,
+                pCidade,
+                pBairro,
+                pCEP,
+                pUF);
+
+            List<EnderecoAlteracaoVM> enderecosVm = new List<EnderecoAlteracaoVM>();
+
+            if (enderecos.Any())
+            {
+
+                enderecosVm = enderecos.Select(c => new EnderecoAlteracaoVM()
+                {
+                    ID = c.IdEndereco,
+                    Bairro = c.Bairro,
+                    CEP = c.CEP,
+                    Cidade = c.Cidade,
+                    Complemento = c.Complemento,
+                    Logradouro = c.Logradouro,
+                    Numero = c.Numero,
+                    UF = c.UF.GetDescription()
+                }).ToList();
+            }
+
+            return View(enderecosVm.Skip(pIndiceInicial).Take(Constantes.QuantidadeRegistrosPorPagina));
+        }
+
+        #endregion
+
+        #region Editar endereço
+        /// <summary>
+        /// Método que altera os dados do endereço
+        /// </summary>
+        /// <param name="ID">ID do endereço</param>
+        /// <returns>Endereço para ser alterado</returns>
+        [HttpGet]
+        public IActionResult EditarEndereco(int ID)
+        {
+            ViewData[Constantes.ViewDataMensagemErro] = ViewData[Constantes.ViewDataMensagemRetorno] = null;
+            if (ID <= 0)
+                return RedirectToAction("EnderecosCadastrados", "Nutricionista");
+
+            EnderecoAlteracaoVM enderecoAlteracaoVM = null;
+
+            Endereco endereco = _ServiceNutricionista.ConsultarEnderecoNutricionistaPorID(ID,
+                Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType)
+                );
+
+            if (endereco != null)
+            {
+                enderecoAlteracaoVM = new EnderecoAlteracaoVM()
+                {
+                    ID = endereco.IdEndereco,
+                    Bairro = endereco.Bairro,
+                    CEP = endereco.CEP,
+                    Cidade = endereco.Cidade,
+                    Complemento = endereco.Complemento,
+                    Logradouro = endereco.Logradouro,
+                    Numero = endereco.Numero,
+                    UF = endereco.UF.GetDefaultValue()
+                };
+            }
+
+            if (enderecoAlteracaoVM == null)
+                return RedirectToAction("EnderecosCadastrados", "Nutricionista");
+
+            ViewData[Constantes.ViewDataUnidadesFeracao] = ListaUF;
+
+            return View(enderecoAlteracaoVM);
+        }
+
+        /// <summary>
+        /// Edita os dados de um endereço
+        /// </summary>
+        /// <param name="pModel">Endereço a ser alterado</param>
+        /// <returns>Mensagem de sucesso ou erro</returns>
+        [HttpPost]
+        public IActionResult EditarEndereco(EnderecoAlteracaoVM pModel)
+        {
+            ViewData[Constantes.ViewDataUnidadesFeracao] = ListaUF;
+
+            try
+            {
+                if (!ModelState.IsValid)
+                    return View(pModel);
+
+                UnidadeFederacaoEnum unidadeFeracao = Enum.GetValues(typeof(UnidadeFederacaoEnum))
+                    .Cast<UnidadeFederacaoEnum>()
+                    .FirstOrDefault(v => v.GetDescription().Equals(pModel.UF));
+
+                int IdUsuario = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType);
+
+                _ServiceNutricionista.AlterarDadosEndereco(new Endereco(
+                    IdUsuario,
+                    pModel.Logradouro,
+                    pModel.Bairro,
+                    pModel.Cidade,
+                    pModel.CEP,
+                    unidadeFeracao
+                    )
+                {
+                    Numero = pModel.Numero,
+                    Complemento = pModel.Complemento,
+                    IdEndereco = pModel.ID
+                });
+
+                ViewData[Constantes.ViewDataMensagemRetorno] = $"Endereço {pModel.Logradouro}, {pModel.Numero}. {pModel.Cidade} - {unidadeFeracao.GetDefaultValue()}.{Environment.NewLine}Alterado com sucesso!";
+
+                return View(pModel);
+            }
+            catch (Exception ex)
+            {
+                ViewData[Constantes.ViewDataMensagemErro] = ex.Message;
+                return View(pModel);
+            }
+        }
+        #endregion
+
         #endregion
 
     }

@@ -1,6 +1,8 @@
 ﻿@model ContratacaoNutricionistasWEB.Models.Paciente.PacienteAlteracaoVM
-
-<h4>Alteração de dados</h4>
+@{
+    ViewData["Title"] = "Alteração de dados";
+}
+<h4>@ViewData["Title"]</h4>
 <hr />
 @if (ViewData[Constantes.ViewDataMensagemErro] != null)
 {

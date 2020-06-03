@@ -5,12 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Correios.NET" Version="1.0.1" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.1" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="DataBaseHelper">
       <HintPath>..\Referencias\DataBaseHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="ExtensionHelper">
+      <HintPath>..\Referencias\ExtensionHelper.dll</HintPath>
     </Reference>
   </ItemGroup>
 
