@@ -33,6 +33,12 @@
 * Data: 04/06/2020
 * Implementação: Implementação da classe de endereço
 */
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 04/06/2020
+* Implementação: Incluindo política de usuário logado.
+*/
 #endregion
 
 using ContratacaoNutricionistas.Domain.Interfaces.Endereco;

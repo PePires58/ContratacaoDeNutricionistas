@@ -16,6 +16,12 @@
 * Data: 04/06/2020
 * Implementação: Inclusão de método de logout.
 */
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 04/06/2020
+* Implementação: Inclusão de método de logout.
+*/
 #endregion
 
 using System;

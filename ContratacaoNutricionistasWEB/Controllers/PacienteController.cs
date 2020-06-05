@@ -41,6 +41,12 @@
 * Data: 04/06/2020
 * Implementação: Restrição por CPF e tipo de usuário.
 */
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 04/06/2020
+* Implementação: Inclusão de método de logout.
+*/
 #endregion
 
 using ContratacaoNutricionistas.Domain.Entidades.Paciente;
@@ -49,7 +55,6 @@ using ContratacaoNutricionistas.Domain.Enumerados.Usuario;
 using ContratacaoNutricionistas.Domain.Interfaces.Paciente;
 using ContratacaoNutricionistas.Domain.Interfaces.Usuario;
 using ContratacaoNutricionistasWEB.Models.Paciente;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ModulosHelper.Extensions;
