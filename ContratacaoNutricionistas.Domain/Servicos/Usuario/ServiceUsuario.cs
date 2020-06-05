@@ -17,12 +17,21 @@
 * Implementação: Incluindo ID para o usuário autenticado.
 */
 
+/*
+* Programador: Pedro Henrique Pires
+* Data: 04/06/2020
+* Implementação: Restrição cpf e tipo de usuário.
+*/
+
 #endregion
 using ContratacaoNutricionistas.Domain.Entidades.Usuario;
+using ContratacaoNutricionistas.Domain.Enumerados.Usuario;
 using ContratacaoNutricionistas.Domain.Interfaces.Paciente;
 using ContratacaoNutricionistas.Domain.Interfaces.Usuario;
+using ModulosHelper.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 
 namespace ContratacaoNutricionistas.Domain.Servicos.Usuario
@@ -62,15 +71,23 @@ namespace ContratacaoNutricionistas.Domain.Servicos.Usuario
         /// Verifica se o login já existe
         /// </summary>
         /// <param name="pLogin">Login já existe</param>
+        /// <param name="pCPF">CPF</param>
+        /// <param name="pTipoUsuario">Tipo de usuário</param>
         /// <returns>Returna se o usuário existe ou não</returns>
-        public bool LoginExiste(string pLogin)
+        public bool LoginExiste(string pLogin, string pCPF, string pTipoUsuario)
         {
             if (string.IsNullOrEmpty(pLogin))
                 throw new ArgumentException("O login é obrigatório.");
             else if (pLogin.Length > TamanhoMaximoLogin)
                 throw new ArgumentException(string.Format("O tamanho máximo do campo Login é de {0} caracteres.", TamanhoMaximoLogin));
+            CPF cpf = new CPF(pCPF, false);
+            if (string.IsNullOrEmpty(pTipoUsuario))
+                throw new ArgumentException("O tipo de usuário é obrigatório");
+            else if (!Enum.GetValues(typeof(TipoUsuarioEnum)).Cast<TipoUsuarioEnum>().Any(c => c.GetDefaultValue()
+             .Equals(pTipoUsuario)))
+                throw new ArgumentException("Tipo de usuário inválido");
 
-            return _UsuarioRepository.LoginExiste(pLogin);
+            return _UsuarioRepository.LoginExiste(pLogin, cpf.Numero, pTipoUsuario);
         }
 
         public ClaimsPrincipal RetornaAutenticacaoUsuario(string pLogin, string pSenha)

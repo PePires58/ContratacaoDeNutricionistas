@@ -46,6 +46,12 @@
  * Data: 03/06/2020
  * Implementação: Implementação de cadastro/alteração de endereço e consulta de CEP
  */
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 04/06/2020
+* Implementação: Ajustando erro ao acessar a tela.
+*/
 #endregion
 
 using System;
@@ -119,7 +125,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
             if (User.HasClaim(c => c.Type != TipoUsuarioEnum.NaoDefinido.ToString()))
                 await HttpContext.SignOutAsync();
 
-            return RedirectToAction("Cadastro", "Nutricionista");
+            return View();
         }
 
         /// <summary>
@@ -140,7 +146,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
                     return View(pModel);
 
                 /*Valida se já existe login cadastrado*/
-                if (_ServiceUsuario.LoginExiste(pModel.Login))
+                if (_ServiceUsuario.LoginExiste(pModel.Login,pModel.CPF,pModel.TipoUsuario.GetDefaultValue()))
                     throw new Exception($"O login: {pModel.Login}, já existe!");
 
                 /*Cadastro o nutricionista*/
@@ -492,6 +498,5 @@ namespace ContratacaoNutricionistasWEB.Controllers
         #endregion
 
         #endregion
-
     }
 }

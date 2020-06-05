@@ -16,10 +16,17 @@
 * Data: 01/06/2020
 * Implementação: Restringindo pelo tipo de usuário.
 */
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 04/06/2020
+* Implementação: Herdando do repositório base.
+*/
 #endregion
 
 using ContratacaoNutricionistas.Domain.Entidades.Paciente;
 using ContratacaoNutricionistas.Domain.Interfaces.Paciente;
+using ContratacaoNutricionistas.Domain.Repository.Repository;
 using DataBaseHelper.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -31,23 +38,17 @@ namespace ContratacaoNutricionistas.Domain.Repository.Paciente
     /// <summary>
     /// Classe que faz as conexões com o banco quando o objeto é um paciente
     /// </summary>
-    public class PacienteRepository : IPacienteRepository
+    public class PacienteRepository : RepositoryBase,IPacienteRepository
     {
-        #region Propriedades
-        /// <summary>
-        /// Unidade de conexão e execução com banco de dados
-        /// </summary>
-        private readonly IUnitOfWork _UnitOfWork;
-        #endregion
-
+ 
         #region Construtor
         /// <summary>
         /// Unidade de trabalho
         /// </summary>
         /// <param name="pIUnitOfWork"></param>
         public PacienteRepository(IUnitOfWork pIUnitOfWork)
+            : base(pIUnitOfWork)
         {
-            _UnitOfWork = pIUnitOfWork;
         }
         #endregion
 

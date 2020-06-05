@@ -16,10 +16,17 @@
 * Data: 01/06/2020
 * Implementação: Incluindo ID do usuário.
 */
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 04/06/2020
+* Implementação: Herdando do repositório base.
+*/
 #endregion
 using ContratacaoNutricionistas.Domain.Entidades.Usuario;
 using ContratacaoNutricionistas.Domain.Enumerados.Usuario;
 using ContratacaoNutricionistas.Domain.Interfaces.Paciente;
+using ContratacaoNutricionistas.Domain.Repository.Repository;
 using DataBaseHelper.Interfaces;
 using System;
 using System.Data;
@@ -27,23 +34,15 @@ using System.Text;
 
 namespace ContratacaoNutricionistas.Domain.Repository.Usuario
 {
-    public class UsuarioRepository : IUsuarioRepository
+    public class UsuarioRepository : RepositoryBase, IUsuarioRepository
     {
-        #region Propriedades
-        /// <summary>
-        /// Unidade de conexão e execução com banco de dados
-        /// </summary>
-        private readonly IUnitOfWork _UnitOfWork;
-        #endregion
-
         #region Construtor
         /// <summary>
         /// Unidade de trabalho
         /// </summary>
         /// <param name="pIUnitOfWork"></param>
-        public UsuarioRepository(IUnitOfWork pIUnitOfWork)
+        public UsuarioRepository(IUnitOfWork pIUnitOfWork):base(pIUnitOfWork)
         {
-            _UnitOfWork = pIUnitOfWork;
         }
         #endregion
 
@@ -52,14 +51,20 @@ namespace ContratacaoNutricionistas.Domain.Repository.Usuario
         /// Login já existe
         /// </summary>
         /// <param name="pLogin">Login</param>
+        /// <param name="pCPF">CPF</param>
+        /// <param name="pTipoUsuario">Tipo de usuário</param>
         /// <returns>Login já existe ou não</returns>
-        public bool LoginExiste(string pLogin)
+        public bool LoginExiste(string pLogin, string pCPF, string pTipoUsuario)
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine($"DECLARE @LOGIN VARCHAR(20)");
+            stringBuilder.AppendLine($"DECLARE @LOGIN VARCHAR(20),");
+            stringBuilder.AppendLine($"@CPF VARCHAR(14),");
+            stringBuilder.AppendLine($"@TP_USUARIO CHAR(1)");
             stringBuilder.AppendLine($"SET @LOGIN = '{pLogin}'");
-            stringBuilder.AppendLine($"SELECT TOP 1 1 FROM USUARIO_TB WITH(NOLOCK) WHERE LOGIN = @LOGIN");
+            stringBuilder.AppendLine($"SET @CPF = '{pCPF}'");
+            stringBuilder.AppendLine($"SET @TP_USUARIO = '{pTipoUsuario}'");
+            stringBuilder.AppendLine($"SELECT TOP 1 1 FROM USUARIO_TB TB WITH(NOLOCK) WHERE TB.LOGIN = @LOGIN OR (TB.CPF = @CPF AND TB.TP_USUARIO = @TP_USUARIO)");
 
             DataSet ds = _UnitOfWork.Consulta(stringBuilder.ToString());
 

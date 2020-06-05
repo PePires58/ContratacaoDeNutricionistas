@@ -5,17 +5,24 @@
  * Implementação: Implementação Inicial da classe de serviço de paciente
  */
 
-  /*
- * Programador: Pedro Henrique Pires
- * Data: 01/06/2020
- * Implementação: Implementação dos métodos de alteração e consulta.
- */
+/*
+* Programador: Pedro Henrique Pires
+* Data: 01/06/2020
+* Implementação: Implementação dos métodos de alteração e consulta.
+*/
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 04/06/2020
+* Implementação: Restrição por cpf e tipo de login.
+*/
 #endregion
 
 using ContratacaoNutricionistas.Domain.Entidades.Paciente;
 using ContratacaoNutricionistas.Domain.Interfaces.Paciente;
 using ContratacaoNutricionistas.Domain.Interfaces.Usuario;
 using DataBaseHelper.Interfaces;
+using ModulosHelper.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -60,7 +67,7 @@ namespace ContratacaoNutricionistas.Domain.Servicos.Paciente
         /// <param name="pModel"></param>
         public void Cadastra(PacienteCadastro pModel)
         {
-            if (!_ServiceUsuario.LoginExiste(pModel.Login))
+            if (!_ServiceUsuario.LoginExiste(pModel.Login,pModel.CpfObjeto.Numero,pModel.TipoUsuario.GetDefaultValue()))
                 _PacienteRepository.CadastrarPaciente(pModel);
             else
                 throw new Exception($"O login: { pModel }, já existe!");

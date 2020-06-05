@@ -4,6 +4,12 @@
  * Data: 30/05/2020
  * Implementação: Implementação Inicial da classe de cadastro ou alteração de usuários
  */
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 04/06/2020
+* Implementação: Arrumando mensagem e mascara de data.
+*/
 #endregion
 
 using System.ComponentModel.DataAnnotations;
@@ -27,7 +33,7 @@ namespace ContratacaoNutricionistasWEB.Models.Usuario
         /// Telefone
         /// </summary>
         [Display(Name = "Telefone", Prompt = "Ex.: (011) 91242-1234")]
-        [RegularExpression(@"^\(\d{3}\)\d{4}\-\d{4}$", ErrorMessage ="Telefone deve estar no formato (011)91242-1234")]
+        [RegularExpression(@"^\([1-9]{2}\) (9)?[0-9]{4}\-[0-9]{4}$", ErrorMessage = "Telefone deve estar no formato (11) 91242-1234 ou (011) 1242-1234")]
         [Required(ErrorMessage = "O campo Telefone é obrigatório.")]
         public string Telefone { get; set; }
 
@@ -35,7 +41,7 @@ namespace ContratacaoNutricionistasWEB.Models.Usuario
         /// Campo de confirmação de senha
         /// </summary>
         [DataType(DataType.Password)]
-        [Required(ErrorMessage = "O campo Conformar senha é obrigatório.")]
+        [Required(ErrorMessage = "O campo Confirmar senha é obrigatório.")]
         [Display(Name = "Confirmar senha",Prompt ="Confirme sua senha")]
         [Compare(nameof(Senha), ErrorMessage = "As senhas não conferem")]
         [MaxLength(20, ErrorMessage = "O tamanho máximo do campo Confirmar senha é 20 caracteres")]

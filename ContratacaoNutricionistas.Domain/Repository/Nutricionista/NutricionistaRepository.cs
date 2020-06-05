@@ -34,12 +34,19 @@
  * Data: 03/06/2020
  * Implementação: Implementação de cadastro/alteração de endereços
  */
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 04/06/2020
+* Implementação: Herdando do repositório base.
+*/
 #endregion
 
 
 using ContratacaoNutricionistas.Domain.Entidades.Nutricionista;
 using ContratacaoNutricionistas.Domain.Enumerados.Gerais;
 using ContratacaoNutricionistas.Domain.Interfaces.Nutricionista;
+using ContratacaoNutricionistas.Domain.Repository.Repository;
 using DataBaseHelper.Interfaces;
 using ModulosHelper.Extensions;
 using System;
@@ -53,23 +60,16 @@ namespace ContratacaoNutricionistas.Domain.Repository.Nutricionista
     /// <summary>
     /// Classe que faz os comandos no banco de dados para nutricionista
     /// </summary>
-    public class NutricionistaRepository : INutricionistaRepository
+    public class NutricionistaRepository : RepositoryBase, INutricionistaRepository
     {
-        #region Propriedades
-        /// <summary>
-        /// Unidade de conexão e execução com banco de dados
-        /// </summary>
-        private readonly IUnitOfWork _UnitOfWork;
-        #endregion
 
         #region Construtor
         /// <summary>
         /// Unidade de trabalho
         /// </summary>
         /// <param name="pIUnitOfWork"></param>
-        public NutricionistaRepository(IUnitOfWork pIUnitOfWork)
+        public NutricionistaRepository(IUnitOfWork pIUnitOfWork): base(pIUnitOfWork)
         {
-            _UnitOfWork = pIUnitOfWork;
         }
         #endregion
 

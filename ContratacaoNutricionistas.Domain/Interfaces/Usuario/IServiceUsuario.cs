@@ -9,6 +9,11 @@
 * Data: 01/06/2020
 * Implementação: Implementação do método de consulta de usuário para autenticação.
 */
+/*
+* Programador: Pedro Henrique Pires
+* Data: 04/06/2020
+* Implementação: Implementação de restrição por CPF e tipo de usuário.
+*/
 #endregion
 using System.Security.Claims;
 
@@ -23,8 +28,10 @@ namespace ContratacaoNutricionistas.Domain.Interfaces.Usuario
         /// Verifica se o login existe
         /// </summary>
         /// <param name="pLogin">Login existe</param>
+        /// <param name="pCPF">CPF</param>
+        /// <param name="pTipoUsuario">Tipo de usuário</param>
         /// <returns></returns>
-        bool LoginExiste(string pLogin);
+        bool LoginExiste(string pLogin, string pCPF, string pTipoUsuario);
 
         /// <summary>
         /// Retorna o objeto de autenticação

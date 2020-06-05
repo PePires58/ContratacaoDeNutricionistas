@@ -35,6 +35,12 @@
  * Data: 03/06/2020
  * Implementação: Implementação de restrição por usuário
  */
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 04/06/2020
+* Implementação: Restrição por CPF e tipo de usuário.
+*/
 #endregion
 
 using ContratacaoNutricionistas.Domain.Entidades.Paciente;
@@ -46,6 +52,7 @@ using ContratacaoNutricionistasWEB.Models.Paciente;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ModulosHelper.Extensions;
 using System;
 using System.Linq;
 
@@ -114,7 +121,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
 
 
                 /*Valida se já existe login cadastrado*/
-                if (_ServiceUsuario.LoginExiste(pModel.Login))
+                if (_ServiceUsuario.LoginExiste(pModel.Login, pModel.CPF, pModel.TipoUsuario.GetDefaultValue()))
                     throw new Exception($"O login: {pModel.Login}, já existe!");
 
                 ///*Cadastro o paciente*/
