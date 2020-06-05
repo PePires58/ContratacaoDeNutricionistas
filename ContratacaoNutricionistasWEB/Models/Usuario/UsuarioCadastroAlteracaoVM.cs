@@ -10,6 +10,12 @@
 * Data: 04/06/2020
 * Implementação: Arrumando mensagem e mascara de data.
 */
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 04/06/2020
+* Implementação: Arrumando mensagem e mascara de data.
+*/
 #endregion
 
 using System.ComponentModel.DataAnnotations;
@@ -32,8 +38,8 @@ namespace ContratacaoNutricionistasWEB.Models.Usuario
         /// <summary>
         /// Telefone
         /// </summary>
-        [Display(Name = "Telefone", Prompt = "Ex.: (011) 91242-1234")]
-        [RegularExpression(@"^\([1-9]{2}\) (9)?[0-9]{4}\-[0-9]{4}$", ErrorMessage = "Telefone deve estar no formato (11) 91242-1234 ou (011) 1242-1234")]
+        [Display(Name = "Telefone", Prompt = "Ex.: (11) 91242-1234")]
+        [RegularExpression(@"^\([1-9]{2}\) (9)?[0-9]{4}\-[0-9]{4}$", ErrorMessage = "Telefone deve estar no formato (11) 91242-1234 ou (11) 1242-1234")]
         [Required(ErrorMessage = "O campo Telefone é obrigatório.")]
         public string Telefone { get; set; }
 

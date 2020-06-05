@@ -10,6 +10,12 @@
 * Data: 30/05/2020
 * Implementação: Ajuste no namespace.
 */
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 04/06/2020
+* Implementação: Ajuste para CPF invalidos de acordo com a receita federal.
+*/
 #endregion
 
 using System;
@@ -51,6 +57,14 @@ namespace ContratacaoNutricionistas.Domain.Entidades.Usuario
                 throw new ArgumentException("O número do CPF deve estar no formato 99999999999.");
 
             string CPF = pSemPontuacao ? pNumero : pNumero.Replace(".", "").Replace("-", "");
+
+            if (CPF.Equals("00000000000") || CPF.Equals("11111111111") || CPF.Equals("22222222222") ||
+                CPF.Equals("33333333333") || CPF.Equals("44444444444") || CPF.Equals("55555555555") ||
+                CPF.Equals("66666666666") || CPF.Equals("77777777777") || CPF.Equals("88888888888") ||
+                CPF.Equals("99999999999"))
+                throw new Exception("O CPF é inválido");
+
+
             string novePrimeirosDigitos = CPF.Substring(0, 9);
             string dezPrimeirosDigitos = CPF.Substring(0, 10);
             string digitoVerificador = CPF.Substring(9, 2);

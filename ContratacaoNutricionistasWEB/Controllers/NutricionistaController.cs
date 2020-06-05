@@ -52,6 +52,12 @@
 * Data: 04/06/2020
 * Implementação: Ajustando erro ao acessar a tela.
 */
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 04/06/2020
+* Implementação: Inclusão de serviço de endereço
+*/
 #endregion
 
 using System;
@@ -62,6 +68,7 @@ using ContratacaoNutricionistas.Domain.Entidades.Nutricionista;
 using ContratacaoNutricionistas.Domain.Entidades.Usuario;
 using ContratacaoNutricionistas.Domain.Enumerados.Gerais;
 using ContratacaoNutricionistas.Domain.Enumerados.Usuario;
+using ContratacaoNutricionistas.Domain.Interfaces.Endereco;
 using ContratacaoNutricionistas.Domain.Interfaces.Nutricionista;
 using ContratacaoNutricionistas.Domain.Interfaces.Usuario;
 using ContratacaoNutricionistasWEB.Models.Nutricionista;
@@ -84,6 +91,11 @@ namespace ContratacaoNutricionistasWEB.Controllers
         /// Serviços referente ao Nutricionista
         /// </summary>
         private readonly IServiceNutricionista _ServiceNutricionista;
+
+        /// <summary>
+        /// Serviços referente ao Nutricionista
+        /// </summary>
+        private readonly IServiceEndereco _ServiceEndereco;
         /// <summary>
         /// Serviços referente ao usuário
         /// </summary>
@@ -96,10 +108,12 @@ namespace ContratacaoNutricionistasWEB.Controllers
         /// </summary>
         /// <param name="pServiceNutricionista">Serviços referênte ao nutricionista</param>
         /// <param name="pServiceUsuario">Serviço de usuário</param>
-        public NutricionistaController(IServiceNutricionista pServiceNutricionista, IServiceUsuario pServiceUsuario)
+        /// <param name="pServiceEndereco">Serviço para endereço</param>
+        public NutricionistaController(IServiceNutricionista pServiceNutricionista, IServiceUsuario pServiceUsuario, IServiceEndereco pServiceEndereco)
         {
             _ServiceNutricionista = pServiceNutricionista;
             _ServiceUsuario = pServiceUsuario;
+            _ServiceEndereco = pServiceEndereco;
         }
         #endregion
 
@@ -297,7 +311,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
 
                 int IdUsuario = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType);
 
-                _ServiceNutricionista.CadastrarEndereco(new Endereco(
+                _ServiceEndereco.CadastrarEndereco(new Endereco(
                     IdUsuario,
                     pModel.Logradouro,
                     pModel.Bairro,
@@ -331,7 +345,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
 
             try
             {
-                Endereco endereco = _ServiceNutricionista.ConsultarEnderecoPorCEP(pCEP,
+                Endereco endereco = _ServiceEndereco.ConsultarEnderecoPorCEP(pCEP,
                     Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType));
 
                 return Json(new
@@ -377,7 +391,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
         [HttpGet]
         public IActionResult EnderecosCadastrados(int pIndiceInicial, string pRua, string pCidade, string pBairro, string pCEP, string pUF)
         {
-            List<Endereco> enderecos = _ServiceNutricionista.EnderecosCadastrados(
+            List<Endereco> enderecos = _ServiceEndereco.EnderecosCadastrados(
                 Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType),
                 pRua,
                 pCidade,
@@ -423,7 +437,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
 
             EnderecoAlteracaoVM enderecoAlteracaoVM = null;
 
-            Endereco endereco = _ServiceNutricionista.ConsultarEnderecoNutricionistaPorID(ID,
+            Endereco endereco = _ServiceEndereco.ConsultarEnderecoNutricionistaPorID(ID,
                 Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType)
                 );
 
@@ -471,7 +485,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
 
                 int IdUsuario = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType);
 
-                _ServiceNutricionista.AlterarDadosEndereco(new Endereco(
+                _ServiceEndereco.AlterarDadosEndereco(new Endereco(
                     IdUsuario,
                     pModel.Logradouro,
                     pModel.Bairro,

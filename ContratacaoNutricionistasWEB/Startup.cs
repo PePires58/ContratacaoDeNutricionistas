@@ -27,14 +27,25 @@
 * Data: 01/06/2020
 * Implementação: Implementando recurso para expirar a autenticação.
 */
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 04/06/2020
+* Implementação: Implementação da classe de endereço
+*/
 #endregion
 
+using ContratacaoNutricionistas.Domain.Interfaces.Endereco;
 using ContratacaoNutricionistas.Domain.Interfaces.Nutricionista;
 using ContratacaoNutricionistas.Domain.Interfaces.Paciente;
+using ContratacaoNutricionistas.Domain.Interfaces.Repository;
 using ContratacaoNutricionistas.Domain.Interfaces.Usuario;
+using ContratacaoNutricionistas.Domain.Repository.Endereco;
 using ContratacaoNutricionistas.Domain.Repository.Nutricionista;
 using ContratacaoNutricionistas.Domain.Repository.Paciente;
+using ContratacaoNutricionistas.Domain.Repository.Repository;
 using ContratacaoNutricionistas.Domain.Repository.Usuario;
+using ContratacaoNutricionistas.Domain.Servicos.Endereco;
 using ContratacaoNutricionistas.Domain.Servicos.Nutricionista;
 using ContratacaoNutricionistas.Domain.Servicos.Paciente;
 using ContratacaoNutricionistas.Domain.Servicos.Usuario;
@@ -97,12 +108,15 @@ namespace ContratacaoNutricionistasWEB
 
             #region Injeção de depencia
             services.AddSingleton<IUnitOfWork>(new UnitOfWork(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddSingleton<IRepositoryBase, RepositoryBase>();
             services.AddSingleton<IServicePaciente, ServicePaciente>();
             services.AddSingleton<IPacienteRepository, PacienteRepository>();
             services.AddSingleton<IServiceNutricionista, ServiceNutricionista>();
             services.AddSingleton<INutricionistaRepository, NutricionistaRepository>();
             services.AddSingleton<IServiceUsuario, ServiceUsuario>();
             services.AddSingleton<IUsuarioRepository, UsuarioRepository>();
+            services.AddSingleton<IServiceEndereco, ServiceEndereco>();
+            services.AddSingleton<IEnderecoRepository, EnderecoRepository>();
             #endregion
         }
 
