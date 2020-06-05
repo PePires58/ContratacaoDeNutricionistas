@@ -31,10 +31,7 @@
                     <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Nutricionistas WEB</a>
                 </div>
                 <div class="navbar-collapse collapse">
-
                     <ul class="nav navbar-nav">
-                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Página inicial</a></li>
-                        <li><a asp-area="" asp-controller="Home" asp-action="About">Sobre o site</a></li>
                         @if (User.Claims.Any(c => c.Type == Constantes.NutricionistaLogado))
                         {
                             if (User.Claims.FirstOrDefault(c => c.Type == Constantes.NutricionistaLogado).Type.ToString() == Constantes.NutricionistaLogado)
@@ -47,6 +44,24 @@
                                     <a asp-controller="Nutricionista" asp-action="EnderecosCadastrados">Endereços cadastrados</a>
                                 </li>
                             }
+                        }
+                        @if (User.Claims.Any(c => c.Type == Constantes.PacienteLogado))
+                        {
+                            if (User.Claims.FirstOrDefault(c => c.Type == Constantes.PacienteLogado).Type.ToString() == Constantes.PacienteLogado)
+                            {
+                                <li>
+                                    <a asp-controller="Paciente" asp-action="AlterarDados"
+                                       asp-route-ID="@User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType.ToString()">Altere seus dados</a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li>
+                                <a asp-area="" asp-controller="Login" asp-action="Logout">Sair</a>
+                            </li>
                         }
                     </ul>
                 </div>

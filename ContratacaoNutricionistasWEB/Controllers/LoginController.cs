@@ -10,18 +10,21 @@
 * Data: 01/06/2020
 * Implementação: Implementação de autenticação para Login.
 */
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 04/06/2020
+* Implementação: Inclusão de método de logout.
+*/
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
+using ContratacaoNutricionistas.Domain.Enumerados.Usuario;
 using ContratacaoNutricionistas.Domain.Interfaces.Usuario;
 using ContratacaoNutricionistasWEB.Models.Usuario;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ContratacaoNutricionistasWEB.Controllers
@@ -29,8 +32,6 @@ namespace ContratacaoNutricionistasWEB.Controllers
     /// <summary>
     /// Controlador de login
     /// </summary>
-    [Authorize(Policy = "Nutricionista")]
-    [Authorize(Policy = "Paciente")]
     public class LoginController : Controller
     {
         #region Propriedades
@@ -89,6 +90,20 @@ namespace ContratacaoNutricionistasWEB.Controllers
                 ViewData[Constantes.ViewDataMensagemErro] = ex.Message;
                 return View(pModel);
             }
+        }
+
+        /// <summary>
+        /// Método para realizar logout
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Logout()
+        {
+            if (User.HasClaim(c => c.Type != TipoUsuarioEnum.NaoDefinido.ToString()))
+                await HttpContext.SignOutAsync();
+
+            return RedirectToAction("Index","Login");
         }
     }
 }
