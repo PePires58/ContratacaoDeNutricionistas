@@ -134,11 +134,10 @@ namespace ContratacaoNutricionistasWEB.Controllers
         /// <returns>Cadastro.cshtml da pasta Nutricionista</returns>
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Cadastro()
+        public IActionResult Cadastro()
         {
             if (User.HasClaim(c => c.Type != TipoUsuarioEnum.NaoDefinido.ToString()))
-                await HttpContext.SignOutAsync();
-
+                return RedirectToAction("Logout", "Login");
             return View();
         }
 

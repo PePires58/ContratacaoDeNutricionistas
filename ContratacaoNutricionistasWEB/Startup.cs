@@ -95,12 +95,17 @@ namespace ContratacaoNutricionistasWEB
             {
                 option.AddPolicy("Nutricionista", politica =>
                 {
-                    politica.RequireClaim("Nutricionista");
+                    politica.RequireClaim(Constantes.NutricionistaLogado);
                 });
 
                 option.AddPolicy("Paciente", paciente =>
                 {
-                    paciente.RequireClaim("Paciente");
+                    paciente.RequireClaim(Constantes.PacienteLogado);
+                });
+
+                option.AddPolicy("UsuarioLogado", usuario =>
+                {
+                    usuario.RequireClaim(Constantes.IDUsuarioLogado);
                 });
             });
 

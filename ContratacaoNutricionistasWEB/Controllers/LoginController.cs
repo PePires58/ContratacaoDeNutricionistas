@@ -32,6 +32,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
     /// <summary>
     /// Controlador de login
     /// </summary>
+    [Authorize(Policy = "UsuarioLogado")]
     public class LoginController : Controller
     {
         #region Propriedades
@@ -97,13 +98,11 @@ namespace ContratacaoNutricionistasWEB.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> Logout()
         {
-            if (User.HasClaim(c => c.Type != TipoUsuarioEnum.NaoDefinido.ToString()))
-                await HttpContext.SignOutAsync();
+            await HttpContext.SignOutAsync();
 
-            return RedirectToAction("Index","Login");
+            return RedirectToAction("Index", "Login");
         }
     }
 }

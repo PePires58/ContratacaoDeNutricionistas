@@ -99,7 +99,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
         public IActionResult Cadastro()
         {
             if (User.HasClaim(c => c.Type != TipoUsuarioEnum.NaoDefinido.ToString()))
-                HttpContext.SignOutAsync();
+                return RedirectToAction("Logout", "Login");
             return View();
         }
 
