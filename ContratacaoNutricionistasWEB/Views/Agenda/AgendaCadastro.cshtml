@@ -1,0 +1,64 @@
+﻿@model ContratacaoNutricionistasWEB.Models.Agenda.AgendaCadastroDataHoraVM
+@{
+    ViewData["Title"] = "Cadastro de agenda de serviço";
+}
+<div class="col-md-12">
+    <h4>Em quais datas e horários?</h4>
+    @if (ViewData[Constantes.ViewDataMensagemErro] != null)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-12 alert alert-danger">
+                    <span>
+                        @ViewData[Constantes.ViewDataMensagemErro].ToString()
+                    </span>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="AgendaCadastro" asp-controller="Agenda">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="IdEndereco" hidden />
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="DataAgendaInicio" class="control-label"></label>
+                    <input asp-for="DataAgendaInicio" class="form-control" />
+                    <span asp-validation-for="DataAgendaInicio" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="DataAgendaFim" class="control-label"></label>
+                    <input asp-for="DataAgendaFim" class="form-control" />
+                    <span asp-validation-for="DataAgendaFim" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="HoraInicio" class="control-label"></label>
+                    <input asp-for="HoraInicio" class="form-control" />
+                    <span asp-validation-for="HoraInicio" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="HoraFim" class="control-label"></label>
+                    <input asp-for="HoraFim" class="form-control" />
+                    <span asp-validation-for="HoraFim" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-12 form-group">
+                <input id="btnCadastrar" type="submit" value="Cadastrar" class="btn btn-primary form-control" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <a asp-action="AgendaEndereco" asp-controller="Agenda">Voltar para escolha de endereço</a>
+</div>
+

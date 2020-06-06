@@ -1,0 +1,84 @@
+﻿@model IEnumerable<ContratacaoNutricionistasWEB.Models.Agenda.AgendaLista>
+
+@{
+    ViewData["Title"] = "Agendas cadastradas";
+}
+
+<h4>@ViewData["Title"]</h4>
+<hr />
+
+@if (ViewData[Constantes.ViewDataMensagemErro] != null)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12 alert alert-danger">
+                <span>
+                    @ViewData[Constantes.ViewDataMensagemErro].ToString()
+                </span>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewData[Constantes.ViewDataMensagemRetorno] != null)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12 alert alert-success">
+                <span>
+                    @ViewData[Constantes.ViewDataMensagemRetorno].ToString()
+                </span>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="col-md-12">
+    <p>
+        <a class="btn btn-success" asp-action="AgendaEndereco" asp-controller="Agenda">Nova agenda</a>
+    </p>
+    @foreach (var item in Model)
+    {
+        <div class="row">
+            <div class="col-md-6 col-xs-6 col-sm-6">
+                @Html.LabelFor(modelItem => item.DataInicio)
+            </div>
+            <div class="col-md-6 col-xs-6 col-sm-6">
+                @Html.LabelFor(modelItem => item.DataFim)
+            </div>
+            <div class="col-md-6 col-xs-6 col-sm-6">
+                @Html.LabelFor(modelItem => item.DataInicio, item.DataInicio.ToString("dd/MM/yyyy"), new { @class = "label-celular-dados" })
+            </div>
+            <div class="col-md-6 col-xs-6 col-sm-6">
+                @Html.LabelFor(modelItem => item.DataFim, item.DataFim.ToString("dd/MM/yyyy"), new { @class = "label-celular-dados" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                @Html.Label("", "Endereço")
+            </div>
+            <div class="col-md-12">
+                @Html.LabelFor(modelItem => item.Endereco.Logradouro, item.Endereco.EnderecoCompleto, new { @class = "label-celular-dados" })
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-xs-2 col-sm-2">
+                @Html.LabelFor(modelItem => item.Endereco.CEP)
+            </div>
+            <div class="col-md-3 col-xs-4 col-sm-4">
+                @Html.LabelFor(modelItem => item.Endereco.CEP, item.Endereco.CEP.ToString(), new { @class = "label-celular-dados" })
+            </div>
+            <div class="col-md-3 col-xs-2">
+                @Html.LabelFor(modelItem => item.Endereco.UF)
+            </div>
+            <div class="col-md-3">
+                @Html.DisplayFor(modelItem => item.Endereco.UF, item.Endereco.UF.ToString(), new { @class = "label-celular-dados" })
+            </div>
+        </div>
+        <hr />
+    }
+</div>
+<div>
+    <a asp-action="Index" asp-controller="Home">Voltar para página inicial</a>
+</div>

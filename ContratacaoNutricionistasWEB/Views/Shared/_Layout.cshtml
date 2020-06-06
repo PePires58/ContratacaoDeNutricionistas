@@ -36,6 +36,10 @@
                         {
                             if (User.Claims.FirstOrDefault(c => c.Type == Constantes.NutricionistaLogado).Type.ToString() == Constantes.NutricionistaLogado)
                             {
+
+                                <li>
+                                    <a asp-controller="Agenda" asp-action="Index">Agendas cadastradas</a>
+                                </li>
                                 <li>
                                     <a asp-controller="Nutricionista" asp-action="AlterarDados"
                                        asp-route-ID="@User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType.ToString()">Altere seus dados</a>

@@ -6,6 +6,33 @@
 
 <h4>@ViewData["Title"]</h4>
 <hr />
+
+@if (ViewData[Constantes.ViewDataMensagemErro] != null)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12 alert alert-danger">
+                <span>
+                    @ViewData[Constantes.ViewDataMensagemErro].ToString()
+                </span>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewData[Constantes.ViewDataMensagemRetorno] != null)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12 alert alert-success">
+                <span>
+                    @ViewData[Constantes.ViewDataMensagemRetorno].ToString()
+                </span>
+            </div>
+        </div>
+    </div>
+}
+
 <div class="col-md-12">
     <p>
         <a class="btn btn-success" asp-action="CadastrarEndereco" asp-controller="Nutricionista">Novo Endereço</a>
@@ -18,10 +45,7 @@
                 @Html.Label("", "Endereço")
             </div>
             <div class="col-md-12">
-                @Html.LabelFor(modelItem => item.Logradouro,
-                    string.Concat(item.Logradouro.ToString(), " - ", (string.IsNullOrEmpty(item?.Numero.ToString()) ? "SEM NÚMERO" : "Nº. " + item.Numero.ToString())
-                    , (string.IsNullOrEmpty(item.Complemento) ? "" : " - " + item.Complemento), ". ", item.Cidade, ", ", item.Bairro),
-                    new { @class = "label-celular-dados" })
+                @Html.LabelFor(modelItem => item.Logradouro,item.EnderecoCompleto,new { @class = "label-celular-dados" })
 
             </div>
         </div>

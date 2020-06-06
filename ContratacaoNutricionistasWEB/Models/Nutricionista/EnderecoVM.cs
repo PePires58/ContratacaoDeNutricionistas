@@ -4,6 +4,12 @@
  * Data: 03/06/2020
  * Implementação: Implementação Inicial da classe de endereço
  */
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 05/06/2020
+* Implementação: Ajuste nas propriedades.
+*/
 #endregion
 
 using System;
@@ -16,41 +22,44 @@ namespace ContratacaoNutricionistasWEB.Models.Nutricionista
     /// Classe de endereço
     /// </summary>
     public class EnderecoVM
-    {        
+    {
         #region Propriedades
 
-        [Display(Name ="Bairro",Prompt = "Bairro preenchido automáticamente a partir do CEP")]
-        [Required(ErrorMessage ="O campo Endereço é obrigatório")]
-        [StringLength(50,ErrorMessage ="O tamanho máximo do campo Bairro é de 50 caracteres")]
+        [Display(Name = "Bairro", Prompt = "Bairro preenchido automáticamente a partir do CEP")]
+        [Required(ErrorMessage = "O campo Endereço é obrigatório")]
+        [StringLength(50, ErrorMessage = "O tamanho máximo do campo Bairro é de 50 caracteres")]
         public string Bairro { get; set; }
 
-        [Display(Name ="Cidade",Prompt = "Cidade preenchida automáticamente a partir do CEP")]
-        [Required(ErrorMessage ="A campo Cidade é obrigatória")]
+        [Display(Name = "Cidade", Prompt = "Cidade preenchida automáticamente a partir do CEP")]
+        [Required(ErrorMessage = "A campo Cidade é obrigatória")]
         [StringLength(30, ErrorMessage = "O tamanho máximo do campo Cidade é de 30 caracteres")]
         public string Cidade { get; set; }
 
-        [Display(Name ="CEP",Prompt ="00000-000")]
-        [Required(ErrorMessage ="O campo CEP é obrigatório")]
-        [RegularExpression(@"^\d{5}\-\d{3}$",ErrorMessage ="O campo CEP deve estar no formato 00000-000")]
+        [Display(Name = "CEP", Prompt = "00000-000")]
+        [Required(ErrorMessage = "O campo CEP é obrigatório")]
+        [RegularExpression(@"^\d{5}\-\d{3}$", ErrorMessage = "O campo CEP deve estar no formato 00000-000")]
         [StringLength(9, ErrorMessage = "O tamanho máximo do campo CEP é de 9 caracteres")]
         public string CEP { get; set; }
 
-        [Display(Name ="Complemento",Prompt ="Ex.: Apto - Bloco B")]
+        [Display(Name = "Complemento", Prompt = "Ex.: Apto - Bloco B")]
         [StringLength(255, ErrorMessage = "O tamanho máximo do campo Complemento é de 255 caracteres")]
         public string Complemento { get; set; }
 
-        [Display(Name ="Logradouro",Prompt = "Logradouro preenchido automáticamente a partir do CEP",AutoGenerateField =true)]
-        [Required(ErrorMessage ="O campo Logradouro é obrigatório")]
+        [Display(Name = "Logradouro", Prompt = "Logradouro preenchido automáticamente a partir do CEP", AutoGenerateField = true)]
+        [Required(ErrorMessage = "O campo Logradouro é obrigatório")]
         [StringLength(100, ErrorMessage = "O tamanho máximo do campo Logradouro é de 100 caracteres")]
         public string Logradouro { get; set; }
 
-        [Display(Name ="UF", Prompt = "UF preenchida automáticamente a partir do CEP")]
-        [Required(ErrorMessage ="O campo UF é obrigatório")]
+        [Display(Name = "UF", Prompt = "UF preenchida automáticamente a partir do CEP")]
+        [Required(ErrorMessage = "O campo UF é obrigatório")]
         [StringLength(100, ErrorMessage = "O tamanho máximo do campo UF é de 100 caracteres")]
         public string UF { get; set; }
 
-        [Display(Name ="Número",Prompt ="Ex.: 2020")]
+        [Display(Name = "Número", Prompt = "Ex.: 2020")]
         public uint? Numero { get; set; }
+
+        public string EnderecoCompleto => string.Concat(Logradouro.ToString(), " - ", (string.IsNullOrEmpty(Numero?.ToString()) ? "SEM NÚMERO" : "Nº. " + Numero.ToString())
+                    , (string.IsNullOrEmpty(Complemento) ? "" : " - " + Complemento), ". ", Cidade, ", ", Bairro);
 
         #endregion
 

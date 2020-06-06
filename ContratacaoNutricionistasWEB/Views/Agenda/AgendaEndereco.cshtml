@@ -1,0 +1,50 @@
+﻿@model IEnumerable<ContratacaoNutricionistasWEB.Models.Nutricionista.EnderecoAlteracaoVM>
+
+@{
+    ViewData["Title"] = "Cadastro de agenda de serviço";
+}
+
+<div class="col-md-12">
+    <h4><b>Em qual endereço?</b></h4>
+    <hr />
+</div>
+<div class="col-md-12">
+    @foreach (var item in Model)
+    {
+        <div>
+            <a style="color:black;" asp-action="AgendaCadastro" asp-controller="Agenda" asp-route-ID="@item.ID">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        @Html.Label("", "Endereço")
+                    </div>
+                    <div class="col-md-12">
+                        @Html.LabelFor(modelItem => item.Logradouro,
+                            string.Concat(item.Logradouro.ToString(), " - ", (string.IsNullOrEmpty(item?.Numero.ToString()) ? "SEM NÚMERO" : "Nº. " + item.Numero.ToString())
+                            , (string.IsNullOrEmpty(item.Complemento) ? "" : " - " + item.Complemento), ". ", item.Cidade, ", ", item.Bairro),
+                            new { @class = "label-celular-dados" })
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-xs-2 col-sm-2">
+                        @Html.LabelFor(modelItem => item.CEP)
+                    </div>
+                    <div class="col-md-3 col-xs-4 col-sm-4">
+                        @Html.LabelFor(modelItem => item.CEP, item.CEP.ToString(), new { @class = "label-celular-dados" })
+                    </div>
+                    <div class="col-md-3 col-xs-2">
+                        @Html.LabelFor(modelItem => item.UF)
+                    </div>
+                    <div class="col-md-3">
+                        @Html.DisplayFor(modelItem => item.UF, item.UF.ToString(), new { @class = "label-celular-dados" })
+                    </div>
+                </div>
+            </a>
+        </div>
+        <hr />
+    }
+</div>
+<div>
+    <a asp-action="Index" asp-controller="Agenda">Voltar para lista de agendas</a>
+</div>

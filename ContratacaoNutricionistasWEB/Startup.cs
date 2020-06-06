@@ -39,18 +39,27 @@
 * Data: 04/06/2020
 * Implementação: Incluindo política de usuário logado.
 */
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 05/06/2020
+* Implementação: Inclusão de agenda.
+*/
 #endregion
 
+using ContratacaoNutricionistas.Domain.Interfaces.Agenda;
 using ContratacaoNutricionistas.Domain.Interfaces.Endereco;
 using ContratacaoNutricionistas.Domain.Interfaces.Nutricionista;
 using ContratacaoNutricionistas.Domain.Interfaces.Paciente;
 using ContratacaoNutricionistas.Domain.Interfaces.Repository;
 using ContratacaoNutricionistas.Domain.Interfaces.Usuario;
+using ContratacaoNutricionistas.Domain.Repository.Agenda;
 using ContratacaoNutricionistas.Domain.Repository.Endereco;
 using ContratacaoNutricionistas.Domain.Repository.Nutricionista;
 using ContratacaoNutricionistas.Domain.Repository.Paciente;
 using ContratacaoNutricionistas.Domain.Repository.Repository;
 using ContratacaoNutricionistas.Domain.Repository.Usuario;
+using ContratacaoNutricionistas.Domain.Servicos.Agenda;
 using ContratacaoNutricionistas.Domain.Servicos.Endereco;
 using ContratacaoNutricionistas.Domain.Servicos.Nutricionista;
 using ContratacaoNutricionistas.Domain.Servicos.Paciente;
@@ -128,6 +137,8 @@ namespace ContratacaoNutricionistasWEB
             services.AddSingleton<IUsuarioRepository, UsuarioRepository>();
             services.AddSingleton<IServiceEndereco, ServiceEndereco>();
             services.AddSingleton<IEnderecoRepository, EnderecoRepository>();
+            services.AddSingleton<IServiceAgenda, ServiceAgenda>();
+            services.AddSingleton<IAgendaRepository, AgenciaRepository>();
             #endregion
         }
 
