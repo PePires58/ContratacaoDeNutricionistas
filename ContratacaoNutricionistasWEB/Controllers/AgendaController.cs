@@ -4,6 +4,12 @@
  Programador: Pedro Henrique Pires
  Descrição: Implementação Inicial da classe.
  */
+
+/*
+Data: 08/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Ajuste para escrita do método
+*/
 #endregion
 using ContratacaoNutricionistas.Domain.Entidades.Agenda;
 using ContratacaoNutricionistas.Domain.Entidades.Nutricionista;
@@ -159,7 +165,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
                     dataHoraFim
                     ));
 
-                ViewData[Constantes.ViewDataMensagemRetorno] = $"Agenda com início no dia {dataInicio.ToString("dd/MM/yyyy")} e término no dia {dataFim.ToString("dd/MM/yyyy")}.{Environment.NewLine}Horário: {dataHoraInicio.ToString("hh:mm")} às {dataHoraFim.ToString("hh:mm")}.{Environment.NewLine}Cadastrado com sucesso!";
+                ViewData[Constantes.ViewDataMensagemRetorno] = $"Agenda com início no dia {dataInicio.ToString(Constantes.MascaraData)} e término no dia {dataFim.ToString(Constantes.MascaraData)}.{Environment.NewLine}Horário: {dataHoraInicio.ToString(Constantes.MascaraHoraMinuto)} às {dataHoraFim.ToString(Constantes.MascaraHoraMinuto)}.{Environment.NewLine}Cadastrado com sucesso!";
                 return RedirectToAction("Index", "Agenda", new { mensagem = ViewData[Constantes.ViewDataMensagemRetorno].ToString() });
             }
             catch (Exception ex)
@@ -189,7 +195,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
             ViewData[Constantes.ViewDataMensagemRetorno] = mensagem;
 
             int idUsuario = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType);
-            List<Agenda> agendas = _ServiceAgenda.AgendasCadastradas(pDataInicio, pDataFim, idUsuario);
+            List<Agenda> agendas = _ServiceAgenda.AgendasCadastradas(pDataInicio, pDataFim, idUsuario, false);
             List<Endereco> enderecos = _ServiceEndereco.EnderecosCadastrados(
                 Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType),
                 pRua,

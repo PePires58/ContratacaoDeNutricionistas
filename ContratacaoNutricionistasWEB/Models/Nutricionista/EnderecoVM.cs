@@ -10,6 +10,12 @@
 * Data: 05/06/2020
 * Implementação: Ajuste nas propriedades.
 */
+
+/*
+Data: 08/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Incluindo validação para não dar erro ao cadastrar um endereço sem preencher os dados
+*/
 #endregion
 
 using System;
@@ -58,7 +64,7 @@ namespace ContratacaoNutricionistasWEB.Models.Nutricionista
         [Display(Name = "Número", Prompt = "Ex.: 2020")]
         public uint? Numero { get; set; }
 
-        public string EnderecoCompleto => string.Concat(Logradouro.ToString(), " - ", (string.IsNullOrEmpty(Numero?.ToString()) ? "SEM NÚMERO" : "Nº. " + Numero.ToString())
+        public string EnderecoCompleto => string.Concat(Logradouro?.ToString(), " - ", (string.IsNullOrEmpty(Numero?.ToString()) ? "SEM NÚMERO" : "Nº. " + Numero.ToString())
                     , (string.IsNullOrEmpty(Complemento) ? "" : " - " + Complemento), ". ", Cidade, ", ", Bairro);
 
         #endregion

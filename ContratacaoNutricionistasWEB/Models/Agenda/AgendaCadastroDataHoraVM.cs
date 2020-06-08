@@ -4,6 +4,12 @@
 * Data: 05/06/2020
 * Implementação: Implementação inicial.
 */
+
+/*
+Data: 08/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Ajuste na busca de data
+*/
 #endregion
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -17,9 +23,9 @@ namespace ContratacaoNutricionistasWEB.Models.Agenda
     {
         public AgendaCadastroDataHoraVM()
         {
-            DataAgendaInicio = DataAgendaFim = DateTime.Now;
-            HoraInicio = DateTime.Now.TimeOfDay;
-            HoraFim = DateTime.Now.TimeOfDay.Add(new TimeSpan(0, 30, 0));
+            DataAgendaInicio = DataAgendaFim = Constantes.DateTimeNow();
+            HoraInicio = Constantes.DateTimeNow().TimeOfDay;
+            HoraFim = Constantes.DateTimeNow().TimeOfDay.Add(new TimeSpan(0, 30, 0));
         }
         [Required(ErrorMessage = "Endereço é obrigatório")]
         public int IdEndereco { get; set; }

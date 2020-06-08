@@ -27,7 +27,15 @@
  * Data: 03/06/2020
  * Implementação: Implementação de constante de registro por página
  */
+
+/*
+Data: 08/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Inclusão para mascaras
+*/
 #endregion
+
+using System;
 
 namespace ContratacaoNutricionistasWEB
 {
@@ -77,5 +85,27 @@ namespace ContratacaoNutricionistasWEB
         /// Quantidade de registros por página
         /// </summary>
         public const int QuantidadeRegistrosPorPagina = 10;
+
+        /// <summary>
+        /// Mascara de data/hora
+        /// </summary>
+        public const string MascaraDataHora = @"dd/MM/yyyy hh:mm";
+
+        /// <summary>
+        /// Mascara de data
+        /// </summary>
+        public const string MascaraData = @"dd/MM/yyyy";
+
+        /// <summary>
+        /// Máscara de hora/minuto
+        /// </summary>
+        public const string MascaraHoraMinuto = "HH:mm";
+
+        public static DateTime DateTimeNow()
+        {
+            DateTime agora = DateTime.UtcNow;
+            TimeZoneInfo horaBrasilia = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
+            return TimeZoneInfo.ConvertTimeFromUtc(agora, horaBrasilia);
+        }
     }
 }

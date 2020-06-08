@@ -47,10 +47,10 @@
                 @Html.LabelFor(modelItem => item.DataFim)
             </div>
             <div class="col-md-6 col-xs-6 col-sm-6">
-                @Html.LabelFor(modelItem => item.DataInicio, item.DataInicio.ToString("dd/MM/yyyy"), new { @class = "label-celular-dados" })
+                @Html.LabelFor(modelItem => item.DataInicio,item.DataInicio.ToString(Constantes.MascaraDataHora), new { @class = "label-celular-dados" })
             </div>
             <div class="col-md-6 col-xs-6 col-sm-6">
-                @Html.LabelFor(modelItem => item.DataFim, item.DataFim.ToString("dd/MM/yyyy"), new { @class = "label-celular-dados" })
+                @Html.LabelFor(modelItem => item.DataFim,item.DataFim.ToString(Constantes.MascaraDataHora), new { @class = "label-celular-dados" })
             </div>
         </div>
         <div class="row">
@@ -58,21 +58,21 @@
                 @Html.Label("", "Endereço")
             </div>
             <div class="col-md-12">
-                @Html.LabelFor(modelItem => item.Endereco.Logradouro, item.Endereco.EnderecoCompleto, new { @class = "label-celular-dados" })
+                @Html.DisplayFor(modelItem => item.Endereco.EnderecoCompleto, item.Endereco.EnderecoCompleto, new { @class = "label-celular-dados" })
 
             </div>
         </div>
         <div class="row">
-            <div class="col-md-3 col-xs-2 col-sm-2">
+            <div class="col-md-6 col-xs-6">
                 @Html.LabelFor(modelItem => item.Endereco.CEP)
             </div>
-            <div class="col-md-3 col-xs-4 col-sm-4">
-                @Html.LabelFor(modelItem => item.Endereco.CEP, item.Endereco.CEP.ToString(), new { @class = "label-celular-dados" })
-            </div>
-            <div class="col-md-3 col-xs-2">
+            <div class="col-md-6 col-xs-6">
                 @Html.LabelFor(modelItem => item.Endereco.UF)
             </div>
-            <div class="col-md-3">
+            <div class="col-md-6 col-xs-6">
+                @Html.DisplayFor(modelItem => item.Endereco.CEP, item.Endereco.CEP.ToString(), new { @class = "label-celular-dados" })
+            </div>
+            <div class="col-md-6" col-xs-6>
                 @Html.DisplayFor(modelItem => item.Endereco.UF, item.Endereco.UF.ToString(), new { @class = "label-celular-dados" })
             </div>
         </div>

@@ -1,0 +1,59 @@
+﻿@model ContratacaoNutricionistasWEB.Models.Agenda.AgendaListaContratoVM
+
+@{
+    ViewData["Title"] = "Agende sua consulta";
+}
+
+<div class="col-md-12">
+    <h4>@ViewData["Title"]</h4>
+    <hr />
+</div>
+
+<div class="col-md-12">
+    <form asp-action="ContratarNutricionista" asp-controller="Contrato">
+        <div class="row">
+            <div class="col-md-6 col-xs-6 col-sm-6">
+                @Html.LabelFor(modelItem => modelItem.DataInicio)
+            </div>
+            <div class="col-md-6 col-xs-6 col-sm-6">
+                @Html.LabelFor(modelItem => modelItem.DataFim)
+            </div>
+            <div class="col-md-6 col-xs-6 col-sm-6">
+                @Html.DisplayFor(modelItem => modelItem.DataInicio, new { @class = "label-celular-dados" })
+            </div>
+            <div class="col-md-6 col-xs-6 col-sm-6">
+                @Html.DisplayFor(modelItem => modelItem.DataFim, new { @class = "label-celular-dados" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                @Html.Label("", "Endereço")
+            </div>
+            <div class="col-md-12">
+                @Html.DisplayFor(modelItem => modelItem.Endereco.EnderecoCompleto, new { @class = "label-celular-dados" })
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-xs-6">
+                @Html.LabelFor(modelItem => modelItem.Endereco.CEP)
+            </div>
+            <div class="col-md-6 col-xs-6">
+                @Html.LabelFor(modelItem => modelItem.Endereco.UF)
+            </div>
+            <div class="col-md-6 col-xs-6">
+                @Html.DisplayFor(modelItem => modelItem.Endereco.CEP, new { @class = "label-celular-dados" })
+            </div>
+            <div class="col-md-6 col-xs-6">
+                @Html.DisplayFor(modelItem => modelItem.Endereco.UF, new { @class = "label-celular-dados" })
+            </div>
+        </div>
+        <div class="form-group">
+            <br />
+            <input id="btnCadastrar" type="submit" value="Cadastrar" class="btn btn-primary form-control" />
+        </div>
+    </form>
+</div>
+<div class="col-md-12">
+    <a asp-action="Index" asp-controller="Home">Voltar para página inicial</a>
+</div>

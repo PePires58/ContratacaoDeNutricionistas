@@ -4,6 +4,12 @@
  Programador: Pedro Henrique Pires
  Descrição: Implementação Inicial da classe.
  */
+
+/*
+Data: 08/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Inclusão de campos.
+*/
 #endregion
 using ContratacaoNutricionistas.Domain.Interfaces.Agenda;
 using ContratacaoNutricionistas.Domain.Repository.Repository;
@@ -48,8 +54,8 @@ namespace ContratacaoNutricionistas.Domain.Repository.Agenda
             stringBuilder.AppendLine("	@DT_FIM DATETIME");
             stringBuilder.AppendLine($"SET @ID_USUARIO = {pIdUsuario}");
             stringBuilder.AppendLine($"SET @ID_ENDERECO = {pIdEndereco}");
-            stringBuilder.AppendLine($"SET @DT_INICIO = '{(pDataHoraInicio == DateTime.MinValue ? "" : pDataHoraInicio.ToString("yyyy-MM-dd hh:mm:ss"))}'");
-            stringBuilder.AppendLine($"SET @DT_FIM = '{(pDataHoraFim == DateTime.MinValue ? "" : pDataHoraFim.ToString("yyyy-MM-dd hh:mm:ss"))}'");
+            stringBuilder.AppendLine($"SET @DT_INICIO = '{(pDataHoraInicio == DateTime.MinValue ? "" : pDataHoraInicio.ToString(Constantes.MascaraDataHora))}'");
+            stringBuilder.AppendLine($"SET @DT_FIM = '{(pDataHoraFim == DateTime.MinValue ? "" : pDataHoraFim.ToString(Constantes.MascaraDataHora))}'");
             stringBuilder.AppendLine("SELECT TOP 1 1 FROM AGENDA_TB AG WITH(NOLOCK)");
             stringBuilder.AppendLine("WHERE AG.ID_USUARIO = @ID_USUARIO");
             stringBuilder.AppendLine("    AND AG.ID_ENDERECO = @ID_ENDERECO");
@@ -68,10 +74,12 @@ namespace ContratacaoNutricionistas.Domain.Repository.Agenda
             stringBuilder.AppendLine("DECLARE @DT_INICIO DATETIME,");
             stringBuilder.AppendLine("	@DT_FIM DATETIME,");
             stringBuilder.AppendLine("    @ID_USUARIO INT");
-            stringBuilder.AppendLine($"SET @ID_USUARIO = {pIdUsuario}");
+            stringBuilder.AppendLine($"SET @ID_USUARIO = {(pIdUsuario == 0 ? "NULL" : pIdUsuario.ToString())}");
             stringBuilder.AppendLine($"SET @DT_INICIO = {(pDataInicio == DateTime.MinValue ? "NULL" : "'" + pDataInicio.ToString("yyyy-MM-dd") + "'")}");
             stringBuilder.AppendLine($"SET @DT_FIM = {(pDataFim == DateTime.MinValue ? "NULL" : "'" + pDataFim.ToString("yyyy-MM-dd") + "'")}");
             stringBuilder.AppendLine("SELECT");
+            stringBuilder.AppendLine("  AG.ID_AGENDA,");
+            stringBuilder.AppendLine("  AG.ID_USUARIO,");
             stringBuilder.AppendLine("  AG.ID_ENDERECO,");
             stringBuilder.AppendLine("  AG.DT_INICIO,");
             stringBuilder.AppendLine("  AG.DT_FIM");
@@ -80,7 +88,7 @@ namespace ContratacaoNutricionistas.Domain.Repository.Agenda
             stringBuilder.AppendLine("WHERE AG.AGENDA_STATUS = 'A'");
             stringBuilder.AppendLine("    AND(AG.DT_INICIO BETWEEN ISNULL(@DT_INICIO, AG.DT_INICIO) AND ISNULL(@DT_FIM, AG.DT_FIM) OR");
             stringBuilder.AppendLine("        AG.DT_FIM BETWEEN ISNULL(@DT_INICIO, AG.DT_INICIO) AND ISNULL(@DT_FIM, AG.DT_FIM))");
-            stringBuilder.AppendLine("    AND AG.ID_USUARIO = @ID_USUARIO");
+            stringBuilder.AppendLine("    AND AG.ID_USUARIO = ISNULL(@ID_USUARIO,AG.ID_USUARIO)");
 
             DataSet ds = _UnitOfWork.Consulta(stringBuilder.ToString());
 
@@ -90,24 +98,28 @@ namespace ContratacaoNutricionistas.Domain.Repository.Agenda
 
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    int idEndereco = 0;
+                    int idEndereco = 0, idAgenda = 0, idUsuario = 0;
                     DateTime datainicio = DateTime.MinValue,
                         dataFim = DateTime.MinValue;
 
                     if (ds.Tables[0].Rows[i]["ID_ENDERECO"] != DBNull.Value)
                         idEndereco = Convert.ToInt32(ds.Tables[0].Rows[i]["ID_ENDERECO"]);
+                    if (ds.Tables[0].Rows[i]["ID_USUARIO"] != DBNull.Value)
+                        idUsuario = Convert.ToInt32(ds.Tables[0].Rows[i]["ID_USUARIO"]);
+                    if (ds.Tables[0].Rows[i]["ID_AGENDA"] != DBNull.Value)
+                        idAgenda = Convert.ToInt32(ds.Tables[0].Rows[i]["ID_AGENDA"]);
                     if (ds.Tables[0].Rows[i]["DT_INICIO"] != DBNull.Value)
                         datainicio = Convert.ToDateTime(ds.Tables[0].Rows[i]["DT_INICIO"]);
                     if (ds.Tables[0].Rows[i]["DT_FIM"] != DBNull.Value)
                         dataFim = Convert.ToDateTime(ds.Tables[0].Rows[i]["DT_FIM"]);
 
                     agendas.Add(new Entidades.Agenda.Agenda(
-                        pIdUsuario,
+                        idUsuario,
                         idEndereco,
                         datainicio,
                         dataFim
                         )
-                    { StatusAgenda = Enumerados.Agenda.StatusAgendaEnum.Ativa });
+                    { StatusAgenda = Enumerados.Agenda.StatusAgendaEnum.Ativa, IdAgenda = idAgenda });
                 }
                 return agendas;
             }
