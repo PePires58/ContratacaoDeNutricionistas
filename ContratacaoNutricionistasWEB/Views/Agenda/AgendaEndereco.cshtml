@@ -9,37 +9,40 @@
     <hr />
 </div>
 <div class="col-md-12">
+    <p>
+        <a class="btn btn-success" asp-action="CadastrarEndereco" asp-controller="Nutricionista">Novo Endereço</a>
+    </p>
     @foreach (var item in Model)
     {
-        <div>
-            <a style="color:black;" asp-action="AgendaCadastro" asp-controller="Agenda" asp-route-ID="@item.ID">
+    <div>
+        <a style="color:black;" asp-action="AgendaCadastro" asp-controller="Agenda" asp-route-ID="@item.ID">
 
-                <div class="row">
-                    <div class="col-md-12">
-                        @Html.Label("", "Endereço")
-                    </div>
-                    <div class="col-md-12">
-                        @Html.DisplayFor(modelItem => item.Logradouro,item.EnderecoCompleto, new { @class = "label-celular-dados" })
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.Label("", "Endereço")
+                </div>
+                <div class="col-md-12">
+                    @Html.DisplayFor(modelItem => item.EnderecoCompleto,item.EnderecoCompleto, new { @class = "label-celular-dados" })
 
-                    </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6 col-xs-6">
-                        @Html.LabelFor(modelItem => item.CEP)
-                    </div>
-                    <div class="col-md-6 col-xs-6">
-                        @Html.LabelFor(modelItem => item.UF)
-                    </div>
-                    <div class="col-md-6 col-xs-6">
-                        @Html.DisplayFor(modelItem => item.CEP, item.CEP.ToString(), new { @class = "label-celular-dados" })
-                    </div>
-                    <div class="col-md-6 col-xs-6">
-                        @Html.DisplayFor(modelItem => item.UF, item.UF.ToString(), new { @class = "label-celular-dados" })
-                    </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-xs-6">
+                    @Html.LabelFor(modelItem => item.CEP)
                 </div>
-            </a>
-        </div>
-        <hr />
+                <div class="col-md-6 col-xs-6">
+                    @Html.LabelFor(modelItem => item.UF)
+                </div>
+                <div class="col-md-6 col-xs-6">
+                    @Html.DisplayFor(modelItem => item.CEP, item.CEP.ToString(), new { @class = "label-celular-dados" })
+                </div>
+                <div class="col-md-6 col-xs-6">
+                    @Html.DisplayFor(modelItem => item.UF, item.UF.ToString(), new { @class = "label-celular-dados" })
+                </div>
+            </div>
+        </a>
+    </div>
+    <hr />
     }
 </div>
 <div>

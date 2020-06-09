@@ -4,6 +4,12 @@ Data: 08/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Implementação inicial
 */
+
+/*
+Data: 08/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Ajuste para mostrar os endereços de todos os nutricionistas
+*/
 #endregion
 using System;
 using System.Collections.Generic;
@@ -64,26 +70,32 @@ namespace ContratacaoNutricionistasWEB.Controllers
         /// <param name="mensagem">Mensagem</param>
         /// <returns>Tela de localizar o nutricionsita</returns>
         [HttpGet]
-        [Authorize(Policy ="Paciente")]
+        [Authorize(Policy = "Paciente")]
         public IActionResult LocalizarNutricionista(int pIndiceInicial, string pRua, string pCidade, string pBairro, string pCEP, string pUF, DateTime pDataInicio, DateTime pDataFim, string mensagem)
         {
             ViewData[Constantes.ViewDataMensagemRetorno] = mensagem;
 
             List<Agenda> agendas = _ServiceAgenda.AgendasCadastradas(pDataInicio, pDataFim, 0, true);
-            List<Endereco> enderecos = _ServiceEndereco.EnderecosCadastrados(
-                agendas.FirstOrDefault().IdUsuario,
+            List<int> nutricionistas = agendas.Select(c => c.IdUsuario).Distinct().ToList();
+            List<Endereco> enderecos = new List<Endereco>();
+
+            foreach (int nutricionista in nutricionistas)
+            {
+                enderecos.AddRange(_ServiceEndereco.EnderecosCadastrados(
+                nutricionista,
                 pRua,
                 pCidade,
                 pBairro,
                 pCEP,
-                pUF);
+                pUF));
+            }
 
             List<EnderecoAlteracaoVM> enderecosVm = new List<EnderecoAlteracaoVM>();
 
             if (enderecos.Any())
             {
 
-                enderecosVm = enderecos.Select(c => new EnderecoAlteracaoVM()
+                enderecosVm = enderecos.Distinct().Select(c => new EnderecoAlteracaoVM()
                 {
                     ID = c.IdEndereco,
                     Bairro = c.Bairro,

@@ -19,10 +19,10 @@
                 @Html.LabelFor(modelItem => modelItem.DataFim)
             </div>
             <div class="col-md-6 col-xs-6 col-sm-6">
-                @Html.DisplayFor(modelItem => modelItem.DataInicio, new { @class = "label-celular-dados" })
+                @Html.LabelFor(modelItem => modelItem.DataInicio, Model.DataInicio.ToString(Constantes.MascaraDataHora), new { @class = "label-celular-dados" })
             </div>
             <div class="col-md-6 col-xs-6 col-sm-6">
-                @Html.DisplayFor(modelItem => modelItem.DataFim, new { @class = "label-celular-dados" })
+                @Html.LabelFor(modelItem => modelItem.DataFim, Model.DataFim.ToString(Constantes.MascaraDataHora), new { @class = "label-celular-dados" })
             </div>
         </div>
         <div class="row">

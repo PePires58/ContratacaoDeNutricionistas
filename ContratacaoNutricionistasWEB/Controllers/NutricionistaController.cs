@@ -64,6 +64,12 @@
 * Data: 04/06/2020
 * Implementação: Inclusão de método de logout.
 */
+
+/*
+Data: 08/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Ajuste para melhoria de experiencia de usuário
+*/
 #endregion
 
 using System;
@@ -165,7 +171,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
                     return View(pModel);
 
                 /*Valida se já existe login cadastrado*/
-                if (_ServiceUsuario.LoginExiste(pModel.Login,pModel.CPF,pModel.TipoUsuario.GetDefaultValue()))
+                if (_ServiceUsuario.LoginExiste(pModel.Login, pModel.CPF, pModel.TipoUsuario.GetDefaultValue()))
                     throw new Exception($"O login: {pModel.Login}, já existe!");
 
                 /*Cadastro o nutricionista*/
@@ -333,7 +339,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
 
                 ModelState.Clear();
 
-                return View();
+                return RedirectToAction("EnderecosCadastrados", "Nutricionista", new { pMensagem = ViewData[Constantes.ViewDataMensagemRetorno] });
             }
             catch (Exception ex)
             {
@@ -394,8 +400,10 @@ namespace ContratacaoNutricionistasWEB.Controllers
         /// <param name="pUF">UF</param>
         /// <returns>Uma lista de endereços</returns>
         [HttpGet]
-        public IActionResult EnderecosCadastrados(int pIndiceInicial, string pRua, string pCidade, string pBairro, string pCEP, string pUF)
+        public IActionResult EnderecosCadastrados(int pIndiceInicial, string pRua, string pCidade, string pBairro, string pCEP, string pUF, string pMensagem)
         {
+            ViewData[Constantes.ViewDataMensagemRetorno] = pMensagem;
+
             List<Endereco> enderecos = _ServiceEndereco.EnderecosCadastrados(
                 Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType),
                 pRua,
@@ -506,7 +514,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
 
                 ViewData[Constantes.ViewDataMensagemRetorno] = $"Endereço {pModel.Logradouro}, {pModel.Numero}. {pModel.Cidade} - {unidadeFeracao.GetDefaultValue()}.{Environment.NewLine}Alterado com sucesso!";
 
-                return View(pModel);
+                return RedirectToAction("EnderecosCadastrados", "Nutricionista", new { pMensagem = ViewData[Constantes.ViewDataMensagemRetorno] });
             }
             catch (Exception ex)
             {
