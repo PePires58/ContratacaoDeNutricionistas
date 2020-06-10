@@ -4,6 +4,12 @@ Data: 08/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Implementação Inicial
 */
+
+/*
+Data: 10/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Ajuste na máscara.
+*/
 #endregion
 using System;
 
@@ -17,7 +23,12 @@ namespace ContratacaoNutricionistas.Domain
         /// <summary>
         /// Mascara de data/hora
         /// </summary>
-        public const string MascaraDataHora = @"dd/MM/yyyy hh:mm";
+        public const string MascaraDataHora = @"dd/MM/yyyy HH:mm";
+
+        /// <summary>
+        /// Mascara de data/hora do sql
+        /// </summary>
+        public const string MascaraDataHoraSegundoSql = @"yyyy-MM-dd HH:mm:ss";
 
         /// <summary>
         /// Mascara de data

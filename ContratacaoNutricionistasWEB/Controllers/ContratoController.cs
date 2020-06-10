@@ -10,6 +10,12 @@ Data: 08/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Ajuste para mostrar os endereços de todos os nutricionistas
 */
+
+/*
+Data: 10/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Realizando a contratação.
+*/
 #endregion
 using System;
 using System.Collections.Generic;
@@ -17,7 +23,9 @@ using System.Linq;
 using ContratacaoNutricionistas.Domain.Entidades.Agenda;
 using ContratacaoNutricionistas.Domain.Entidades.Nutricionista;
 using ContratacaoNutricionistas.Domain.Enumerados.Agenda;
+using ContratacaoNutricionistas.Domain.Enumerados.Gerais;
 using ContratacaoNutricionistas.Domain.Interfaces.Agenda;
+using ContratacaoNutricionistas.Domain.Interfaces.Contrato;
 using ContratacaoNutricionistas.Domain.Interfaces.Endereco;
 using ContratacaoNutricionistasWEB.Models.Agenda;
 using ContratacaoNutricionistasWEB.Models.Nutricionista;
@@ -39,6 +47,11 @@ namespace ContratacaoNutricionistasWEB.Controllers
         /// Serviços de agenda
         /// </summary>
         private readonly IServiceAgenda _ServiceAgenda;
+
+        /// <summary>
+        /// Serviços de contrato
+        /// </summary>
+        private readonly IServiceContrato _ServiceContrato;
         #endregion
 
         #region Construtores
@@ -47,10 +60,12 @@ namespace ContratacaoNutricionistasWEB.Controllers
         /// </summary>
         /// <param name="ServiceEndereco">Serviços de endereço</param>
         /// <param name="ServiceAgenda">Serviços de agenda</param>
-        public ContratoController(IServiceEndereco ServiceEndereco, IServiceAgenda ServiceAgenda)
+        /// <param name="ServiceContrato">Serviços de contrato</param>
+        public ContratoController(IServiceEndereco ServiceEndereco, IServiceAgenda ServiceAgenda, IServiceContrato ServiceContrato)
         {
             _ServiceEndereco = ServiceEndereco;
             _ServiceAgenda = ServiceAgenda;
+            _ServiceContrato = ServiceContrato;
         }
         #endregion
 
@@ -180,6 +195,43 @@ namespace ContratacaoNutricionistasWEB.Controllers
             }
 
             return View(agendaContrato);
+        }
+
+        [HttpPost]
+        public IActionResult ContratarNutricionista(AgendaListaContratoVM pModel)
+        {
+            try
+            {
+                int idUsuario = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType);
+
+                if (!ModelState.IsValid)
+                    return View(pModel);
+
+                _ServiceContrato.ContratarNutricionista(
+                    new ContratacaoNutricionistas.Domain.Entidades.Contrato.Contrato(
+                        pIdUsuario: idUsuario,
+                        pIdNutricionista: pModel.IdUsuario,
+                        pLogradouro: pModel.Endereco.Logradouro,
+                        complemento: pModel.Endereco.Complemento,
+                        numero: pModel.Endereco.Numero,
+                        pBairro: pModel.Endereco.Bairro,
+                        pCidade: pModel.Endereco.Cidade,
+                        pUF: Enum.GetValues(typeof(UnidadeFederacaoEnum)).Cast<UnidadeFederacaoEnum>().FirstOrDefault(c => c.GetDefaultValue().Equals(pModel.Endereco.UF)),
+                        pCEP: pModel.Endereco.CEP,
+                        dataInicio: pModel.DataInicio,
+                        dataTermino: pModel.DataFim,
+                        status: ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.PendenteAceitacaoNutricionista
+                        )
+                    );
+
+                ViewData[Constantes.ViewDataMensagemRetorno] = $"Sua consulta foi agendada com sucesso!";
+                return View();
+            }
+            catch (Exception ex)
+            {
+                ViewData[Constantes.ViewDataMensagemErro] = ex.Message;
+                return View(pModel);
+            }
         }
         #endregion
 

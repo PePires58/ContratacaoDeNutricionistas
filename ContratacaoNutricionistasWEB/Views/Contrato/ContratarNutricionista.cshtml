@@ -10,7 +10,31 @@
 </div>
 
 <div class="col-md-12">
+    @if (ViewData[Constantes.ViewDataMensagemErro] != null)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-12 alert alert-danger">
+                    <span>
+                        @ViewData[Constantes.ViewDataMensagemErro].ToString()
+                    </span>
+                </div>
+            </div>
+        </div>
+    }
     <form asp-action="ContratarNutricionista" asp-controller="Contrato">
+        <input hidden asp-for="DataInicio" />
+        <input hidden asp-for="DataFim" />
+        <input hidden asp-for="Endereco.Bairro" />
+        <input hidden asp-for="Endereco.CEP" />
+        <input hidden asp-for="Endereco.Cidade" />
+        <input hidden asp-for="Endereco.Complemento" />
+        <input hidden asp-for="Endereco.Logradouro" />
+        <input hidden asp-for="Endereco.Numero" />
+        <input hidden asp-for="Endereco.UF" />
+        <input hidden asp-for="IdAgenda" />
+        <input hidden asp-for="IdUsuario" />
+
         <div class="row">
             <div class="col-md-6 col-xs-6 col-sm-6">
                 @Html.LabelFor(modelItem => modelItem.DataInicio)

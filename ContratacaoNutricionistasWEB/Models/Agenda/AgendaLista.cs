@@ -4,6 +4,12 @@
 * Data: 04/06/2020
 * Implementação: Implementação inicial.
 */
+
+/*
+Data: 10/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Ajustando os campos para ter horas.
+*/
 #endregion
 using ContratacaoNutricionistas.Domain.Enumerados.Agenda;
 using ContratacaoNutricionistasWEB.Models.Nutricionista;
@@ -22,11 +28,11 @@ namespace ContratacaoNutricionistasWEB.Models.Agenda
             Endereco = new EnderecoVM();
         }
 
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         [Display(Name = "Data de início")]
         public DateTime DataInicio { get; set; }
 
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         [Display(Name = "Data de término")]
         public DateTime DataFim { get; set; }
 

@@ -33,6 +33,12 @@ Data: 08/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Inclusão para mascaras
 */
+/*
+Data: 10/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Ajuste nas máscaras.
+*/
+
 #endregion
 
 using System;
@@ -89,7 +95,7 @@ namespace ContratacaoNutricionistasWEB
         /// <summary>
         /// Mascara de data/hora
         /// </summary>
-        public const string MascaraDataHora = @"dd/MM/yyyy hh:mm";
+        public const string MascaraDataHora = @"dd/MM/yyyy HH:mm";
 
         /// <summary>
         /// Mascara de data

@@ -10,6 +10,12 @@ Data: 08/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Inclusão de campos.
 */
+
+/*
+Data: 10/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Ajustando nome da classe.
+*/
 #endregion
 using ContratacaoNutricionistas.Domain.Interfaces.Agenda;
 using ContratacaoNutricionistas.Domain.Repository.Repository;
@@ -24,14 +30,14 @@ namespace ContratacaoNutricionistas.Domain.Repository.Agenda
     /// <summary>
     /// Repositório de agência
     /// </summary>
-    public class AgenciaRepository : RepositoryBase, IAgendaRepository
+    public class AgendaRepository : RepositoryBase, IAgendaRepository
     {
         #region Construtores
         /// <summary>
         /// Repositório de agenda
         /// </summary>
         /// <param name="UnitOfWork"></param>
-        public AgenciaRepository(IUnitOfWork UnitOfWork) : base(UnitOfWork)
+        public AgendaRepository(IUnitOfWork UnitOfWork) : base(UnitOfWork)
         {
         }
         #endregion
@@ -53,12 +59,10 @@ namespace ContratacaoNutricionistas.Domain.Repository.Agenda
             stringBuilder.AppendLine("  @DT_INICIO DATETIME,");
             stringBuilder.AppendLine("	@DT_FIM DATETIME");
             stringBuilder.AppendLine($"SET @ID_USUARIO = {pIdUsuario}");
-            stringBuilder.AppendLine($"SET @ID_ENDERECO = {pIdEndereco}");
-            stringBuilder.AppendLine($"SET @DT_INICIO = '{(pDataHoraInicio == DateTime.MinValue ? "" : pDataHoraInicio.ToString(Constantes.MascaraDataHora))}'");
-            stringBuilder.AppendLine($"SET @DT_FIM = '{(pDataHoraFim == DateTime.MinValue ? "" : pDataHoraFim.ToString(Constantes.MascaraDataHora))}'");
+            stringBuilder.AppendLine($"SET @DT_INICIO = '{(pDataHoraInicio == DateTime.MinValue ? "" : pDataHoraInicio.ToString(Constantes.MascaraDataHoraSegundoSql))}'");
+            stringBuilder.AppendLine($"SET @DT_FIM = '{(pDataHoraFim == DateTime.MinValue ? "" : pDataHoraFim.ToString(Constantes.MascaraDataHoraSegundoSql))}'");
             stringBuilder.AppendLine("SELECT TOP 1 1 FROM AGENDA_TB AG WITH(NOLOCK)");
             stringBuilder.AppendLine("WHERE AG.ID_USUARIO = @ID_USUARIO");
-            stringBuilder.AppendLine("    AND AG.ID_ENDERECO = @ID_ENDERECO");
             stringBuilder.AppendLine("    AND(AG.DT_INICIO BETWEEN @DT_INICIO AND @DT_FIM");
             stringBuilder.AppendLine("        OR AG.DT_FIM BETWEEN @DT_INICIO AND @DT_FIM)");
             stringBuilder.AppendLine("    AND AGENDA_STATUS = 'A' /*ATIVA*/");
@@ -75,8 +79,8 @@ namespace ContratacaoNutricionistas.Domain.Repository.Agenda
             stringBuilder.AppendLine("	@DT_FIM DATETIME,");
             stringBuilder.AppendLine("    @ID_USUARIO INT");
             stringBuilder.AppendLine($"SET @ID_USUARIO = {(pIdUsuario == 0 ? "NULL" : pIdUsuario.ToString())}");
-            stringBuilder.AppendLine($"SET @DT_INICIO = {(pDataInicio == DateTime.MinValue ? "NULL" : "'" + pDataInicio.ToString("yyyy-MM-dd") + "'")}");
-            stringBuilder.AppendLine($"SET @DT_FIM = {(pDataFim == DateTime.MinValue ? "NULL" : "'" + pDataFim.ToString("yyyy-MM-dd") + "'")}");
+            stringBuilder.AppendLine($"SET @DT_INICIO = {(pDataInicio == DateTime.MinValue ? "NULL" : "'" + pDataInicio.ToString(Constantes.MascaraDataHoraSegundoSql) + "'")}");
+            stringBuilder.AppendLine($"SET @DT_FIM = {(pDataFim == DateTime.MinValue ? "NULL" : "'" + pDataFim.ToString(Constantes.MascaraDataHoraSegundoSql) + "'")}");
             stringBuilder.AppendLine("SELECT");
             stringBuilder.AppendLine("  AG.ID_AGENDA,");
             stringBuilder.AppendLine("  AG.ID_USUARIO,");
