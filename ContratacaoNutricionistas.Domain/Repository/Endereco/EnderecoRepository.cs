@@ -4,6 +4,13 @@
 * Data: 04/06/2020
 * Implementação: Implementação inicial
 */
+
+/*
+Data: 13/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Excluindo o endereço.
+*/
+
 #endregion
 using ContratacaoNutricionistas.Domain.Enumerados.Gerais;
 using ContratacaoNutricionistas.Domain.Interfaces.Endereco;
@@ -285,6 +292,25 @@ namespace ContratacaoNutricionistas.Domain.Repository.Endereco
             _UnitOfWork.Executar(
                 _UnitOfWork.MontaInsertPorAttributo(pEndereco).ToString()
                 );
+        }
+
+        /// <summary>
+        /// Exclui um endereço
+        /// </summary>
+        /// <param name="pIdUsuario">Id do usuário</param>
+        /// <param name="pIdEndereco">Id do endereço</param>
+        public void ExcluirEndereco(int pIdUsuario, int pIdEndereco)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine("DECLARE @ID_USUARIO INT,");
+            stringBuilder.AppendLine("	@ID_ENDERECO INT");
+            stringBuilder.AppendLine($"SET @ID_ENDERECO = {pIdEndereco}");
+            stringBuilder.AppendLine($"SET @ID_USUARIO = {pIdUsuario}");
+            stringBuilder.AppendLine("DELETE FROM ENDERECO_TB");
+            stringBuilder.AppendLine("WHERE ID_ENDERECO = @ID_ENDERECO AND");
+            stringBuilder.AppendLine("    ID_USUARIO = @ID_USUARIO");
+
+            _UnitOfWork.Executar(stringBuilder.ToString());
         }
         #endregion
     }

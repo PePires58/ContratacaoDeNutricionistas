@@ -1,10 +1,6 @@
-﻿@model IEnumerable<ContratacaoNutricionistasWEB.Models.Agenda.AgendaLista>
+﻿@model IEnumerable<ContratacaoNutricionistasWEB.Models.Contrato.ContratoVM>
 
-@{
-    ViewData["Title"] = "Horários cadastrados";
-}
-
-<h4>@ViewData["Title"]</h4>
+<h4>Consultas</h4>
 <hr />
 
 @if (ViewData[Constantes.ViewDataMensagemErro] != null)
@@ -34,14 +30,32 @@
 }
 
 <div class="col-md-12">
-    <p>
-        <a class="btn btn-success" asp-action="AgendaEndereco" asp-controller="Agenda">Nova agenda</a>
-    </p>
+    @if (User.Claims.Any(c => c.Type == Constantes.PacienteLogado))
+    {
+        <p>
+            <a class="btn btn-success" asp-action="LocalizarNutricionista" asp-controller="Contrato">Nova consulta</a>
+        </p>
+    }
     @{
         if (Model.Any())
         {
             @foreach (var item in Model)
             {
+                <div class="row">
+                    <div class="col-md-6 col-xs-6 col-sm-6">
+                        @Html.LabelFor(modelItem => item.NomePaciente)
+                    </div>
+                    <div class="col-md-6 col-xs-6 col-sm-6">
+                        @Html.LabelFor(modelItem => item.NomeNutricionista)
+                    </div>
+
+                    <div class="col-md-6 col-xs-6 col-sm-6">
+                        @Html.LabelFor(modelItem => item.NomePaciente, item.NomePaciente.ToString(), new { @class = "label-celular-dados" })
+                    </div>
+                    <div class="col-md-6 col-xs-6 col-sm-6">
+                        @Html.LabelFor(modelItem => item.NomeNutricionista, item.NomeNutricionista.ToString(), new { @class = "label-celular-dados" })
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-6 col-xs-6 col-sm-6">
                         @Html.LabelFor(modelItem => item.DataInicio)
@@ -84,12 +98,18 @@
         }
         else
         {
-            <p>
-                No momento, não encontramos nenhuma agenda disponível.
-            </p>
+            if(User.Claims.Any(c => c.Type == Constantes.PacienteLogado))
+            {
+                <h4>
+                    No momento, você não agendou nenhuma consulta.
+                </h4>
+            }
+            else if (User.Claims.Any(c => c.Type == Constantes.NutricionistaLogado))
+            {
+                <h4>
+                    No momento, você não possui nenhum paciente para consulta.
+                </h4>
+            }
         }
     }
-</div>
-<div>
-    <a asp-action="Index" asp-controller="Home">Voltar para página inicial</a>
 </div>

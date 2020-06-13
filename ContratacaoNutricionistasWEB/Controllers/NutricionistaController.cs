@@ -70,12 +70,17 @@ Data: 08/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Ajuste para melhoria de experiencia de usuário
 */
+
+/*
+Data: 13/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Excluindo endereço.
+*/
 #endregion
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using ContratacaoNutricionistas.Domain.Entidades.Nutricionista;
 using ContratacaoNutricionistas.Domain.Entidades.Usuario;
 using ContratacaoNutricionistas.Domain.Enumerados.Gerais;
@@ -84,7 +89,6 @@ using ContratacaoNutricionistas.Domain.Interfaces.Endereco;
 using ContratacaoNutricionistas.Domain.Interfaces.Nutricionista;
 using ContratacaoNutricionistas.Domain.Interfaces.Usuario;
 using ContratacaoNutricionistasWEB.Models.Nutricionista;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -513,6 +517,79 @@ namespace ContratacaoNutricionistasWEB.Controllers
                 });
 
                 ViewData[Constantes.ViewDataMensagemRetorno] = $"Endereço {pModel.Logradouro}, {pModel.Numero}. {pModel.Cidade} - {unidadeFeracao.GetDefaultValue()}.{Environment.NewLine}Alterado com sucesso!";
+
+                return RedirectToAction("EnderecosCadastrados", "Nutricionista", new { pMensagem = ViewData[Constantes.ViewDataMensagemRetorno] });
+            }
+            catch (Exception ex)
+            {
+                ViewData[Constantes.ViewDataMensagemErro] = ex.Message;
+                return View(pModel);
+            }
+        }
+        #endregion
+
+        #region Excluir endereço
+        /// <summary>
+        /// Exclui um endereço
+        /// </summary>
+        /// <param name="ID">ID do endereço</param>
+        /// <returns>Endereço a ser excluído</returns>
+        [HttpGet]
+        public IActionResult ExcluirEndereco(int ID)
+        {
+            ViewData[Constantes.ViewDataMensagemErro] = ViewData[Constantes.ViewDataMensagemRetorno] = null;
+            if (ID <= 0)
+                return RedirectToAction("EnderecosCadastrados", "Nutricionista");
+
+            EnderecoAlteracaoVM enderecoAlteracaoVM = null;
+
+            Endereco endereco = _ServiceEndereco.ConsultarEnderecoNutricionistaPorID(ID,
+                Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType)
+                );
+
+            if (endereco != null)
+            {
+                enderecoAlteracaoVM = new EnderecoAlteracaoVM()
+                {
+                    ID = endereco.IdEndereco,
+                    Bairro = endereco.Bairro,
+                    CEP = endereco.CEP,
+                    Cidade = endereco.Cidade,
+                    Complemento = endereco.Complemento,
+                    Logradouro = endereco.Logradouro,
+                    Numero = endereco.Numero,
+                    UF = endereco.UF.GetDefaultValue()
+                };
+            }
+
+            if (enderecoAlteracaoVM == null)
+                return RedirectToAction("EnderecosCadastrados", "Nutricionista");
+
+            return View(enderecoAlteracaoVM);
+        }
+
+        /// <summary>
+        /// Exclui um endereço
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult ExcluirEndereco(EnderecoAlteracaoVM pModel)
+        {
+            ViewData[Constantes.ViewDataUnidadesFeracao] = ListaUF;
+
+            try
+            {
+                if (pModel.ID <= 0)
+                    return View(pModel);
+
+                int IdUsuario = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType);
+
+                _ServiceEndereco.ExcluirEndereco(
+                    IdUsuario,
+                    pModel.ID
+                    );
+
+                ViewData[Constantes.ViewDataMensagemRetorno] = $"Endereço excluído com sucesso!";
 
                 return RedirectToAction("EnderecosCadastrados", "Nutricionista", new { pMensagem = ViewData[Constantes.ViewDataMensagemRetorno] });
             }

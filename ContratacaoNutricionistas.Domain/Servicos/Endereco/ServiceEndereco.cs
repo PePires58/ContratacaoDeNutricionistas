@@ -4,8 +4,15 @@
 * Data: 04/06/2020
 * Implementação: Implementação inicial
 */
+
+/*
+Data: 13/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Excluindo endereço.
+*/
 #endregion
 using ContratacaoNutricionistas.Domain.Enumerados.Gerais;
+using ContratacaoNutricionistas.Domain.Interfaces.Agenda;
 using ContratacaoNutricionistas.Domain.Interfaces.Endereco;
 using Correios.NET.Models;
 using ModulosHelper.Extensions;
@@ -26,6 +33,11 @@ namespace ContratacaoNutricionistas.Domain.Servicos.Endereco
         /// Interface que faz os comandos com o banco de dados para nutricionista
         /// </summary>
         private readonly IEnderecoRepository _EnderecoRepository;
+
+        /// <summary>
+        /// Interface que faz os comandos com o banco de dados para nutricionista
+        /// </summary>
+        private readonly IAgendaRepository _AgendaRepository;
         #endregion
 
         #region Construtores
@@ -33,9 +45,11 @@ namespace ContratacaoNutricionistas.Domain.Servicos.Endereco
         /// Construtor
         /// </summary>
         /// <param name="EnderecoRepository">Serviço de comandos com o banco</param>
-        public ServiceEndereco(IEnderecoRepository EnderecoRepository)
+        /// <param name="AgendaRepository">Repositório de agenda</param>
+        public ServiceEndereco(IEnderecoRepository EnderecoRepository, IAgendaRepository AgendaRepository)
         {
             _EnderecoRepository = EnderecoRepository;
+            _AgendaRepository = AgendaRepository;
         }
         #endregion
 
@@ -167,6 +181,34 @@ namespace ContratacaoNutricionistas.Domain.Servicos.Endereco
                 throw new Exception("UF não corresponde com a cidade informada pelo CEP");
 
             _EnderecoRepository.AlterarDadosEndereco(pEndereco);
+        }
+
+        /// <summary>
+        /// Exclui um endereço
+        /// </summary>
+        /// <param name="pIdUsuario">Id do usuário</param>
+        /// <param name="pIdEndereco">Id do endereço</param>
+        public void ExcluirEndereco(int pIdUsuario, int pIdEndereco)
+        {
+            if (pIdUsuario <= 0)
+                throw new ArgumentException("O usuário é obrigatório.");
+            if (pIdEndereco <= 0)
+                throw new ArgumentException("O endereço é obrigatório.");
+
+            try
+            {
+                _EnderecoRepository.BeginTransaction();
+
+                _AgendaRepository.DesativarAgendaPorEnderecoExcluido(pIdUsuario, pIdEndereco);
+                _EnderecoRepository.ExcluirEndereco(pIdUsuario, pIdEndereco);
+
+                _EnderecoRepository.Commit();
+            }
+            catch 
+            {
+                _EnderecoRepository.RollBack();
+                throw;
+            }            
         }
         #endregion
     }

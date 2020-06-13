@@ -4,7 +4,14 @@
 * Data: 04/06/2020
 * Implementação: Implementação inicial.
 */
+
+/*
+Data: 13/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Herdando do repositório de base.
+*/
 #endregion
+using ContratacaoNutricionistas.Domain.Interfaces.Repository;
 using System.Collections.Generic;
 
 namespace ContratacaoNutricionistas.Domain.Interfaces.Endereco
@@ -12,7 +19,7 @@ namespace ContratacaoNutricionistas.Domain.Interfaces.Endereco
     /// <summary>
     /// Interface para o repositório de endereço
     /// </summary>
-    public interface IEnderecoRepository
+    public interface IEnderecoRepository : IRepositoryBase
     {
         /// <summary>
         /// Método que cadastra um endereço
@@ -45,5 +52,12 @@ namespace ContratacaoNutricionistas.Domain.Interfaces.Endereco
         /// <param name="pIDUsuario">ID do usuário</param>
         /// <returns>Endereço ou null</returns>
         Entidades.Nutricionista.Endereco ConsultarEnderecoNutricionistaPorID(int pID, int pIDUsuario);
+
+        /// <summary>
+        /// Exclui um endereço
+        /// </summary>
+        /// <param name="pIdUsuario">id do usuário</param>
+        /// <param name="pIdEndereco">id do endereço</param>
+        void ExcluirEndereco(int pIdUsuario, int pIdEndereco);
     }
 }

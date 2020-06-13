@@ -4,12 +4,24 @@ Data: 10/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Implementação inicial.
 */
+
+/*
+Data: 13/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Listando os contratos disponíveis.
+*/
+
 #endregion
+using ContratacaoNutricionistas.Domain.Enumerados.Contrato;
+using ContratacaoNutricionistas.Domain.Enumerados.Gerais;
 using ContratacaoNutricionistas.Domain.Interfaces.Contrato;
 using ContratacaoNutricionistas.Domain.Repository.Repository;
 using DataBaseHelper.Interfaces;
+using ModulosHelper.Extensions;
 using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text;
 
 namespace ContratacaoNutricionistas.Domain.Repository.Contrato
@@ -32,6 +44,17 @@ namespace ContratacaoNutricionistas.Domain.Repository.Contrato
         /// <param name="pContrato">Contrato a ser cadastrado</param>
         public void ContratarNutricionista(Entidades.Contrato.Contrato pContrato)
         {
+            if (pContrato == null)
+                throw new ArgumentException("O contrato é obrigatório.");
+            if (pContrato.UF == UnidadeFederacaoEnum.NaoDefinido)
+                throw new ArgumentException("Unidade de federação é obrigatório.");
+            new Entidades.Nutricionista.Endereco(pContrato.IdUsuario,
+                pContrato.Logradouro,
+                pContrato.Bairro,
+                pContrato.Cidade,
+                pContrato.CEP,
+                pContrato.UF);
+
             _UnitOfWork.Executar(_UnitOfWork.MontaInsertPorAttributo(pContrato).ToString());
         }
 
@@ -60,6 +83,158 @@ namespace ContratacaoNutricionistas.Domain.Repository.Contrato
             DataSet ds = _UnitOfWork.Consulta(stringBuilder.ToString());
 
             return ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0;
+        }
+
+        /// <summary>
+        /// <summary>
+        /// Lista os constratos de algum usuário
+        /// </summary>
+        /// <param name="pIndiceInicial">Indice inicial</param>
+        /// <param name="pRua">Rua</param>
+        /// <param name="pCidade">Cidade</param>
+        /// <param name="pBairro">Bairro</param>
+        /// <param name="pCEP">CEP</param>
+        /// <param name="pUF">UF</param>
+        /// <param name="pDataInicio">Data de início</param>
+        /// <param name="pDataFim">Data fim</param>
+        /// <param name="pIdUsuario">ID do usuário</param>
+        /// <returns>Lista de contratos</returns>
+        public List<Entidades.Contrato.Contrato> ListaContratos(string pRua, string pCidade, string pBairro, string pCEP, string pUF, DateTime pDataInicio, DateTime pDataFim, int pIdUsuario)
+        {
+            #region Query
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine("DECLARE @RUA VARCHAR(100),");
+            stringBuilder.AppendLine("	@CIDADE VARCHAR(30),");
+            stringBuilder.AppendLine("	@BAIRRO VARCHAR(50),");
+            stringBuilder.AppendLine("	@CEP VARCHAR(9),");
+            stringBuilder.AppendLine("	@ESTADO VARCHAR(2),");
+            stringBuilder.AppendLine("	@DT_INICIO DATETIME,");
+            stringBuilder.AppendLine("  @DT_FIM DATETIME,");
+            stringBuilder.AppendLine("	@ID_USUARIO INT");
+            stringBuilder.AppendLine($"SET @ID_USUARIO = {pIdUsuario}");
+            stringBuilder.AppendLine($"SET @RUA = '{pRua}'");
+            stringBuilder.AppendLine($"SET @BAIRRO = '{pBairro}'");
+            stringBuilder.AppendLine($"SET @CIDADE = '{pCidade}'");
+            stringBuilder.AppendLine($"SET @CEP = {(string.IsNullOrEmpty(pCEP) ? "NULL" : "'" + pCEP + "'")}");
+            stringBuilder.AppendLine($"SET @ESTADO = {(string.IsNullOrEmpty(pUF) ? "NULL" : "'" + pUF + "'")}");
+            stringBuilder.AppendLine($"SET @DT_INICIO = {(pDataInicio == DateTime.MinValue ? "NULL" : "'" + pDataInicio.ToString(Constantes.MascaraDataHoraSegundoSql) + "'")}");
+            stringBuilder.AppendLine($"SET @DT_FIM = {(pDataFim == DateTime.MinValue ? "NULL" : "'" + pDataFim.ToString(Constantes.MascaraDataHoraSegundoSql) + "'")}");
+            stringBuilder.AppendLine("SELECT");
+            stringBuilder.AppendLine("  C.ID_CONTRATO,");
+            stringBuilder.AppendLine("	C.ID_USUARIO,");
+            stringBuilder.AppendLine("	C.ID_NUTRI,");
+            stringBuilder.AppendLine("	C.RUA,");
+            stringBuilder.AppendLine("	C.COMPLEMENTO,");
+            stringBuilder.AppendLine("	C.NUMERO,");
+            stringBuilder.AppendLine("	C.BAIRRO,");
+            stringBuilder.AppendLine("  C.CIDADE,");
+            stringBuilder.AppendLine("	C.ESTADO,");
+            stringBuilder.AppendLine("	C.CEP,");
+            stringBuilder.AppendLine("	C.DT_INICIO,");
+            stringBuilder.AppendLine("	C.DT_FIM,");
+            stringBuilder.AppendLine("	C.STATUS");
+            stringBuilder.AppendLine("FROM CONTRATO_TB C WITH(NOLOCK)");
+            stringBuilder.AppendLine("WHERE");
+            stringBuilder.AppendLine("    (ISNULL(@RUA, C.RUA) = C.RUA OR C.RUA LIKE @RUA + '%')");
+            stringBuilder.AppendLine("    AND(ISNULL(@CIDADE, C.CIDADE) = C.CIDADE OR C.CIDADE LIKE @CIDADE + '%')");
+            stringBuilder.AppendLine("    AND(ISNULL(@BAIRRO, C.BAIRRO) = C.BAIRRO OR C.BAIRRO LIKE @BAIRRO + '%')");
+            stringBuilder.AppendLine("    AND ISNULL(@CEP, C.CEP) = C.CEP");
+            stringBuilder.AppendLine("    AND ISNULL(@ESTADO, C.ESTADO) = C.ESTADO");
+            stringBuilder.AppendLine("    AND(C.DT_INICIO BETWEEN ISNULL(@DT_INICIO, C.DT_INICIO) AND ISNULL(@DT_FIM, C.DT_FIM)");
+            stringBuilder.AppendLine("        OR C.DT_FIM BETWEEN ISNULL(@DT_INICIO, C.DT_INICIO) AND ISNULL(@DT_FIM, C.DT_FIM)");
+            stringBuilder.AppendLine("    )");
+            stringBuilder.AppendLine("    AND(C.ID_NUTRI = @ID_USUARIO OR C.ID_USUARIO = @ID_USUARIO)");
+
+            #endregion
+            List<Entidades.Contrato.Contrato> listaContratos = new List<Entidades.Contrato.Contrato>();
+
+            DataSet ds = _UnitOfWork.Consulta(stringBuilder.ToString());
+
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                DateTime datainicio = DateTime.MinValue,
+                        dataFim = DateTime.MinValue;
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    string Rua = string.Empty,
+                        Bairro = string.Empty,
+                        Cidade = string.Empty,
+                        CEP = string.Empty,
+                        Complemento = string.Empty;
+
+                    uint? Numero = null;
+                    int idPaciente = 0, idNutricionista = 0, idContrato = 0;
+
+                    UnidadeFederacaoEnum UF = UnidadeFederacaoEnum.NaoDefinido;
+                    StatusContratoEnum statusContrato = StatusContratoEnum.Agendada;
+
+                    if (ds.Tables[0].Rows[i]["RUA"] != DBNull.Value)
+                        Rua = ds.Tables[0].Rows[i]["RUA"].ToString();
+                    if (ds.Tables[0].Rows[i]["BAIRRO"] != DBNull.Value)
+                        Bairro = ds.Tables[0].Rows[i]["BAIRRO"].ToString();
+                    if (ds.Tables[0].Rows[i]["CIDADE"] != DBNull.Value)
+                        Cidade = ds.Tables[0].Rows[i]["CIDADE"].ToString();
+                    if (ds.Tables[0].Rows[i]["CEP"] != DBNull.Value)
+                        CEP = ds.Tables[0].Rows[i]["CEP"].ToString();
+                    if (ds.Tables[0].Rows[i]["CEP"] != DBNull.Value)
+                        CEP = ds.Tables[0].Rows[i]["CEP"].ToString();
+                    if (ds.Tables[0].Rows[i]["COMPLEMENTO"] != DBNull.Value)
+                        Complemento = ds.Tables[0].Rows[i]["COMPLEMENTO"].ToString();
+                    if (ds.Tables[0].Rows[i]["NUMERO"] != DBNull.Value)
+                        Numero = Convert.ToUInt32(ds.Tables[0].Rows[i]["NUMERO"]);
+                    if (ds.Tables[0].Rows[i]["ESTADO"] != DBNull.Value)
+                        UF = Enum.GetValues(typeof(UnidadeFederacaoEnum)).Cast<UnidadeFederacaoEnum>().
+                            FirstOrDefault(s => s.GetDefaultValue().Equals(ds.Tables[0].Rows[i]["ESTADO"].ToString(),StringComparison.CurrentCultureIgnoreCase));
+
+                    Entidades.Nutricionista.Endereco endereco = new Entidades.Nutricionista.Endereco(
+                        pIdUsuario,
+                        Rua,
+                        Bairro,
+                        Cidade,
+                        CEP,
+                        UF
+                        )
+                    {
+                        Complemento = Complemento,
+                        Numero = Numero,
+                    };
+
+                    if (ds.Tables[0].Rows[i]["DT_INICIO"] != DBNull.Value)
+                        datainicio = Convert.ToDateTime(ds.Tables[0].Rows[i]["DT_INICIO"]);
+                    if (ds.Tables[0].Rows[i]["DT_FIM"] != DBNull.Value)
+                        dataFim = Convert.ToDateTime(ds.Tables[0].Rows[i]["DT_FIM"]);
+
+                    if (ds.Tables[0].Rows[i]["ID_CONTRATO"] != DBNull.Value)
+                        idContrato = Convert.ToInt32(ds.Tables[0].Rows[i]["ID_CONTRATO"]);
+                    if (ds.Tables[0].Rows[i]["ID_USUARIO"] != DBNull.Value)
+                        idPaciente = Convert.ToInt32(ds.Tables[0].Rows[i]["ID_USUARIO"]);
+                    if (ds.Tables[0].Rows[i]["ID_NUTRI"] != DBNull.Value)
+                        idNutricionista = Convert.ToInt32(ds.Tables[0].Rows[i]["ID_NUTRI"]);
+
+                    if (ds.Tables[0].Rows[i]["STATUS"] != DBNull.Value)
+                        statusContrato = Enum.GetValues(typeof(StatusContratoEnum)).Cast<StatusContratoEnum>().
+                            FirstOrDefault(s => s.GetDefaultValue().Equals(ds.Tables[0].Rows[i]["STATUS"].ToString()));
+
+                    listaContratos.Add(new Entidades.Contrato.Contrato(
+                        idPaciente,
+                        idNutricionista,
+                        endereco.Logradouro,
+                        endereco?.Complemento,
+                        endereco?.Numero,
+                        endereco.Bairro,
+                        endereco.Cidade,
+                        endereco.UF,
+                        endereco.CEP,
+                        datainicio,
+                        dataFim,
+                        statusContrato
+                        ));
+
+                    
+                }
+            }
+
+            return listaContratos;
         }
     }
 }

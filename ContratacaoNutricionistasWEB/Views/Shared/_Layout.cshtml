@@ -33,11 +33,16 @@
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
+                        @if (User.Claims.Any(c => c.Type == Constantes.IDUsuarioLogado))
+                        {
+                            <li>
+                                <a asp-controller="Contrato" asp-action="ConsultasAgendadas">Consultas agendadas</a>
+                            </li>
+                        }
                         @if (User.Claims.Any(c => c.Type == Constantes.NutricionistaLogado))
                         {
                             if (User.Claims.FirstOrDefault(c => c.Type == Constantes.NutricionistaLogado).Type.ToString() == Constantes.NutricionistaLogado)
                             {
-
                                 <li>
                                     <a asp-controller="Agenda" asp-action="Index">Agendas cadastradas</a>
                                 </li>

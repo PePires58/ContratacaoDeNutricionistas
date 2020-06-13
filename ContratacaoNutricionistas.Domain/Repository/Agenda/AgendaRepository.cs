@@ -16,6 +16,12 @@ Data: 10/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Ajustando nome da classe.
 */
+/*
+Data: 13/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Desativar a agenda quando excluir o endereço.
+*/
+
 #endregion
 using ContratacaoNutricionistas.Domain.Interfaces.Agenda;
 using ContratacaoNutricionistas.Domain.Repository.Repository;
@@ -154,7 +160,8 @@ namespace ContratacaoNutricionistas.Domain.Repository.Agenda
             stringBuilder.AppendLine("	@ID_ENDERECO INT");
             stringBuilder.AppendLine($"SET @ID_USUARIO = {pIdUsuario}");
             stringBuilder.AppendLine($"SET @ID_ENDERECO = {pIdEndereco}");
-            stringBuilder.AppendLine("DELETE FROM AGENDA_TB");
+            stringBuilder.AppendLine("UPDATE AGENDA_TB");
+            stringBuilder.AppendLine("SET AGENDA_STATUS = 'EE'");
             stringBuilder.AppendLine("WHERE ID_USUARIO = @ID_USUARIO");
             stringBuilder.AppendLine("    AND ID_ENDERECO = @ID_ENDERECO");
 

@@ -4,6 +4,13 @@
 * Data: 04/06/2020
 * Implementação: Implementação inicial.
 */
+
+/*
+Data: 13/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Excluir endereço
+*/
+
 #endregion
 using System.Collections.Generic;
 
@@ -53,5 +60,12 @@ namespace ContratacaoNutricionistas.Domain.Interfaces.Endereco
         /// <param name="pCEP">CEP</param>
         /// <returns>Endereço</returns>
         Entidades.Nutricionista.Endereco ConsultarEnderecoPorCEP(string pCEP, int pIdUsuario);
+
+        /// <summary>
+        /// Exclui um endereço
+        /// </summary>
+        /// <param name="pIdUsuario">ID do usuário</param>
+        /// <param name="pIdEndereco">ID do endereço</param>
+        void ExcluirEndereco(int pIdUsuario, int pIdEndereco);
     }
 }

@@ -4,6 +4,12 @@ Data: 10/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Implementação inicial.
 */
+
+/*
+Data: 13/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Critica UF.
+*/
 #endregion
 using ContratacaoNutricionistas.Domain.Enumerados.Contrato;
 using ContratacaoNutricionistas.Domain.Enumerados.Gerais;
@@ -46,6 +52,9 @@ namespace ContratacaoNutricionistas.Domain.Entidades.Contrato
                 throw new ArgumentException("O paciente é obrigatório.");
             if (dataInicio > dataTermino)
                 throw new Exception("Data de início não pode ser maior que data de término.");
+            if (pUF == UnidadeFederacaoEnum.NaoDefinido)
+                throw new ArgumentException("Unidade de federação é obrigatório.");
+
         }
 
         [Coluna(pNomeColuna: "ID_USUARIO", pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Integer)]

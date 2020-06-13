@@ -4,10 +4,19 @@ Data: 10/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Implementação inicial.
 */
+
+/*
+Data: 13/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Listando os contratos.
+*/
+
 #endregion
+using ContratacaoNutricionistas.Domain.Entidades.Contrato;
 using ContratacaoNutricionistas.Domain.Interfaces.Contrato;
 using ModulosHelper.Extensions;
 using System;
+using System.Collections.Generic;
 
 namespace ContratacaoNutricionistas.Domain.Servicos.Contrato
 {
@@ -63,6 +72,11 @@ namespace ContratacaoNutricionistas.Domain.Servicos.Contrato
                 throw new Exception($"Você já possui uma consulta entre o dia/horário {pContrato.DataInicio.ToString(Constantes.MascaraDataHora)} até {pContrato.DataTermino.ToString(Constantes.MascaraDataHora)}. Não foi possível realizar o agendamento.");
 
             _ContratoRepository.ContratarNutricionista(pContrato);
+        }
+
+        public List<Entidades.Contrato.Contrato> ListaContratos(string pRua, string pCidade, string pBairro, string pCEP, string pUF, DateTime pDataInicio, DateTime pDataFim, int pIdUsuario)
+        {
+            return _ContratoRepository.ListaContratos(pRua, pCidade, pBairro, pCEP, pUF, pDataInicio, pDataFim, pIdUsuario);
         }
         #endregion
 
