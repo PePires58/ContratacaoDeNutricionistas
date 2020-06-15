@@ -89,16 +89,42 @@
                     <div class="col-md-6 col-xs-6">
                         @Html.DisplayFor(modelItem => item.Endereco.CEP, item.Endereco.CEP.ToString(), new { @class = "label-celular-dados" })
                     </div>
-                    <div class="col-md-6" col-xs-6>
+                    <div class="col-md-6 col-xs-6">
                         @Html.DisplayFor(modelItem => item.Endereco.UF, item.Endereco.UF.ToString(), new { @class = "label-celular-dados" })
                     </div>
+                </div>
+                <div class="row">
+                    @if (item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.Agendada ||
+                    item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.PendenteAceitacaoNutricionista)
+                    {
+                        <div class="col-md-2 col-xs-6 col-ls-6">
+                            <br />
+                            <a class="text-danger" asp-action="CancelarConsulta" asp-controller="Contrato" asp-route-ID="@item.IdContrato">
+                                Cancelar consulta
+                            </a>
+                        </div>
+                    }
+
+                    @if (User.Claims.Any(c => c.Type == Constantes.NutricionistaLogado) &&
+                        item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.PendenteAceitacaoNutricionista)
+                    {
+                        <div class="col-md-2 col-xs-6 col-ls-6">
+                            <br />
+                            <a class="text-success"
+                               asp-action="AceitarContrato"
+                               asp-controller="Contrato"
+                               asp-route-ID="@item.IdContrato">
+                                Aceitar consulta
+                            </a>
+                        </div>
+                    }
                 </div>
                 <hr />
             }
         }
         else
         {
-            if(User.Claims.Any(c => c.Type == Constantes.PacienteLogado))
+            if (User.Claims.Any(c => c.Type == Constantes.PacienteLogado))
             {
                 <h4>
                     No momento, você não agendou nenhuma consulta.

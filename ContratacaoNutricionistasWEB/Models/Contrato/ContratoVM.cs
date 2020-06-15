@@ -4,8 +4,15 @@ Data: 13/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Implementação inicial.
 */
+
+/*
+Data: 15/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Incluindo ID do contrato e status.
+*/
 #endregion
 
+using ContratacaoNutricionistas.Domain.Enumerados.Contrato;
 using ContratacaoNutricionistasWEB.Models.Nutricionista;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -19,7 +26,9 @@ namespace ContratacaoNutricionistasWEB.Models.Contrato
             Endereco = new EnderecoVM();
         }
 
+        public int IdContrato { get; set; }
         public int IdUsuario { get; set; }
+        public StatusContratoEnum Status { get; set; }
 
         [Display(Name ="Paciente")]
         public string NomePaciente { get; set; }

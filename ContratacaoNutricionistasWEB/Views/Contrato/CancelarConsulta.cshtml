@@ -1,0 +1,107 @@
+﻿@model ContratacaoNutricionistasWEB.Models.Contrato.ContratoVM
+
+<h4>Cancelar consulta</h4>
+<hr />
+
+@if (ViewData[Constantes.ViewDataMensagemErro] != null)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12 alert alert-danger">
+                <span>
+                    @ViewData[Constantes.ViewDataMensagemErro].ToString()
+                </span>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewData[Constantes.ViewDataMensagemRetorno] != null)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12 alert alert-success">
+                <span>
+                    @ViewData[Constantes.ViewDataMensagemRetorno].ToString()
+                </span>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="col-md-12">
+    <form asp-action="CancelarConsulta" asp-controller="Contrato">
+        <input hidden asp-for="DataInicio" />
+        <input hidden asp-for="DataFim" />
+        <input hidden asp-for="Endereco.Bairro" />
+        <input hidden asp-for="Endereco.CEP" />
+        <input hidden asp-for="Endereco.Cidade" />
+        <input hidden asp-for="Endereco.Complemento" />
+        <input hidden asp-for="Endereco.Logradouro" />
+        <input hidden asp-for="Endereco.Numero" />
+        <input hidden asp-for="Endereco.UF" />
+        <input hidden asp-for="IdContrato" />
+        <input hidden asp-for="IdUsuario" />
+
+        <div class="row">
+            <div class="col-md-6 col-xs-6 col-sm-6">
+                @Html.LabelFor(modelItem => modelItem.NomePaciente)
+            </div>
+            <div class="col-md-6 col-xs-6 col-sm-6">
+                @Html.LabelFor(modelItem => modelItem.NomeNutricionista)
+            </div>
+
+            <div class="col-md-6 col-xs-6 col-sm-6">
+                @Html.DisplayFor(modelItem => modelItem.NomePaciente, new { @class = "label-celular-dados" })
+            </div>
+            <div class="col-md-6 col-xs-6 col-sm-6">
+                @Html.DisplayFor(modelItem => modelItem.NomeNutricionista, new { @class = "label-celular-dados" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-xs-6 col-sm-6">
+                @Html.LabelFor(modelItem => modelItem.DataInicio)
+            </div>
+            <div class="col-md-6 col-xs-6 col-sm-6">
+                @Html.LabelFor(modelItem => modelItem.DataFim)
+            </div>
+            <div class="col-md-6 col-xs-6 col-sm-6">
+                @Html.DisplayFor(modelItem => modelItem.DataInicio, new { @class = "label-celular-dados" })
+            </div>
+            <div class="col-md-6 col-xs-6 col-sm-6">
+                @Html.DisplayFor(modelItem => modelItem.DataFim, new { @class = "label-celular-dados" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                @Html.Label("", "Endereço")
+            </div>
+            <div class="col-md-12">
+                @Html.DisplayFor(modelItem => modelItem.Endereco.EnderecoCompleto, new { @class = "label-celular-dados" })
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-xs-6">
+                @Html.LabelFor(modelItem => modelItem.Endereco.CEP)
+            </div>
+            <div class="col-md-6 col-xs-6">
+                @Html.LabelFor(modelItem => modelItem.Endereco.UF)
+            </div>
+            <div class="col-md-6 col-xs-6">
+                @Html.DisplayFor(modelItem => modelItem.Endereco.CEP, new { @class = "label-celular-dados" })
+            </div>
+            <div class="col-md-6" col-xs-6>
+                @Html.DisplayFor(modelItem => modelItem.Endereco.UF, new { @class = "label-celular-dados" })
+            </div>
+        </div>
+        <div class="form-group">
+            <br />
+            <input id="btnCancelar" type="submit" value="Cancelar" class="btn btn-danger form-control" />
+        </div>
+        <hr />
+    </form>
+</div>
+<div class="col-md-12">
+    <a asp-action="ConsultasAgendadas" asp-controller="Contrato">Voltar para consultas agendadas</a>
+</div>

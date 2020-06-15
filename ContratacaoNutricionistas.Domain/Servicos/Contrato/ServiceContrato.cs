@@ -11,8 +11,15 @@ Programador: Pedro Henrique Pires
 Descrição: Listando os contratos.
 */
 
+/*
+Data: 15/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Incluindo método de buscar contrato e alterar status.
+*/
+
 #endregion
 using ContratacaoNutricionistas.Domain.Entidades.Contrato;
+using ContratacaoNutricionistas.Domain.Enumerados.Contrato;
 using ContratacaoNutricionistas.Domain.Interfaces.Contrato;
 using ModulosHelper.Extensions;
 using System;
@@ -77,6 +84,29 @@ namespace ContratacaoNutricionistas.Domain.Servicos.Contrato
         public List<Entidades.Contrato.Contrato> ListaContratos(string pRua, string pCidade, string pBairro, string pCEP, string pUF, DateTime pDataInicio, DateTime pDataFim, int pIdUsuario)
         {
             return _ContratoRepository.ListaContratos(pRua, pCidade, pBairro, pCEP, pUF, pDataInicio, pDataFim, pIdUsuario);
+        }
+
+        /// <summary>
+        /// Busca um contrato pelo seu número
+        /// </summary>
+        /// <param name="pID">Número do contrato</param>
+        /// <returns>Contrato ou null</returns>
+        public Entidades.Contrato.Contrato BuscaContratoPorID(int pID)
+        {
+            return _ContratoRepository.BuscaContratoPorID(pID);
+        }
+
+        /// <summary>
+        /// Altera o status do contrato
+        /// </summary>
+        /// <param name="pIdContrato">Número do contrato</param>
+        /// <param name="pStatusContratoEnum">Novo status</param>
+        public void AlterarStatusContrato(int pIdContrato, StatusContratoEnum pStatusContratoEnum)
+        {
+            if (pIdContrato <= 0 || BuscaContratoPorID(pIdContrato) == null)
+                throw new ArgumentException("Número do contrato inválido.");
+
+            _ContratoRepository.AlterarStatusContrato(pIdContrato, pStatusContratoEnum);
         }
         #endregion
 

@@ -10,6 +10,12 @@ Data: 13/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Critica UF.
 */
+
+/*
+Data: 13/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Incluindo ID do contrato.
+*/
 #endregion
 using ContratacaoNutricionistas.Domain.Enumerados.Contrato;
 using ContratacaoNutricionistas.Domain.Enumerados.Gerais;
@@ -56,6 +62,8 @@ namespace ContratacaoNutricionistas.Domain.Entidades.Contrato
                 throw new ArgumentException("Unidade de federação é obrigatório.");
 
         }
+
+        public int IdContrato { get; set; }
 
         [Coluna(pNomeColuna: "ID_USUARIO", pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Integer)]
         public int IdUsuario { get; set; }

@@ -23,6 +23,11 @@ Programador: Pedro Henrique Pires
 Descrição: Listando contratos disponíveis.
 */
 
+/*
+Data: 15/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Incluindo método de buscar contrato e alterar status.
+*/
 #endregion
 using System;
 using System.Collections.Generic;
@@ -31,6 +36,7 @@ using ContratacaoNutricionistas.Domain.Entidades.Agenda;
 using ContratacaoNutricionistas.Domain.Entidades.Contrato;
 using ContratacaoNutricionistas.Domain.Entidades.Nutricionista;
 using ContratacaoNutricionistas.Domain.Enumerados.Agenda;
+using ContratacaoNutricionistas.Domain.Enumerados.Contrato;
 using ContratacaoNutricionistas.Domain.Enumerados.Gerais;
 using ContratacaoNutricionistas.Domain.Interfaces.Agenda;
 using ContratacaoNutricionistas.Domain.Interfaces.Contrato;
@@ -317,6 +323,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
                 contratosVM = contratos.
                     Select(c => new ContratoVM()
                     {
+                        IdContrato = c.IdContrato,
                         DataFim = c.DataTermino,
                         DataInicio = c.DataInicio,
                         Endereco = new EnderecoVM()
@@ -331,14 +338,155 @@ namespace ContratacaoNutricionistasWEB.Controllers
                         },
                         NomeNutricionista = _ServiceNutricionista.ConsultarNutricionistaPorID(c.IdNutricionista).Nome,
                         NomePaciente = _ServicePaciente.ConsultarPacientePorID(c.IdUsuario).Nome,
-                        IdUsuario = idUsuario
+                        IdUsuario = idUsuario,
+                        Status = c.Status
                     }).ToList();
             }
 
             return View(contratosVM.Skip(pIndiceInicial).Take(Constantes.QuantidadeRegistrosPorPagina));
         }
         #endregion
+
+        #region Cancelar consulta
+        /// <summary>
+        /// Cancela a consulta
+        /// </summary>
+        /// <param name="ID">ID do contrato</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize(Policy = "UsuarioLogado")]
+        public IActionResult CancelarConsulta(int ID)
+        {
+            try
+            {
+                Contrato contrato = _ServiceContrato.BuscaContratoPorID(ID);
+
+                if (contrato == null)
+                    return RedirectToAction("ConsultasAgendadas", "Contrato");
+
+                ContratoVM contratoVM = new ContratoVM()
+                {
+                    DataFim = contrato.DataTermino,
+                    DataInicio = contrato.DataInicio,
+                    Endereco = new EnderecoVM()
+                    {
+                        Bairro = contrato.Bairro,
+                        CEP = contrato.CEP,
+                        Cidade = contrato.Cidade,
+                        Complemento = contrato?.Complemento,
+                        Logradouro = contrato.Logradouro,
+                        Numero = contrato?.Numero,
+                        UF = contrato.UF.GetDefaultValue()
+                    },
+                    IdContrato = contrato.IdContrato,
+                    IdUsuario = contrato.IdUsuario,
+                    NomeNutricionista = _ServiceNutricionista.ConsultarNutricionistaPorID(contrato.IdNutricionista).Nome,
+                    NomePaciente = _ServicePaciente.ConsultarPacientePorID(contrato.IdUsuario).Nome
+                };
+
+                return View(contratoVM);
+            }
+            catch
+            {
+                return RedirectToAction("ConsultasAgendadas", "Contrato");
+            }
+        }
+
+        /// <summary>
+        /// Cancelaa consulta
+        /// </summary>
+        /// <param name="pModel">Contrato a ser cancelado</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Authorize(Policy = "UsuarioLogado")]
+        public IActionResult CancelarConsulta(ContratoVM pModel)
+        {
+            try
+            {
+                if (pModel.IdContrato == 0)
+                    return View(pModel);
+
+                StatusContratoEnum statusContratoEnum = StatusContratoEnum.Agendada;
+
+                if (User.Claims.Any(c => c.Type == Constantes.NutricionistaLogado))
+                    statusContratoEnum = StatusContratoEnum.CanceladaNutricionista;
+                else
+                    statusContratoEnum = StatusContratoEnum.CanceladaPaciente;
+
+                _ServiceContrato.AlterarStatusContrato(pModel.IdContrato,
+                    statusContratoEnum);
+
+                return RedirectToAction("ConsultasAgendadas", "Contrato", new { mensagem = "Consulta cancelada com sucesso." });
+            }
+            catch (Exception ex)
+            {
+                ViewData[Constantes.ViewDataMensagemErro] = ex.Message;
+                return View(pModel);
+            }
+        }
+
         #endregion
 
+        #region Aceitar contrato
+        /// <summary>
+        /// Aceita o contrato
+        /// </summary>
+        /// <param name="ID">ID</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize(Policy = "Nutricionista")]
+        public IActionResult AceitarContrato(int ID)
+        {
+            Contrato contrato = _ServiceContrato.BuscaContratoPorID(ID);
+
+            if (contrato == null)
+                return RedirectToAction("ConsultasAgendadas", "Contrato");
+
+            ContratoVM contratoVM = new ContratoVM()
+            {
+                DataFim = contrato.DataTermino,
+                DataInicio = contrato.DataInicio,
+                Endereco = new EnderecoVM()
+                {
+                    Bairro = contrato.Bairro,
+                    CEP = contrato.CEP,
+                    Cidade = contrato.Cidade,
+                    Complemento = contrato?.Complemento,
+                    Logradouro = contrato.Logradouro,
+                    Numero = contrato?.Numero,
+                    UF = contrato.UF.GetDefaultValue()
+                },
+                IdContrato = contrato.IdContrato,
+                IdUsuario = contrato.IdUsuario,
+                NomeNutricionista = _ServiceNutricionista.ConsultarNutricionistaPorID(contrato.IdNutricionista).Nome,
+                NomePaciente = _ServicePaciente.ConsultarPacientePorID(contrato.IdUsuario).Nome
+            };
+
+            return View(contratoVM);
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "Nutricionista")]
+        public IActionResult AceitarContrato(ContratoVM pModel)
+        {
+            try
+            {
+                if (pModel.IdContrato == 0)
+                    return ViewBag(pModel);
+
+                _ServiceContrato.AlterarStatusContrato(pModel.IdContrato,
+                    StatusContratoEnum.Agendada);
+
+                return RedirectToAction("ConsultasAgendadas", "Contrato", new { mensagem = "Consulta agendada com sucesso." });
+            }
+            catch (Exception ex)
+            {
+                ViewData[Constantes.ViewDataMensagemErro] = ex.Message;
+                return View(pModel);
+            }
+        }
+        #endregion
+
+        #endregion
     }
 }
