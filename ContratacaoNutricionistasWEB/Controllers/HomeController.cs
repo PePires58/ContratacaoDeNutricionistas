@@ -10,41 +10,29 @@
 * Data: 01/06/2020
 * Implementação: Ajustando atributo de autorização.
 */
+
+/*
+Data: 16/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Removendo métodos.
+*/
 #endregion
 
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using ContratacaoNutricionistasWEB.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Linq;
 
 namespace ContratacaoNutricionistasWEB.Controllers
 {
 
     public class HomeController : Controller
     {
-        [Authorize()]
+        [Authorize(Policy = "UsuarioLogado")]
         public IActionResult Index()
         {
-            return View();
-        }
-
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
+             return RedirectToAction("ConsultasAgendadas", "Contrato");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

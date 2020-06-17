@@ -17,6 +17,12 @@ Programador: Pedro Henrique Pires
 Descrição: Incluindo método de buscar contrato e alterar status.
 */
 
+/*
+Data: 16/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Ajustando comando sql.
+*/
+
 #endregion
 using ContratacaoNutricionistas.Domain.Entidades.Contrato;
 using ContratacaoNutricionistas.Domain.Enumerados.Contrato;
@@ -256,8 +262,8 @@ namespace ContratacaoNutricionistas.Domain.Repository.Contrato
             stringBuilder.AppendLine("DECLARE @ID_CONTRATO INT");
             stringBuilder.AppendLine($"SET @ID_CONTRATO = {pIdContrato}");
             stringBuilder.AppendLine("UPDATE CONTRATO_TB");
-            stringBuilder.AppendLine($"SET STATUS = {pStatusContratoEnum.GetDefaultValue()}");
-            stringBuilder.AppendLine("    ID_CONTRATO = @ID_CONTRATO");
+            stringBuilder.AppendLine($"SET STATUS = '{pStatusContratoEnum.GetDefaultValue()}'");
+            stringBuilder.AppendLine("WHERE ID_CONTRATO = @ID_CONTRATO");
 
             _UnitOfWork.Executar(stringBuilder.ToString());
         }

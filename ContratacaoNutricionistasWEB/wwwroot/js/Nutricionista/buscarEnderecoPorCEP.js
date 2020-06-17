@@ -5,6 +5,8 @@
  */
 
 $(document).ready(function () {
+    $('#CEP').mask('99999-999');
+
     $('#CEP').change(function () {
         $.get({
             url: urlCadastrarCEP,

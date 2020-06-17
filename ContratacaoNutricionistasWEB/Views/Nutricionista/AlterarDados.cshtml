@@ -1,5 +1,5 @@
 ﻿@model ContratacaoNutricionistasWEB.Models.Nutricionista.NutricionistaAlteracaoVM
-@{ 
+@{
     ViewData["Title"] = "Alteração de dados";
 }
 
@@ -37,8 +37,8 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input hidden asp-for="ID" />
             <input hidden asp-for="Login" />
-            <input hidden asp-for="Senha" value="@Model.Senha"/>
-            <input hidden asp-for="SenhaConfirmacao" value="@Model.SenhaConfirmacao"/>
+            <input hidden asp-for="Senha" value="@Model.Senha" />
+            <input hidden asp-for="SenhaConfirmacao" value="@Model.SenhaConfirmacao" />
             <div class="form-group">
                 <label asp-for="Nome" class="control-label"></label>
                 <input asp-for="Nome" class="form-control" />
@@ -65,3 +65,7 @@
     <a asp-action="Index" asp-controller="Home">Voltar para página inicial</a>
 </div>
 
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/Usuario/telefoneCelMask.js"></script>
+}
