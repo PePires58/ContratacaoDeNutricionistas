@@ -23,6 +23,12 @@ Programador: Pedro Henrique Pires
 Descrição: Ajustando comando sql.
 */
 
+/*
+Data: 19/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Verificando disponibilidade de contratação.
+*/
+
 #endregion
 using ContratacaoNutricionistas.Domain.Entidades.Contrato;
 using ContratacaoNutricionistas.Domain.Enumerados.Contrato;
@@ -386,6 +392,25 @@ namespace ContratacaoNutricionistas.Domain.Repository.Contrato
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Agenda disponível para contratação?
+        /// </summary>
+        /// <param name="pIdAgenda">ID da agenda</param>
+        /// <returns>Retorna se a agenda está disponível para contratar</returns>
+        public bool AgendaDisponivelParaContratar(int pIdAgenda)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine("DECLARE @ID_AGENDA INT");
+            stringBuilder.AppendLine($"SET @ID_AGENDA = {pIdAgenda}");
+            stringBuilder.AppendLine("SELECT TOP 1 1 FROM CONTRATO_TB TB WITH(NOLOCK)");
+            stringBuilder.AppendLine("    INNER JOIN AGENDA_TB AG WITH(NOLOCK) ON TB.ID_NUTRI = AG.ID_USUARIO");
+            stringBuilder.AppendLine("WHERE AG.ID_AGENDA = @ID_AGENDA AND TB.STATUS NOT IN ('CN','CP')");
+
+            DataSet ds = _UnitOfWork.Consulta(stringBuilder.ToString());
+
+            return !(ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0);
         }
     }
 }

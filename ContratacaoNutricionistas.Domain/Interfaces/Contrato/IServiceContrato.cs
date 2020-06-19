@@ -17,11 +17,16 @@ Data: 15/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Incluindo método de buscar contrato e alterar status.
 */
+
+/*
+Data: 19/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Verifica se a agenda está disponível para contratação.
+*/
 #endregion
 
 using System;
 using System.Collections.Generic;
-using ContratacaoNutricionistas.Domain.Entidades.Contrato;
 using ContratacaoNutricionistas.Domain.Enumerados.Contrato;
 
 namespace ContratacaoNutricionistas.Domain.Interfaces.Contrato
@@ -36,6 +41,13 @@ namespace ContratacaoNutricionistas.Domain.Interfaces.Contrato
         /// </summary>
         /// <param name="pContrato">Contrato</param>
         void ContratarNutricionista(Entidades.Contrato.Contrato pContrato);
+
+        /// <summary>
+        /// Verifica se a agenda está disponível para contratação
+        /// </summary>
+        /// <param name="pIdAgenda">ID da agenda</param>
+        /// <returns>Retorna se a agenda está disponível para contratação</returns>
+        bool AgendaDisponivelParaContratar(int pIdAgenda);
 
         /// <summary>
         /// Lista os constratos de algum usuário

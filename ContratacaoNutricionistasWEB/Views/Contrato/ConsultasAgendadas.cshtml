@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<ContratacaoNutricionistasWEB.Models.Contrato.ContratoVM>
-
+@using ModulosHelper.Extensions
 <h4>Consultas</h4>
 <hr />
 
@@ -39,8 +39,25 @@
     @{
         if (Model.Any())
         {
+
+
             @foreach (var item in Model)
             {
+
+                <div class="row">
+                    <div class="col-md-12 col-xs-12 col-sm-12">
+                        @Html.LabelFor(modelItem => item.Status)
+                    </div>
+                    <div class="col-md-12 col-xs-12 col-sm-12">
+                        @Html.LabelFor(modelItem => item.Status, item.Status.GetDescription(),
+                       new
+                            {
+                                @class = (item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.Agendada ? "label-consulta-aceita" :
+                        item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.PendenteAceitacaoNutricionista ? "label-consulta-pendente"
+                        : "label-consulta-cancelada")
+                            })
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-6 col-xs-6 col-sm-6">
                         @Html.LabelFor(modelItem => item.NomePaciente)
@@ -95,7 +112,7 @@
                 </div>
                 <div class="row">
                     @if (item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.Agendada ||
-                    item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.PendenteAceitacaoNutricionista)
+item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.PendenteAceitacaoNutricionista)
                     {
                         <div class="col-md-2 col-xs-6 col-ls-6">
                             <br />
@@ -104,9 +121,8 @@
                             </a>
                         </div>
                     }
-
-                    @if (User.Claims.Any(c => c.Type == Constantes.NutricionistaLogado) &&
-                        item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.PendenteAceitacaoNutricionista)
+                    else if (User.Claims.Any(c => c.Type == Constantes.NutricionistaLogado) &&
+        item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.PendenteAceitacaoNutricionista)
                     {
                         <div class="col-md-2 col-xs-6 col-ls-6">
                             <br />
@@ -118,9 +134,26 @@
                             </a>
                         </div>
                     }
+                    else
+                    {
+                        <br />
+                    }
                 </div>
                 <hr />
             }
+
+            <div class="row">
+                <div class="col-md-1 col-sm-3 col-lg-3 col-xs-3">
+                    <a class="left" href="#myCarousel" role="button" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                        <span class="sr-only">Anterior</span>
+                    </a>
+                </div>
+                <a class="right" href="#myCarousel" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    <span class="sr-only">Próximo</span>
+                </a>
+            </div>
         }
         else
         {
@@ -139,3 +172,6 @@
         }
     }
 </div>
+
+<partial name="_BotaoFiltroPadrao" />
+

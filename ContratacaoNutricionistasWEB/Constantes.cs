@@ -39,6 +39,12 @@ Programador: Pedro Henrique Pires
 Descrição: Ajuste nas máscaras.
 */
 
+/*
+Data: 19/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Constante para tela de filtro.
+*/
+
 #endregion
 
 using System;
@@ -61,6 +67,16 @@ namespace ContratacaoNutricionistasWEB
         /// Constantes para acesso da ViewData
         /// </summary>
         public const string ViewDataUnidadesFeracao = "UnidadesFederacao";
+
+        /// <summary>
+        /// Nome da constante de viewdata para nome do controller de filtro
+        /// </summary>
+        public const string ViewDataControllerFiltro = "ControllerFiltro";
+
+        /// <summary>
+        /// Nome da tela de filtro
+        /// </summary>
+        public const string ViewDataActionFiltro = "ActionFiltro";
 
         /// <summary>
         /// Mensagem para senha de alteração de dados for inválida
@@ -106,6 +122,7 @@ namespace ContratacaoNutricionistasWEB
         /// Máscara de hora/minuto
         /// </summary>
         public const string MascaraHoraMinuto = "HH:mm";
+
 
         public static DateTime DateTimeNow()
         {

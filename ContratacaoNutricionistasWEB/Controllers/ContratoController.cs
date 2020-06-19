@@ -28,6 +28,12 @@ Data: 15/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Incluindo método de buscar contrato e alterar status.
 */
+
+/*
+Data: 19/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Removendo autorize da classe e colocando nos métodos.
+*/
 #endregion
 using System;
 using System.Collections.Generic;
@@ -101,6 +107,34 @@ namespace ContratacaoNutricionistasWEB.Controllers
         #region Métodos
 
         #region Agendar consulta
+
+        [HttpGet]
+        [Authorize(Policy = "Paciente")]
+        public IActionResult FiltroLocalizarNutricionista()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "Paciente")]
+        public IActionResult FiltroLocalizarNutricionista(FiltroLocalizarNutricionistaVM pFiltro)
+        {
+            return RedirectToAction("LocalizarNutricionista", "Contrato",
+                new
+                {
+                    pIndiceInicial = 0,
+                    pRua = pFiltro.Logradouro,
+                    pCidade = pFiltro.Cidade,
+                    pBairro = pFiltro.Bairro,
+                    pCEP = pFiltro.CEP,
+                    pUF = pFiltro.UF,
+                    pDataInicio = pFiltro.DataAgendaInicio,
+                    pDataFim = pFiltro.DataAgendaFim,
+                    pNomeNutricionista = pFiltro.Nome
+                });
+        }
+
+
         /// <summary>
         /// Método que localiza o endereço
         /// </summary>
@@ -116,16 +150,18 @@ namespace ContratacaoNutricionistasWEB.Controllers
         /// <returns>Tela de localizar o nutricionsita</returns>
         [HttpGet]
         [Authorize(Policy = "Paciente")]
-        public IActionResult LocalizarNutricionista(int pIndiceInicial, string pRua, string pCidade, string pBairro, string pCEP, string pUF, DateTime pDataInicio, DateTime pDataFim, string mensagem)
+        public IActionResult LocalizarNutricionista(int pIndiceInicial, string pRua, string pCidade, string pBairro, string pCEP, string pUF, DateTime pDataInicio, DateTime pDataFim, string pNomeNutricionista, string mensagem)
         {
             ViewData[Constantes.ViewDataMensagemRetorno] = mensagem;
+            ViewData[Constantes.ViewDataActionFiltro] = "FiltroLocalizarNutricionista";
+            ViewData[Constantes.ViewDataControllerFiltro] = "Contrato";
 
             List<Agenda> agendas = _ServiceAgenda.AgendasCadastradas(pDataInicio, pDataFim, 0, true);
             List<int> nutricionistas = new List<int>();
 
             if (agendas.Any(d => d.DataInicio > Constantes.DateTimeNow()))
             {
-                agendas = agendas.Where(d => d.DataInicio > Constantes.DateTimeNow()).ToList();
+                agendas = agendas.Where(d => d.DataInicio > Constantes.DateTimeNow() && _ServiceContrato.AgendaDisponivelParaContratar(d.IdAgenda)).ToList();
                 nutricionistas = agendas
                     .Where(d => d.DataInicio > Constantes.DateTimeNow())
                     .Select(c => c.IdUsuario)
@@ -168,7 +204,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
 
             List<AgendaListaContratoVM> listaAgendas = new List<AgendaListaContratoVM>();
 
-            if (agendas.Any() && enderecosVm.Any())
+            if (agendas.Any(c => _ServiceContrato.AgendaDisponivelParaContratar(c.IdAgenda)) && enderecosVm.Any())
             {
                 listaAgendas = agendas.Join(enderecosVm,
                              a => a.IdEndereco,
@@ -227,7 +263,8 @@ namespace ContratacaoNutricionistasWEB.Controllers
             AgendaListaContratoVM agendaContrato = null;
 
             if (agendas.Any(id => id.IdAgenda == pIdAgenda &&
-                             id.IdUsuario == pIdNutricionista) && enderecosVm.Any())
+                             id.IdUsuario == pIdNutricionista) && enderecosVm.Any()
+                             && _ServiceContrato.AgendaDisponivelParaContratar(pIdAgenda))
             {
                 agendaContrato = agendas.Join(enderecosVm,
                              a => a.IdEndereco,
@@ -241,7 +278,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
                                  StatusDaAgenda = StatusAgendaEnum.Ativa,
                                  Endereco = endereco
                              }).FirstOrDefault(id => id.IdAgenda == pIdAgenda &&
-                             id.IdUsuario == pIdNutricionista);
+                             id.IdUsuario == pIdNutricionista && _ServiceContrato.AgendaDisponivelParaContratar(id.IdAgenda));
             }
 
             if (agendaContrato == null)
@@ -271,8 +308,8 @@ namespace ContratacaoNutricionistasWEB.Controllers
                         pIdUsuario: idUsuario,
                         pIdNutricionista: pModel.IdUsuario,
                         pLogradouro: pModel.Endereco.Logradouro,
-                        complemento: pModel.Endereco.Complemento,
-                        numero: pModel.Endereco.Numero,
+                        complemento: pModel.Endereco?.Complemento,
+                        numero: pModel.Endereco?.Numero,
                         pBairro: pModel.Endereco.Bairro,
                         pCidade: pModel.Endereco.Cidade,
                         pUF: Enum.GetValues(typeof(UnidadeFederacaoEnum)).Cast<UnidadeFederacaoEnum>().FirstOrDefault(c => c.GetDefaultValue().Equals(pModel.Endereco.UF)),
@@ -298,10 +335,12 @@ namespace ContratacaoNutricionistasWEB.Controllers
 
         #region Consultas agendadas
         [HttpGet]
-        [Authorize(Policy ="UsuarioLogado")]
+        [Authorize(Policy = "UsuarioLogado")]
         public IActionResult ConsultasAgendadas(int pIndiceInicial, string pRua, string pCidade, string pBairro, string pCEP, string pUF, DateTime pDataInicio, DateTime pDataFim, string mensagem)
         {
             ViewData[Constantes.ViewDataMensagemRetorno] = mensagem;
+            ViewData[Constantes.ViewDataActionFiltro] = "FiltroConsultasAgendadas";
+            ViewData[Constantes.ViewDataControllerFiltro] = "Contrato";
 
             int idUsuario = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType);
 
@@ -321,8 +360,9 @@ namespace ContratacaoNutricionistasWEB.Controllers
             if (contratos.Any())
             {
                 contratosVM = contratos.
-                    Select(c => new ContratoVM()
+                    Select((c, g) => new ContratoVM()
                     {
+                        Index = g,
                         IdContrato = c.IdContrato,
                         DataFim = c.DataTermino,
                         DataInicio = c.DataInicio,

@@ -76,6 +76,12 @@ Data: 13/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Excluindo endereço.
 */
+
+/*
+Data: 19/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Ajustando authorize.
+*/
 #endregion
 
 using System;
@@ -99,7 +105,6 @@ namespace ContratacaoNutricionistasWEB.Controllers
     /// <summary>
     /// Controlador de nutricionista
     /// </summary>
-    [Authorize(Policy = "Nutricionista")]
     public class NutricionistaController : Controller
     {
         #region Propriedades
@@ -212,6 +217,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
         /// <param name="ID">ID do nutricionista</param>
         /// <returns>AlterarDados.cshtml da pasta Nutricionista</returns>
         [HttpGet]
+        [Authorize(Policy = "Nutricionista")]
         public IActionResult AlterarDados(int ID)
         {
             if (ID == 0 || ID < 0)
@@ -253,6 +259,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
         /// <param name="pModel">Modelo para alterar</param>
         /// <returns>Retorna para a própria tela com mensagem de sucesso ou erro</returns>
         [HttpPost]
+        [Authorize(Policy = "Nutricionista")]
         public IActionResult AlterarDados(NutricionistaAlteracaoVM pModel)
         {
             try
@@ -300,6 +307,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
         /// </summary>
         /// <returns>CadastrarEndereco.cshtml da pasta Nutricionista</returns>
         [HttpGet]
+        [Authorize(Policy = "Nutricionista")]
         public IActionResult CadastrarEndereco()
         {
             return View();
@@ -311,6 +319,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
         /// <param name="pModel">Modelo a ser validado</param>
         /// <returns>Mensagem de sucesso ou erro</returns>
         [HttpPost]
+        [Authorize(Policy = "Nutricionista")]
         public IActionResult CadastrarEndereco(EnderecoVM pModel)
         {
             ViewData[Constantes.ViewDataMensagemErro] = ViewData[Constantes.ViewDataMensagemRetorno] = null;
@@ -354,6 +363,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
 
         #region JsonResults
         [HttpGet]
+        [Authorize(Policy = "UsuarioLogado")]
         public JsonResult ConsultarEnderecoCEP(string pCEP)
         {
             ViewData[Constantes.ViewDataMensagemErro] = ViewData[Constantes.ViewDataMensagemRetorno] = null;
@@ -404,6 +414,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
         /// <param name="pUF">UF</param>
         /// <returns>Uma lista de endereços</returns>
         [HttpGet]
+        [Authorize(Policy = "Nutricionista")]
         public IActionResult EnderecosCadastrados(int pIndiceInicial, string pRua, string pCidade, string pBairro, string pCEP, string pUF, string pMensagem)
         {
             ViewData[Constantes.ViewDataMensagemRetorno] = pMensagem;
@@ -446,6 +457,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
         /// <param name="ID">ID do endereço</param>
         /// <returns>Endereço para ser alterado</returns>
         [HttpGet]
+        [Authorize(Policy = "Nutricionista")]
         public IActionResult EditarEndereco(int ID)
         {
             ViewData[Constantes.ViewDataMensagemErro] = ViewData[Constantes.ViewDataMensagemRetorno] = null;
@@ -487,6 +499,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
         /// <param name="pModel">Endereço a ser alterado</param>
         /// <returns>Mensagem de sucesso ou erro</returns>
         [HttpPost]
+        [Authorize(Policy = "Nutricionista")]
         public IActionResult EditarEndereco(EnderecoAlteracaoVM pModel)
         {
             ViewData[Constantes.ViewDataUnidadesFeracao] = ListaUF;
@@ -535,6 +548,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
         /// <param name="ID">ID do endereço</param>
         /// <returns>Endereço a ser excluído</returns>
         [HttpGet]
+        [Authorize(Policy = "Nutricionista")]
         public IActionResult ExcluirEndereco(int ID)
         {
             ViewData[Constantes.ViewDataMensagemErro] = ViewData[Constantes.ViewDataMensagemRetorno] = null;
@@ -573,6 +587,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
+        [Authorize(Policy = "Nutricionista")]
         public IActionResult ExcluirEndereco(EnderecoAlteracaoVM pModel)
         {
             ViewData[Constantes.ViewDataUnidadesFeracao] = ListaUF;

@@ -29,4 +29,10 @@
     <Folder Include="wwwroot\lib\jquery-masked-input\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Views\Shared\_BotaoFiltroPadrao.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+  </ItemGroup>
+
 </Project>

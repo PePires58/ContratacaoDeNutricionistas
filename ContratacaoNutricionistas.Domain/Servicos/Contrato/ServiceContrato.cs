@@ -17,6 +17,12 @@ Programador: Pedro Henrique Pires
 Descrição: Incluindo método de buscar contrato e alterar status.
 */
 
+/*
+Data: 19/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Agenda disponível para contratação.
+*/
+
 #endregion
 using ContratacaoNutricionistas.Domain.Entidades.Contrato;
 using ContratacaoNutricionistas.Domain.Enumerados.Contrato;
@@ -107,6 +113,18 @@ namespace ContratacaoNutricionistas.Domain.Servicos.Contrato
                 throw new ArgumentException("Número do contrato inválido.");
 
             _ContratoRepository.AlterarStatusContrato(pIdContrato, pStatusContratoEnum);
+        }
+
+        /// <summary>
+        /// Verifica se a agenda está disponível para contratar
+        /// </summary>
+        /// <param name="pIdAgenda">ID da agenda</param>
+        /// <returns>Retorna se a agenda está disponível para contratar</returns>
+        public bool AgendaDisponivelParaContratar(int pIdAgenda)
+        {
+            if (pIdAgenda <= 0)
+                throw new ArgumentException("Agenda é obrigatória");
+            return _ContratoRepository.AgendaDisponivelParaContratar(pIdAgenda);
         }
         #endregion
 

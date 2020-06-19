@@ -17,6 +17,12 @@ Data: 15/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Incluindo método de buscar contrato e alterar status.
 */
+
+/*
+Data: 19/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Incluindo método para não permitir contratar mais de uma vez a mesma agenda.
+*/
 #endregion
 using System;
 using System.Collections.Generic;
@@ -70,5 +76,12 @@ namespace ContratacaoNutricionistas.Domain.Interfaces.Contrato
         /// <param name="pID">ID do contrato</param>
         /// <returns>Contrato ou null</returns>
         Entidades.Contrato.Contrato BuscaContratoPorID(int pID);
+
+        /// <summary>
+        /// Verifica se a agenda está disponível para contratar
+        /// </summary>
+        /// <param name="pIdAgenda">ID da agenda</param>
+        /// <returns>Se a agenda está disponível ou não para contratar</returns>
+        bool AgendaDisponivelParaContratar(int pIdAgenda);
     }
 }

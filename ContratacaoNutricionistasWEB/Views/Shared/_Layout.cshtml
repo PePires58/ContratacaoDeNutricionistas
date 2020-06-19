@@ -29,7 +29,15 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Nutricionistas WEB</a>
+                    @if (User.Claims.Any(c => c.Type == Constantes.NutricionistaLogado))
+                    {
+                        <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Nutricionistas WEB - Nutricionista</a>
+                    }
+                    else if (User.Claims.Any(c => c.Type == Constantes.PacienteLogado))
+                    {
+                        <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Nutricionistas WEB - Paciente</a>
+                    }
+
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
@@ -111,7 +119,7 @@
                 integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd">
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
-        <script src="~/lib/jquery-masked-input/jquery.maskedinput.min.js" asp-append-version="true"></script>
+        <script src="~/lib/jquery-masked-input/jquery.maskedinput.js" asp-append-version="true"></script>
     </environment>
 
     @RenderSection("Scripts", required: false)

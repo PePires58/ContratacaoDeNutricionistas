@@ -4,6 +4,13 @@ Data: 10/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Implementação inicial.
 */
+
+/*
+Data: 19/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Ajustando descrição.
+*/
+
 #endregion
 using System.ComponentModel;
 
@@ -20,7 +27,7 @@ namespace ContratacaoNutricionistas.Domain.Enumerados.Contrato
         [Description("Cancelado pelo nutricionista"),DefaultValue("CN")]
         CanceladaNutricionista,
 
-        [Description("Cencelado pelo paciente"),DefaultValue("CP")]
+        [Description("Cancelado pelo paciente"),DefaultValue("CP")]
         CanceladaPaciente
     }
 }

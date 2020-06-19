@@ -36,7 +36,7 @@
 <div class="col-md-12">
     @foreach (var item in Model)
     {
-        <a  style="color:black;" asp-action="ContratarNutricionista" asp-controller="Contrato"
+        <a style="color:black;" asp-action="ContratarNutricionista" asp-controller="Contrato"
            asp-route-pIdAgenda="@item.IdAgenda"
            asp-route-pIdNutricionista="@item.IdUsuario">
             <div class="row">
@@ -47,10 +47,10 @@
                     @Html.LabelFor(modelItem => item.DataFim)
                 </div>
                 <div class="col-md-6 col-xs-6 col-sm-6">
-                    @Html.LabelFor(modelItem => item.DataInicio,item.DataInicio.ToString(Constantes.MascaraDataHora), new { @class = "label-celular-dados" })
+                    @Html.LabelFor(modelItem => item.DataInicio, item.DataInicio.ToString(Constantes.MascaraDataHora), new { @class = "label-celular-dados" })
                 </div>
                 <div class="col-md-6 col-xs-6 col-sm-6">
-                    @Html.LabelFor(modelItem => item.DataFim,item.DataFim.ToString(Constantes.MascaraDataHora), new { @class = "label-celular-dados" })
+                    @Html.LabelFor(modelItem => item.DataFim, item.DataFim.ToString(Constantes.MascaraDataHora), new { @class = "label-celular-dados" })
                 </div>
             </div>
             <div class="row">
@@ -84,3 +84,5 @@
     <a asp-action="Index" asp-controller="Home">Voltar para página inicial</a>
     <hr />
 </div>
+
+<partial name="_BotaoFiltroPadrao" />

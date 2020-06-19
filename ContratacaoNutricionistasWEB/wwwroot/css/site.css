@@ -4,6 +4,12 @@
  * Implementação: Implementação Inicial da classe de estilo
  */
 
+/*
+Data: 19/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Label de consulta aceita,pendente e recusada.
+*/
+
 
 /* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\ 
 for details on configuring this project to bundle and minify static web assets. */
@@ -43,6 +49,17 @@ body {
     font-weight: 500;
 }
 
+.label-consulta-aceita{
+    color:green;
+}
+
+.label-consulta-cancelada{
+    color:red;
+}
+
+.label-consulta-pendente{
+    color:rgb(151, 134, 40);
+}
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
     /* Hide captions */
