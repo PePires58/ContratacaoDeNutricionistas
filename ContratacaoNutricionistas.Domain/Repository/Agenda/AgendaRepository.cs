@@ -22,6 +22,12 @@ Programador: Pedro Henrique Pires
 Descrição: Desativar a agenda quando excluir o endereço.
 */
 
+/*
+Data: 19/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Método para inativar as agendas.
+*/
+
 #endregion
 using ContratacaoNutricionistas.Domain.Interfaces.Agenda;
 using ContratacaoNutricionistas.Domain.Repository.Repository;
@@ -166,6 +172,22 @@ namespace ContratacaoNutricionistas.Domain.Repository.Agenda
             stringBuilder.AppendLine("    AND ID_ENDERECO = @ID_ENDERECO");
 
             _UnitOfWork.Executar(stringBuilder.ToString());
+        }
+
+        /// <summary>
+        /// Inativa as agendas
+        /// </summary>
+        /// <param name="pDataAgora">Agora</param>
+        public void InvativarAgendas(DateTime pDataAgora)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine("DECLARE @DT_AGORA DATETIME");
+            stringBuilder.AppendLine($"SET @DT_AGORA = '{pDataAgora.ToString(Constantes.MascaraDataHoraSegundoSql)}'");
+            stringBuilder.AppendLine("UPDATE AGENDA_TB");
+            stringBuilder.AppendLine("    SET AGENDA_STATUS = 'D'");
+            stringBuilder.AppendLine("WHERE DT_INICIO<@DT_AGORA");
+            stringBuilder.AppendLine("    AND AGENDA_STATUS <> 'D'");
+            _UnitOfWork.ExecutarAsync(stringBuilder.ToString());
         }
         #endregion
 

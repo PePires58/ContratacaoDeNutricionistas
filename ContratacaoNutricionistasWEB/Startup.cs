@@ -51,6 +51,12 @@ Data: 10/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Inclusão dos serviços de contrato.
 */
+
+/*
+Data: 19/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Método para inativar as origens a cada 30 segundos.
+*/
 #endregion
 
 using ContratacaoNutricionistas.Domain.Interfaces.Agenda;
@@ -177,6 +183,15 @@ namespace ContratacaoNutricionistasWEB
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            new System.Threading.Tasks.Task(() =>
+            {
+                while (true)
+                {
+                    app.ApplicationServices.GetRequiredService<IServiceAgenda>().InvativarAgendas();
+                    System.Threading.Thread.Sleep(30000);
+                }
+            }).Start();
         }
     }
 }

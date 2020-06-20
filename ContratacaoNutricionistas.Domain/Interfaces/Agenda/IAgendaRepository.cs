@@ -4,6 +4,12 @@
  Programador: Pedro Henrique Pires
  Descrição: Implementação Inicial da classe.
  */
+
+/*
+Data: 19/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Incluindo herença.
+*/
 #endregion
 using System;
 using System.Collections.Generic;
@@ -13,7 +19,7 @@ namespace ContratacaoNutricionistas.Domain.Interfaces.Agenda
     /// <summary>
     /// Repositório de comandos de agenda no banco de dados
     /// </summary>
-    public interface IAgendaRepository
+    public interface IAgendaRepository: Repository.IRepositoryBase
     {
         /// <summary>
         /// Cadastar a agenda
@@ -47,5 +53,11 @@ namespace ContratacaoNutricionistas.Domain.Interfaces.Agenda
         /// <param name="pIdUsuario">Id do usuário</param>
         /// <returns>Lista de agendas</returns>
         List<Entidades.Agenda.Agenda> AgendasCadastradas(DateTime pDataInicio, DateTime pDataFim, int pIdUsuario);
+
+        /// <summary>
+        /// Inativa as agendas
+        /// </summary>
+        /// <param name="pDataAgora">Agora</param>
+        void InvativarAgendas(DateTime pDataAgora);
     }
 }

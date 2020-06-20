@@ -10,6 +10,12 @@ Data: 08/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Inclusão para permitir paciente consultar as agendas.
 */
+
+/*
+Data: 19/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Método de inativar agendas.
+*/
 #endregion
 using System;
 using System.Collections.Generic;
@@ -36,5 +42,10 @@ namespace ContratacaoNutricionistas.Domain.Interfaces.Agenda
         /// <param name="pIsPaciente">Paciente consultando</param>
         /// <returns>Lista de agendas</returns>
         List<Entidades.Agenda.Agenda> AgendasCadastradas(DateTime pDataInicio, DateTime pDataFim, int pIdUsuario, bool pIsPaciente);
+
+        /// <summary>
+        /// Inativa as agendas
+        /// </summary>
+        void InvativarAgendas();
     }
 }

@@ -11,6 +11,12 @@ Programador: Pedro Henrique Pires
 Descrição: Excluindo o endereço.
 */
 
+/*
+Data: 19/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Ajustando filtro do estado.
+*/
+
 #endregion
 using ContratacaoNutricionistas.Domain.Enumerados.Gerais;
 using ContratacaoNutricionistas.Domain.Interfaces.Endereco;
@@ -68,7 +74,7 @@ namespace ContratacaoNutricionistas.Domain.Repository.Endereco
             stringBuilder.AppendLine($"SET @BAIRRO = '{pBairro}'");
             stringBuilder.AppendLine($"SET @CIDADE = '{pCidade}'");
             stringBuilder.AppendLine($"SET @CEP = {(string.IsNullOrEmpty(pCEP) ? "NULL" : "'" + pCEP + "'")}");
-            stringBuilder.AppendLine($"SET @ESTADO = {(string.IsNullOrEmpty(pUF) ? "NULL" : "'" + pUF + "'")}");
+            stringBuilder.AppendLine($"SET @ESTADO = {(string.IsNullOrEmpty(pUF) ? "NULL" : "'" + Enum.GetValues(typeof(UnidadeFederacaoEnum)).Cast<UnidadeFederacaoEnum>().FirstOrDefault(c => c.GetDescription().Equals(pUF)).GetDefaultValue() + "'")}");
             stringBuilder.AppendLine("SELECT");
             stringBuilder.AppendLine("  E.ID_ENDERECO,");
             stringBuilder.AppendLine("  E.RUA,");

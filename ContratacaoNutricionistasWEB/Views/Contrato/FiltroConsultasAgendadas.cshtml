@@ -4,7 +4,7 @@
 <hr />
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="FiltroLocalizarNutricionista" asp-controller="Contrato">
+        <form asp-action="FiltroConsultasAgendadas" asp-controller="Contrato">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <a class="form-control" style="color:black" data-toggle="collapse" href="#divLogradouro" role="button">
@@ -74,16 +74,6 @@
             <div class="form-group collapse" id="divDataTermino">
                 <input asp-for="DataAgendaFim" class="form-control" />
                 <span asp-validation-for="DataAgendaFim" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <a class="form-control" style="color:black" data-toggle="collapse" href="#divNome" role="button">
-                    Nome do nutricionista
-                </a>
-            </div>
-            <div class="form-group collapse" id="divNome">
-                <input asp-for="Nome" class="form-control" />
-                <span asp-validation-for="Nome" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Filtrar" class="btn btn-default form-control" />

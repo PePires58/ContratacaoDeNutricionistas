@@ -34,6 +34,12 @@ Data: 19/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Removendo autorize da classe e colocando nos métodos.
 */
+
+/*
+Data: 19/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Implementando filtro.
+*/
 #endregion
 using System;
 using System.Collections.Generic;
@@ -54,6 +60,7 @@ using ContratacaoNutricionistasWEB.Models.Contrato;
 using ContratacaoNutricionistasWEB.Models.Nutricionista;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using ModulosHelper.Extensions;
 
 namespace ContratacaoNutricionistasWEB.Controllers
@@ -112,6 +119,8 @@ namespace ContratacaoNutricionistasWEB.Controllers
         [Authorize(Policy = "Paciente")]
         public IActionResult FiltroLocalizarNutricionista()
         {
+            ViewData[Constantes.ViewDataUnidadesFeracao] = Enum.GetValues(typeof(UnidadeFederacaoEnum))
+                .Cast<UnidadeFederacaoEnum>().Select(c => new SelectListItem(c.GetDescription(), c.GetDescription())).ToList();
             return View();
         }
 
@@ -119,6 +128,9 @@ namespace ContratacaoNutricionistasWEB.Controllers
         [Authorize(Policy = "Paciente")]
         public IActionResult FiltroLocalizarNutricionista(FiltroLocalizarNutricionistaVM pFiltro)
         {
+            ViewData[Constantes.ViewDataUnidadesFeracao] = Enum.GetValues(typeof(UnidadeFederacaoEnum))
+                .Cast<UnidadeFederacaoEnum>().Select(c => new SelectListItem(c.GetDescription(), c.GetDescription())).ToList();
+
             return RedirectToAction("LocalizarNutricionista", "Contrato",
                 new
                 {
@@ -173,15 +185,18 @@ namespace ContratacaoNutricionistasWEB.Controllers
 
             List<Endereco> enderecos = new List<Endereco>();
 
+
+
             foreach (int nutricionista in nutricionistas)
             {
-                enderecos.AddRange(_ServiceEndereco.EnderecosCadastrados(
-                nutricionista,
-                pRua,
-                pCidade,
-                pBairro,
-                pCEP,
-                pUF));
+                if (string.IsNullOrEmpty(pNomeNutricionista) || _ServiceNutricionista.ConsultarNutricionistaPorID(nutricionista).Nome.Equals(pNomeNutricionista))
+                    enderecos.AddRange(_ServiceEndereco.EnderecosCadastrados(
+                    nutricionista,
+                    pRua,
+                    pCidade,
+                    pBairro,
+                    pCEP,
+                    pUF));
             }
 
             List<EnderecoAlteracaoVM> enderecosVm = new List<EnderecoAlteracaoVM>();
@@ -220,7 +235,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
                              }).ToList();
             }
 
-            return View(listaAgendas.Skip(pIndiceInicial).Take(Constantes.QuantidadeRegistrosPorPagina));
+            return View(listaAgendas.Skip(pIndiceInicial).Take(Constantes.QuantidadeRegistrosPorPagina).OrderByDescending(c => c.DataInicio));
         }
 
         /// <summary>
@@ -334,6 +349,38 @@ namespace ContratacaoNutricionistasWEB.Controllers
         #endregion
 
         #region Consultas agendadas
+
+        [HttpGet]
+        [Authorize(Policy = "UsuarioLogado")]
+        public IActionResult FiltroConsultasAgendadas()
+        {
+            ViewData[Constantes.ViewDataUnidadesFeracao] = Enum.GetValues(typeof(UnidadeFederacaoEnum))
+                .Cast<UnidadeFederacaoEnum>().Select(c => new SelectListItem(c.GetDescription(), c.GetDescription())).ToList();
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "UsuarioLogado")]
+        public IActionResult FiltroConsultasAgendadas(FiltroLocalizarNutricionistaVM pFiltro)
+        {
+            ViewData[Constantes.ViewDataUnidadesFeracao] = Enum.GetValues(typeof(UnidadeFederacaoEnum))
+                .Cast<UnidadeFederacaoEnum>().Select(c => new SelectListItem(c.GetDescription(), c.GetDescription())).ToList();
+
+            return RedirectToAction("ConsultasAgendadas", "Contrato",
+                new
+                {
+                    pIndiceInicial = 0,
+                    pRua = pFiltro.Logradouro,
+                    pCidade = pFiltro.Cidade,
+                    pBairro = pFiltro.Bairro,
+                    pCEP = pFiltro.CEP,
+                    pUF = pFiltro.UF,
+                    pDataInicio = pFiltro.DataAgendaInicio,
+                    pDataFim = pFiltro.DataAgendaFim,
+                    pNomeNutricionista = pFiltro.Nome
+                });
+        }
+
         [HttpGet]
         [Authorize(Policy = "UsuarioLogado")]
         public IActionResult ConsultasAgendadas(int pIndiceInicial, string pRua, string pCidade, string pBairro, string pCEP, string pUF, DateTime pDataInicio, DateTime pDataFim, string mensagem)
@@ -383,7 +430,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
                     }).ToList();
             }
 
-            return View(contratosVM.Skip(pIndiceInicial).Take(Constantes.QuantidadeRegistrosPorPagina));
+            return View(contratosVM.Skip(pIndiceInicial).Take(Constantes.QuantidadeRegistrosPorPagina).OrderByDescending(c => c.DataInicio));
         }
         #endregion
 

@@ -4,6 +4,12 @@ Data: 19/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Implementação inicial.
 */
+
+/*
+Data: 19/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Ajustando descrição dos filtros.
+*/
 #endregion
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -13,16 +19,15 @@ namespace ContratacaoNutricionistasWEB.Models.Contrato
     public class FiltroLocalizarNutricionistaVM
     {
 
-        [Display(Name = "Logradouro", Prompt = "Logradouro preenchido automáticamente a partir do CEP", AutoGenerateField = true)]
-        [Required(ErrorMessage = "O campo Logradouro é obrigatório")]
+        [Display(Name = "Logradouro", Prompt = "Digite a rua", AutoGenerateField = true)]
         [StringLength(100, ErrorMessage = "O tamanho máximo do campo Logradouro é de 100 caracteres")]
         public string Logradouro { get; set; }
 
-        [Display(Name = "Cidade", Prompt = "Cidade preenchida automáticamente a partir do CEP")]
+        [Display(Name = "Cidade", Prompt = "Digite a cidade")]
         [StringLength(30, ErrorMessage = "O tamanho máximo do campo Cidade é de 30 caracteres")]
         public string Cidade { get; set; }
 
-        [Display(Name = "Bairro", Prompt = "Bairro preenchido automáticamente a partir do CEP")]
+        [Display(Name = "Bairro", Prompt = "Digite o bairro")]
         [StringLength(50, ErrorMessage = "O tamanho máximo do campo Bairro é de 50 caracteres")]
         public string Bairro { get; set; }
 
@@ -31,17 +36,17 @@ namespace ContratacaoNutricionistasWEB.Models.Contrato
         [StringLength(9, ErrorMessage = "O tamanho máximo do campo CEP é de 9 caracteres")]
         public string CEP { get; set; }
 
-        [Display(Name = "UF", Prompt = "UF preenchida automáticamente a partir do CEP")]
+        [Display(Name = "UF", Prompt = "UF")]
         [StringLength(100, ErrorMessage = "O tamanho máximo do campo UF é de 100 caracteres")]
         public string UF { get; set; }
 
         [DataType(DataType.Date)]
         [Display(Name = "Data de início", Description = "Data da agenda (início)", Prompt = "Ex.: 01/01/2021")]
-        public DateTime DataAgendaInicio { get; set; }
+        public DateTime? DataAgendaInicio { get; set; }
 
         [DataType(DataType.Date)]
         [Display(Name = "Data de término", Description = "Data da agenda (fim)", Prompt = "Ex.: 01/01/2021")]
-        public DateTime DataAgendaFim { get; set; }
+        public DateTime? DataAgendaFim { get; set; }
 
         /// <summary>
         /// Nome

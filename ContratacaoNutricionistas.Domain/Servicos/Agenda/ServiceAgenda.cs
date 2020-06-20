@@ -10,6 +10,12 @@ Data: 08/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Inclusão de validações de data.
 */
+
+/*
+Data: 19/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Método para inativar as agendas.
+*/
 #endregion
 using ContratacaoNutricionistas.Domain.Interfaces.Agenda;
 using System;
@@ -86,6 +92,14 @@ namespace ContratacaoNutricionistas.Domain.Servicos.Agenda
             if (pIdUsuario <= 0 && !pIsPaciente)
                 throw new ArgumentException("Usuário náo identificado");
             return _AgendaRepository.AgendasCadastradas(pDataInicio, pDataFim, pIdUsuario);
+        }
+
+        /// <summary>
+        /// Inativa as agendas
+        /// </summary>
+        public void InvativarAgendas()
+        {
+            _AgendaRepository.InvativarAgendas(Constantes.DateTimeNow());
         }
         #endregion
 
