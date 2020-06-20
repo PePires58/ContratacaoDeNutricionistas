@@ -1,10 +1,18 @@
 ﻿@model ContratacaoNutricionistasWEB.Models.Contrato.FiltroLocalizarNutricionistaVM
 
-<h4>Filtros</h4>
-<hr />
-<div class="row">
-    <div class="col-md-12">
-        <form asp-action="FiltroLocalizarNutricionista" asp-controller="Contrato">
+<br />
+<form asp-action="FiltroLocalizarNutricionista" asp-controller="Contrato">
+    <div class="row">
+        <div class="col-md-6 col-xs-6 col-lg-6 col-sm-6">
+            <a class="btn btn-default" asp-action="ConsultasAgendadas" asp-controller="Contrato" style="color:black;">LIMPAR TUDO</a>
+        </div>
+        <div class="col-md-6 col-xs-6 col-lg-6 col-sm-6">
+            <input type="submit" value="CONCLUÍDO" class="btn btn-default" style="float:right" />
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <a class="form-control" style="color:black" data-toggle="collapse" href="#divLogradouro" role="button">
@@ -85,12 +93,9 @@
                 <input asp-for="Nome" class="form-control" />
                 <span asp-validation-for="Nome" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Filtrar" class="btn btn-default form-control" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
+</form>
 
 <div>
     <a asp-action="ConsultasAgendadas" asp-controller="Contrato">Voltar para página inicial</a>

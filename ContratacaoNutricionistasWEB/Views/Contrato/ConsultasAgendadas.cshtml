@@ -121,7 +121,7 @@ item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContra
                             </a>
                         </div>
                     }
-                    else if (User.Claims.Any(c => c.Type == Constantes.NutricionistaLogado) &&
+                    @if (User.Claims.Any(c => c.Type == Constantes.NutricionistaLogado) &&
         item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.PendenteAceitacaoNutricionista)
                     {
                         <div class="col-md-2 col-xs-6 col-ls-6">

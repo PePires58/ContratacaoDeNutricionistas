@@ -11,6 +11,12 @@ Programador: Pedro Henrique Pires
 Descrição: Ajustando descrição.
 */
 
+/*
+Data: 20/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Ajustando valor default.
+*/
+
 #endregion
 using System.ComponentModel;
 
@@ -18,16 +24,16 @@ namespace ContratacaoNutricionistas.Domain.Enumerados.Contrato
 {
     public enum StatusContratoEnum
     {
-        [Description("Pendente de aceitação do nutricionista"),DefaultValue("PN")]
+        [Description("Pendente de aceitação do nutricionista"), DefaultValue("PN")]
         PendenteAceitacaoNutricionista,
 
-        [Description("Agendado"),DefaultValue("A")]
+        [Description("Agendado"), DefaultValue("AC")]
         Agendada,
 
-        [Description("Cancelado pelo nutricionista"),DefaultValue("CN")]
+        [Description("Cancelado pelo nutricionista"), DefaultValue("CN")]
         CanceladaNutricionista,
 
-        [Description("Cancelado pelo paciente"),DefaultValue("CP")]
+        [Description("Cancelado pelo paciente"), DefaultValue("CP")]
         CanceladaPaciente
     }
 }

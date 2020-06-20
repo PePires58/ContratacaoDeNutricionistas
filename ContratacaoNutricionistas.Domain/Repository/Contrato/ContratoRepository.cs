@@ -29,6 +29,12 @@ Programador: Pedro Henrique Pires
 Descrição: Verificando disponibilidade de contratação.
 */
 
+/*
+Data: 20/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Ajustando filtro de estado.
+*/
+
 #endregion
 using ContratacaoNutricionistas.Domain.Entidades.Contrato;
 using ContratacaoNutricionistas.Domain.Enumerados.Contrato;
@@ -135,7 +141,7 @@ namespace ContratacaoNutricionistas.Domain.Repository.Contrato
             stringBuilder.AppendLine($"SET @BAIRRO = '{pBairro}'");
             stringBuilder.AppendLine($"SET @CIDADE = '{pCidade}'");
             stringBuilder.AppendLine($"SET @CEP = {(string.IsNullOrEmpty(pCEP) ? "NULL" : "'" + pCEP + "'")}");
-            stringBuilder.AppendLine($"SET @ESTADO = {(string.IsNullOrEmpty(pUF) ? "NULL" : "'" + pUF + "'")}");
+            stringBuilder.AppendLine($"SET @ESTADO = {(string.IsNullOrEmpty(pUF) ? "NULL" : "'" + Enum.GetValues(typeof(UnidadeFederacaoEnum)).Cast<UnidadeFederacaoEnum>().FirstOrDefault(c => c.GetDescription().Equals(pUF)).GetDefaultValue() + "'")}");
             stringBuilder.AppendLine($"SET @DT_INICIO = {(pDataInicio == DateTime.MinValue ? "NULL" : "'" + pDataInicio.ToString(Constantes.MascaraDataHoraSegundoSql) + "'")}");
             stringBuilder.AppendLine($"SET @DT_FIM = {(pDataFim == DateTime.MinValue ? "NULL" : "'" + pDataFim.ToString(Constantes.MascaraDataHoraSegundoSql) + "'")}");
             stringBuilder.AppendLine("SELECT");

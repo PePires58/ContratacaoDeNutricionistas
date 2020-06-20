@@ -28,6 +28,12 @@ Programador: Pedro Henrique Pires
 Descrição: Método para inativar as agendas.
 */
 
+/*
+Data: 20/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Abrindo transação para não dar erro ao executar comandos simultaneos em aparelhos diferentes.
+*/
+
 #endregion
 using ContratacaoNutricionistas.Domain.Interfaces.Agenda;
 using ContratacaoNutricionistas.Domain.Repository.Repository;
@@ -180,6 +186,7 @@ namespace ContratacaoNutricionistas.Domain.Repository.Agenda
         /// <param name="pDataAgora">Agora</param>
         public void InvativarAgendas(DateTime pDataAgora)
         {
+            _UnitOfWork.BeginTransaction();
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("DECLARE @DT_AGORA DATETIME");
             stringBuilder.AppendLine($"SET @DT_AGORA = '{pDataAgora.ToString(Constantes.MascaraDataHoraSegundoSql)}'");
@@ -187,7 +194,8 @@ namespace ContratacaoNutricionistas.Domain.Repository.Agenda
             stringBuilder.AppendLine("    SET AGENDA_STATUS = 'D'");
             stringBuilder.AppendLine("WHERE DT_INICIO<@DT_AGORA");
             stringBuilder.AppendLine("    AND AGENDA_STATUS <> 'D'");
-            _UnitOfWork.ExecutarAsync(stringBuilder.ToString());
+            _UnitOfWork.Executar(stringBuilder.ToString());
+            _UnitOfWork.Commit();
         }
         #endregion
 
