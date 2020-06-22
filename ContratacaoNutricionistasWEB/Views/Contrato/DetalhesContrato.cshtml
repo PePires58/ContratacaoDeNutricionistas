@@ -1,0 +1,78 @@
+﻿@model ContratacaoNutricionistasWEB.Models.Contrato.ContratoVM
+@using ModulosHelper.Extensions
+
+<h4>Detalhes da consulta</h4>
+<hr />
+
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-12 col-xs-12 col-sm-12">
+            @Html.LabelFor(modelItem => Model.Status)
+        </div>
+        <div class="col-md-12 col-xs-12 col-sm-12">
+            @Html.LabelFor(modelItem => Model.Status, Model.Status.GetDescription(),
+           new
+                {
+                    @class = (Model.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.Agendada ? "label-consulta-aceita" :
+            Model.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.PendenteAceitacaoNutricionista ? "label-consulta-pendente"
+            : "label-consulta-cancelada")
+                })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-xs-6 col-sm-6">
+            @Html.LabelFor(modelItem => modelItem.NomePaciente)
+        </div>
+        <div class="col-md-6 col-xs-6 col-sm-6">
+            @Html.LabelFor(modelItem => modelItem.NomeNutricionista)
+        </div>
+
+        <div class="col-md-6 col-xs-6 col-sm-6">
+            @Html.DisplayFor(modelItem => modelItem.NomePaciente, new { @class = "label-celular-dados" })
+        </div>
+        <div class="col-md-6 col-xs-6 col-sm-6">
+            @Html.DisplayFor(modelItem => modelItem.NomeNutricionista, new { @class = "label-celular-dados" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-xs-6 col-sm-6">
+            @Html.LabelFor(modelItem => modelItem.DataInicio)
+        </div>
+        <div class="col-md-6 col-xs-6 col-sm-6">
+            @Html.LabelFor(modelItem => modelItem.DataFim)
+        </div>
+        <div class="col-md-6 col-xs-6 col-sm-6">
+            @Html.DisplayFor(modelItem => modelItem.DataInicio, new { @class = "label-celular-dados" })
+        </div>
+        <div class="col-md-6 col-xs-6 col-sm-6">
+            @Html.DisplayFor(modelItem => modelItem.DataFim, new { @class = "label-celular-dados" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @Html.Label("", "Endereço")
+        </div>
+        <div class="col-md-12">
+            @Html.DisplayFor(modelItem => modelItem.Endereco.EnderecoCompleto, new { @class = "label-celular-dados" })
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-xs-6">
+            @Html.LabelFor(modelItem => modelItem.Endereco.CEP)
+        </div>
+        <div class="col-md-6 col-xs-6">
+            @Html.LabelFor(modelItem => modelItem.Endereco.UF)
+        </div>
+        <div class="col-md-6 col-xs-6">
+            @Html.DisplayFor(modelItem => modelItem.Endereco.CEP, new { @class = "label-celular-dados" })
+        </div>
+        <div class="col-md-6" col-xs-6>
+            @Html.DisplayFor(modelItem => modelItem.Endereco.UF, new { @class = "label-celular-dados" })
+        </div>
+    </div>
+    <hr />
+</div>
+<div class="col-md-12">
+    <a asp-action="ConsultasAgendadas" asp-controller="Contrato">Voltar para consultas agendadas</a>
+</div>

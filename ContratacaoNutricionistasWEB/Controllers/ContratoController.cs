@@ -40,6 +40,12 @@ Data: 19/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Implementando filtro.
 */
+
+/*
+Data: 22/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Ajuste de segurança.
+*/
 #endregion
 using System;
 using System.Collections.Generic;
@@ -451,25 +457,19 @@ namespace ContratacaoNutricionistasWEB.Controllers
                 if (contrato == null)
                     return RedirectToAction("ConsultasAgendadas", "Contrato");
 
-                ContratoVM contratoVM = new ContratoVM()
+                if (User.Claims.Any(c => c.Type == Constantes.NutricionistaLogado))
                 {
-                    DataFim = contrato.DataTermino,
-                    DataInicio = contrato.DataInicio,
-                    Endereco = new EnderecoVM()
-                    {
-                        Bairro = contrato.Bairro,
-                        CEP = contrato.CEP,
-                        Cidade = contrato.Cidade,
-                        Complemento = contrato?.Complemento,
-                        Logradouro = contrato.Logradouro,
-                        Numero = contrato?.Numero,
-                        UF = contrato.UF.GetDefaultValue()
-                    },
-                    IdContrato = contrato.IdContrato,
-                    IdUsuario = contrato.IdUsuario,
-                    NomeNutricionista = _ServiceNutricionista.ConsultarNutricionistaPorID(contrato.IdNutricionista).Nome,
-                    NomePaciente = _ServicePaciente.ConsultarPacientePorID(contrato.IdUsuario).Nome
-                };
+                    if (contrato.IdNutricionista != Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType))
+                        return RedirectToAction("ConsultasAgendadas", "Contrato");
+                }
+                else
+                {
+                    if (contrato.IdUsuario != Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType))
+                        return RedirectToAction("ConsultasAgendadas", "Contrato");
+                }
+
+
+                ContratoVM contratoVM = PreencheContratoVM(contrato);
 
                 return View(contratoVM);
             }
@@ -492,6 +492,20 @@ namespace ContratacaoNutricionistasWEB.Controllers
             {
                 if (pModel.IdContrato == 0)
                     return View(pModel);
+
+                if (User.Claims.Any(c => c.Type == Constantes.NutricionistaLogado))
+                {
+                    if (pModel.NomeNutricionista != _ServiceNutricionista.ConsultarNutricionistaPorID(Convert.ToInt32(User
+                        .Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType)).Nome)
+                        return RedirectToAction("ConsultasAgendadas", "Contrato");
+                }
+                else
+                {
+                    if (pModel.IdUsuario != Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType))
+                        return RedirectToAction("ConsultasAgendadas", "Contrato");
+                }
+
+
 
                 StatusContratoEnum statusContratoEnum = StatusContratoEnum.Agendada;
 
@@ -529,6 +543,10 @@ namespace ContratacaoNutricionistasWEB.Controllers
             if (contrato == null)
                 return RedirectToAction("ConsultasAgendadas", "Contrato");
 
+            if (contrato.IdNutricionista != Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType))
+                return RedirectToAction("ConsultasAgendadas", "Contrato");
+
+
             ContratoVM contratoVM = new ContratoVM()
             {
                 DataFim = contrato.DataTermino,
@@ -561,6 +579,10 @@ namespace ContratacaoNutricionistasWEB.Controllers
                 if (pModel.IdContrato == 0)
                     return ViewBag(pModel);
 
+                if (pModel.NomeNutricionista != _ServiceNutricionista.ConsultarNutricionistaPorID(Convert.ToInt32(User
+                    .Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType)).Nome)
+                    return RedirectToAction("ConsultasAgendadas", "Contrato");
+
                 _ServiceContrato.AlterarStatusContrato(pModel.IdContrato,
                     StatusContratoEnum.Agendada);
 
@@ -571,6 +593,91 @@ namespace ContratacaoNutricionistasWEB.Controllers
                 ViewData[Constantes.ViewDataMensagemErro] = ex.Message;
                 return View(pModel);
             }
+        }
+        #endregion
+
+        #region Detalhes do contrato
+        [HttpGet]
+        [Authorize(Policy = "UsuarioLogado")]
+        public IActionResult DetalhesContrato(int ID)
+        {
+            Contrato contrato = _ServiceContrato.BuscaContratoPorID(ID);
+
+            if (contrato == null)
+                return RedirectToAction("ConsultasAgendadas", "Contrato");
+
+            if (User.Claims.Any(c => c.Type == Constantes.NutricionistaLogado))
+            {
+                if (contrato.IdNutricionista != Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType))
+                    return RedirectToAction("ConsultasAgendadas", "Contrato");
+            }
+            else
+            {
+                if (contrato.IdUsuario != Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType))
+                    return RedirectToAction("ConsultasAgendadas", "Contrato");
+            }
+
+            ContratoVM contratoVM = PreencheContratoVM(contrato);
+
+            return View(contratoVM);
+        }
+        #endregion
+
+        #region Ações contrato
+        [HttpGet]
+        [Authorize(Policy = "UsuarioLogado")]
+        public IActionResult AcoesContrato(int ID)
+        {
+            Contrato contrato = _ServiceContrato.BuscaContratoPorID(ID);
+
+            if (contrato == null)
+                return RedirectToAction("ConsultasAgendadas", "Contrato");
+
+            if (User.Claims.Any(c => c.Type == Constantes.NutricionistaLogado))
+            {
+                if (contrato.IdNutricionista != Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType))
+                    return RedirectToAction("ConsultasAgendadas", "Contrato");
+            }
+            else
+            {
+                if (contrato.IdUsuario != Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType))
+                    return RedirectToAction("ConsultasAgendadas", "Contrato");
+            }
+
+            ContratoVM contratoVM = PreencheContratoVM(contrato);
+
+            return View(contratoVM);
+        }
+        #endregion
+
+        #region Métodos privados
+        /// <summary>
+        /// Preenche um objeto de contrato view model
+        /// </summary>
+        /// <param name="contrato">Contrato DML</param>
+        /// <returns>Contrato VM</returns>
+        private ContratoVM PreencheContratoVM(Contrato contrato)
+        {
+            return new ContratoVM()
+            {
+                DataFim = contrato.DataTermino,
+                DataInicio = contrato.DataInicio,
+                Endereco = new EnderecoVM()
+                {
+                    Bairro = contrato.Bairro,
+                    CEP = contrato.CEP,
+                    Cidade = contrato.Cidade,
+                    Complemento = contrato?.Complemento,
+                    Logradouro = contrato.Logradouro,
+                    Numero = contrato?.Numero,
+                    UF = contrato.UF.GetDefaultValue()
+                },
+                IdContrato = contrato.IdContrato,
+                IdUsuario = contrato.IdUsuario,
+                NomeNutricionista = _ServiceNutricionista.ConsultarNutricionistaPorID(contrato.IdNutricionista).Nome,
+                NomePaciente = _ServicePaciente.ConsultarPacientePorID(contrato.IdUsuario).Nome,
+                Status = contrato.Status
+            };
         }
         #endregion
 

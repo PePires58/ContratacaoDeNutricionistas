@@ -1,0 +1,75 @@
+﻿@model ContratacaoNutricionistasWEB.Models.Contrato.ContratoVM
+
+<h4>O que desejar fazer?</h4>
+<hr />
+
+<div class="col-md-12">
+    <input hidden asp-for="DataInicio" />
+    <input hidden asp-for="DataFim" />
+    <input hidden asp-for="Endereco.Bairro" />
+    <input hidden asp-for="Endereco.CEP" />
+    <input hidden asp-for="Endereco.Cidade" />
+    <input hidden asp-for="Endereco.Complemento" />
+    <input hidden asp-for="Endereco.Logradouro" />
+    <input hidden asp-for="Endereco.Numero" />
+    <input hidden asp-for="Endereco.UF" />
+    <input hidden asp-for="IdContrato" />
+    <input hidden asp-for="IdUsuario" />
+
+    @if (Model.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.Agendada ||
+Model.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.PendenteAceitacaoNutricionista
+&& Model.DataInicio > Constantes.DateTimeNow())
+    {
+        <div class="row">
+            <a class="text-danger" asp-action="CancelarConsulta" asp-controller="Contrato" asp-route-ID="@Model.IdContrato">
+                <div class="col-md-12 alert alert-danger">
+                    Cancelar consulta
+                </div>
+
+            </a>
+        </div>
+    }
+
+    @if (User.Claims.Any(c => c.Type == Constantes.NutricionistaLogado) &&
+Model.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.PendenteAceitacaoNutricionista)
+    {
+        <div class="row">
+            <a class="text-success" asp-action="AceitarContrato"
+               asp-controller="Contrato"
+               asp-route-ID="@Model.IdContrato">
+                <div class="col-md-12 alert alert-success">
+                    Aceitar consulta
+                </div>
+            </a>
+        </div>
+    }
+    @if (User.Claims.Any(c => c.Type == Constantes.NutricionistaLogado) &&
+Model.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.Agendada &&
+Model.DataInicio < Constantes.DateTimeNow())
+    {
+        <div class="row">
+            <a class="text-success"
+               asp-action="RegistrarAtendimento"
+               asp-controller="Contrato"
+               asp-route-ID="@Model.IdContrato">
+                <div class="col-md-12 alert alert-success">
+                    Registrar atendimento
+                </div>
+            </a>
+        </div>
+    }
+    <div class="row">
+        <a class="text-warning"
+           asp-action="DetalhesContrato"
+           asp-controller="Contrato"
+           asp-route-ID="@Model.IdContrato">
+            <div class="col-md-12 alert alert-warning">
+                Ver detalhes da consulta
+            </div>
+        </a>
+    </div>
+    <hr />
+</div>
+<div class="col-md-12">
+    <a asp-action="ConsultasAgendadas" asp-controller="Contrato">Voltar para consultas agendadas</a>
+</div>

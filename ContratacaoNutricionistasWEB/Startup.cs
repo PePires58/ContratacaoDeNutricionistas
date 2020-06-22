@@ -142,7 +142,7 @@ namespace ContratacaoNutricionistasWEB
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             #region Injeção de depencia
-            services.AddSingleton<IUnitOfWork>(new UnitOfWork(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddTransient<IUnitOfWork>(unit => new UnitOfWork(Configuration.GetConnectionString("DefaultConnection")));
             services.AddSingleton<IRepositoryBase, RepositoryBase>();
             services.AddSingleton<IServicePaciente, ServicePaciente>();
             services.AddSingleton<IPacienteRepository, PacienteRepository>();

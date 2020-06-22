@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<ContratacaoNutricionistasWEB.Models.Contrato.ContratoVM>
-@using ModulosHelper.Extensions
-<h4>Consultas</h4>
-<hr />
+    @using ModulosHelper.Extensions
+    <h4>Consultas</h4>
+    <hr />
 
-@if (ViewData[Constantes.ViewDataMensagemErro] != null)
-{
+    @if (ViewData[Constantes.ViewDataMensagemErro] != null)
+    {
     <div class="row">
         <div class="col-md-12">
             <div class="col-md-12 alert alert-danger">
@@ -14,10 +14,10 @@
             </div>
         </div>
     </div>
-}
+    }
 
-@if (ViewData[Constantes.ViewDataMensagemRetorno] != null)
-{
+    @if (ViewData[Constantes.ViewDataMensagemRetorno] != null)
+    {
     <div class="row">
         <div class="col-md-12">
             <div class="col-md-12 alert alert-success">
@@ -27,151 +27,108 @@
             </div>
         </div>
     </div>
-}
+    }
 
 <div class="col-md-12">
     @if (User.Claims.Any(c => c.Type == Constantes.PacienteLogado))
-    {
-        <p>
-            <a class="btn btn-success" asp-action="LocalizarNutricionista" asp-controller="Contrato">Nova consulta</a>
-        </p>
-    }
+        {
+    <p>
+        <a class="btn btn-success" asp-action="LocalizarNutricionista" asp-controller="Contrato">Nova consulta</a>
+    </p>
+        }
     @{
         if (Model.Any())
         {
 
 
-            @foreach (var item in Model)
-            {
+        @foreach (var item in Model)
+        {
 
-                <div class="row">
-                    <div class="col-md-12 col-xs-12 col-sm-12">
-                        @Html.LabelFor(modelItem => item.Status)
-                    </div>
-                    <div class="col-md-12 col-xs-12 col-sm-12">
-                        @Html.LabelFor(modelItem => item.Status, item.Status.GetDescription(),
-                       new
-                            {
-                                @class = (item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.Agendada ? "label-consulta-aceita" :
-                        item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.PendenteAceitacaoNutricionista ? "label-consulta-pendente"
-                        : "label-consulta-cancelada")
-                            })
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-xs-6 col-sm-6">
-                        @Html.LabelFor(modelItem => item.NomePaciente)
-                    </div>
-                    <div class="col-md-6 col-xs-6 col-sm-6">
-                        @Html.LabelFor(modelItem => item.NomeNutricionista)
-                    </div>
+        <div class="row">
+            <div class="col-md-12 col-xs-12 col-sm-12">
+                @Html.LabelFor(modelItem => item.Status)
+            </div>
+            <div class="col-md-12 col-xs-12 col-sm-12">
+                @Html.LabelFor(modelItem => item.Status, item.Status.GetDescription(),
+                new
+                {
+                @class = (item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.Agendada ? "label-consulta-aceita" :
+                item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.PendenteAceitacaoNutricionista ? "label-consulta-pendente"
+                : "label-consulta-cancelada")
+                })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-xs-6 col-sm-6">
+                @Html.LabelFor(modelItem => item.DataInicio)
+            </div>
+            <div class="col-md-6 col-xs-6 col-sm-6">
+                @Html.LabelFor(modelItem => item.DataFim)
+            </div>
+            <div class="col-md-6 col-xs-6 col-sm-6">
+                @Html.LabelFor(modelItem => item.DataInicio, item.DataInicio.ToString(Constantes.MascaraDataHora), new { @class = "label-celular-dados" })
+            </div>
+            <div class="col-md-6 col-xs-6 col-sm-6">
+                @Html.LabelFor(modelItem => item.DataFim, item.DataFim.ToString(Constantes.MascaraDataHora), new { @class = "label-celular-dados" })
+            </div>
+        </div>
 
-                    <div class="col-md-6 col-xs-6 col-sm-6">
-                        @Html.LabelFor(modelItem => item.NomePaciente, item.NomePaciente.ToString(), new { @class = "label-celular-dados" })
-                    </div>
-                    <div class="col-md-6 col-xs-6 col-sm-6">
-                        @Html.LabelFor(modelItem => item.NomeNutricionista, item.NomeNutricionista.ToString(), new { @class = "label-celular-dados" })
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-xs-6 col-sm-6">
-                        @Html.LabelFor(modelItem => item.DataInicio)
-                    </div>
-                    <div class="col-md-6 col-xs-6 col-sm-6">
-                        @Html.LabelFor(modelItem => item.DataFim)
-                    </div>
-                    <div class="col-md-6 col-xs-6 col-sm-6">
-                        @Html.LabelFor(modelItem => item.DataInicio, item.DataInicio.ToString(Constantes.MascaraDataHora), new { @class = "label-celular-dados" })
-                    </div>
-                    <div class="col-md-6 col-xs-6 col-sm-6">
-                        @Html.LabelFor(modelItem => item.DataFim, item.DataFim.ToString(Constantes.MascaraDataHora), new { @class = "label-celular-dados" })
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        @Html.Label("", "Endereço")
-                    </div>
-                    <div class="col-md-12">
-                        @Html.DisplayFor(modelItem => item.Endereco.EnderecoCompleto, item.Endereco.EnderecoCompleto, new { @class = "label-celular-dados" })
+        <div class="row">
+            <div class="col-md-12">
+                @Html.Label("", "Endereço")
+            </div>
+            <div class="col-md-12">
+                @Html.DisplayFor(modelItem => item.Endereco.EnderecoCompleto, item.Endereco.EnderecoCompleto, new { @class = "label-celular-dados" })
 
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-xs-6">
-                        @Html.LabelFor(modelItem => item.Endereco.CEP)
-                    </div>
-                    <div class="col-md-6 col-xs-6">
-                        @Html.LabelFor(modelItem => item.Endereco.UF)
-                    </div>
-                    <div class="col-md-6 col-xs-6">
-                        @Html.DisplayFor(modelItem => item.Endereco.CEP, item.Endereco.CEP.ToString(), new { @class = "label-celular-dados" })
-                    </div>
-                    <div class="col-md-6 col-xs-6">
-                        @Html.DisplayFor(modelItem => item.Endereco.UF, item.Endereco.UF.ToString(), new { @class = "label-celular-dados" })
-                    </div>
-                </div>
-                <div class="row">
-                    @if (item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.Agendada ||
-item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.PendenteAceitacaoNutricionista)
-                    {
-                        <div class="col-md-2 col-xs-6 col-ls-6">
-                            <br />
-                            <a class="text-danger" asp-action="CancelarConsulta" asp-controller="Contrato" asp-route-ID="@item.IdContrato">
-                                Cancelar consulta
-                            </a>
-                        </div>
-                    }
-                    @if (User.Claims.Any(c => c.Type == Constantes.NutricionistaLogado) &&
-        item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.PendenteAceitacaoNutricionista)
-                    {
-                        <div class="col-md-2 col-xs-6 col-ls-6">
-                            <br />
-                            <a class="text-success"
-                               asp-action="AceitarContrato"
-                               asp-controller="Contrato"
-                               asp-route-ID="@item.IdContrato">
-                                Aceitar consulta
-                            </a>
-                        </div>
-                    }
-                    else
-                    {
-                        <br />
-                    }
-                </div>
-                <hr />
-            }
-
-            <div class="row">
-                <div class="col-md-1 col-sm-3 col-lg-3 col-xs-3">
-                    <a class="left" href="#myCarousel" role="button" data-slide="prev">
-                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                        <span class="sr-only">Anterior</span>
-                    </a>
-                </div>
-                <a class="right" href="#myCarousel" role="button" data-slide="next">
-                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                    <span class="sr-only">Próximo</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <br />
+                <a class="h4"
+                   asp-action="AcoesContrato"
+                   asp-controller="Contrato"
+                   asp-route-ID="@item.IdContrato">
+                    <b>
+                        Ações
+                        <i class="glyphicon glyphicon-cog"></i>
+                    </b>
                 </a>
             </div>
+        </div>
+        <hr />
+        }
+
+        <div class="row">
+            <div class="col-md-1 col-sm-3 col-lg-3 col-xs-3">
+                <a class="left" href="#myCarousel" role="button" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    <span class="sr-only">Anterior</span>
+                </a>
+            </div>
+            <a class="right" href="#myCarousel" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                <span class="sr-only">Próximo</span>
+            </a>
+        </div>
         }
         else
         {
-            if (User.Claims.Any(c => c.Type == Constantes.PacienteLogado))
-            {
-                <h4>
-                    No momento, você não agendou nenhuma consulta.
-                </h4>
-            }
-            else if (User.Claims.Any(c => c.Type == Constantes.NutricionistaLogado))
-            {
-                <h4>
-                    No momento, você não possui nenhum paciente para consulta.
-                </h4>
-            }
+        if (User.Claims.Any(c => c.Type == Constantes.PacienteLogado))
+        {
+        <h4>
+            No momento, você não agendou nenhuma consulta.
+        </h4>
+        }
+        else if (User.Claims.Any(c => c.Type == Constantes.NutricionistaLogado))
+        {
+        <h4>
+            No momento, você não possui nenhum paciente para consulta.
+        </h4>
+        }
         }
     }
 </div>
 
-<partial name="_BotaoFiltroPadrao" />
+    <partial name="_BotaoFiltroPadrao" />
 

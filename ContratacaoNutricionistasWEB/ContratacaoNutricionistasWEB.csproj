@@ -30,6 +30,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Views\Contrato\DetalhesContrato.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Contrato\AcoesContrato.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Shared\_BotaoFiltroPadrao.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
