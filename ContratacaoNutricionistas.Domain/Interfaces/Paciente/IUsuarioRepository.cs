@@ -19,13 +19,14 @@ using ContratacaoNutricionistas.Domain.Entidades.Usuario;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ContratacaoNutricionistas.Domain.Interfaces.Repository;
 
 namespace ContratacaoNutricionistas.Domain.Interfaces.Paciente
 {
     /// <summary>
     /// Classe que realiza os comandos no banco para usuários
     /// </summary>
-    public interface IUsuarioRepository 
+    public interface IUsuarioRepository : IRepositoryBase
     {
         /// <summary>
         /// Login já existe

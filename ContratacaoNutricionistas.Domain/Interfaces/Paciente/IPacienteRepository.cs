@@ -16,13 +16,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using ContratacaoNutricionistas.Domain.Entidades.Paciente;
+using ContratacaoNutricionistas.Domain.Interfaces.Repository;
 
 namespace ContratacaoNutricionistas.Domain.Interfaces.Paciente
 {
     /// <summary>
     /// Interface da classe que ira conectar e fazer comando com o banco
     /// </summary>
-    public interface IPacienteRepository
+    public interface IPacienteRepository : IRepositoryBase
     {
         /// <summary>
         /// Método que cadastra um paciente no banco

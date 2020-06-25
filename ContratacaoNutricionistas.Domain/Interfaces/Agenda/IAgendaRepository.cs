@@ -7,13 +7,14 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using ContratacaoNutricionistas.Domain.Interfaces.Repository;
 
 namespace ContratacaoNutricionistas.Domain.Interfaces.Agenda
 {
     /// <summary>
     /// Repositório de comandos de agenda no banco de dados
     /// </summary>
-    public interface IAgendaRepository
+    public interface IAgendaRepository : IRepositoryBase
     {
         /// <summary>
         /// Cadastar a agenda

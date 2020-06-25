@@ -16,13 +16,14 @@
 */
 #endregion
 using System.Security.Claims;
+using ContratacaoNutricionistas.Domain.Interfaces.Repository;
 
 namespace ContratacaoNutricionistas.Domain.Interfaces.Usuario
 {
     /// <summary>
     /// Serviços para o usuário
     /// </summary>
-    public interface IServiceUsuario
+    public interface IServiceUsuario : IRepositoryBase
     {
         /// <summary>
         /// Verifica se o login existe

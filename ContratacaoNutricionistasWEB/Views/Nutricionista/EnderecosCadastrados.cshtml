@@ -4,96 +4,98 @@
     ViewData["Title"] = "Endereços cadastrados";
 }
 
-<h4>@ViewData["Title"]</h4>
-<hr />
-
-@if (ViewData[Constantes.ViewDataMensagemErro] != null)
-{
-    <div class="row">
-        <div class="col-md-12">
-            <div class="col-md-12 alert alert-danger">
-                <span>
-                    @ViewData[Constantes.ViewDataMensagemErro].ToString()
-                </span>
-            </div>
-        </div>
-    </div>
-}
-
-@if (ViewData[Constantes.ViewDataMensagemRetorno] != null)
-{
-    <div class="row">
-        <div class="col-md-12">
-            <div class="col-md-12 alert alert-success">
-                <span>
-                    @ViewData[Constantes.ViewDataMensagemRetorno].ToString()
-                </span>
-            </div>
-        </div>
-    </div>
-}
-
 <div class="col-md-12">
-    <p>
-        <a class="btn btn-success" asp-action="CadastrarEndereco" asp-controller="Nutricionista">Novo Endereço</a>
-    </p>
-    @{
-        if (Model.Any())
-        {
-            @foreach (var item in Model)
+    <h4>@ViewData["Title"]</h4>
+    <hr />
+</div>
+
+    @if (ViewData[Constantes.ViewDataMensagemErro] != null)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-12 alert alert-danger">
+                    <span>
+                        @ViewData[Constantes.ViewDataMensagemErro].ToString()
+                    </span>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (ViewData[Constantes.ViewDataMensagemRetorno] != null)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-12 alert alert-success">
+                    <span>
+                        @ViewData[Constantes.ViewDataMensagemRetorno].ToString()
+                    </span>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="col-md-12">
+        <p>
+            <a class="btn btn-success" asp-action="CadastrarEndereco" asp-controller="Nutricionista">Novo Endereço</a>
+        </p>
+        @{
+            if (Model.Any())
             {
+                @foreach (var item in Model)
+                {
 
-                <div class="row">
-                    <div class="col-md-12">
-                        @Html.Label("", "Endereço")
-                    </div>
-                    <div class="col-md-12">
-                        @Html.LabelFor(modelItem => item.Logradouro, item.EnderecoCompleto, new { @class = "label-celular-dados" })
+                    <div class="row">
+                        <div class="col-md-12">
+                            @Html.Label("", "Endereço")
+                        </div>
+                        <div class="col-md-12">
+                            @Html.LabelFor(modelItem => item.Logradouro, item.EnderecoCompleto, new { @class = "label-celular-dados" })
 
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3 col-xs-2 col-sm-2">
-                        @Html.LabelFor(modelItem => item.CEP)
+                    <div class="row">
+                        <div class="col-md-3 col-xs-2 col-sm-2">
+                            @Html.LabelFor(modelItem => item.CEP)
+                        </div>
+                        <div class="col-md-3 col-xs-4 col-sm-4">
+                            @Html.LabelFor(modelItem => item.CEP, item.CEP.ToString(), new { @class = "label-celular-dados" })
+                        </div>
+                        <div class="col-md-3 col-xs-2">
+                            @Html.LabelFor(modelItem => item.UF)
+                        </div>
+                        <div class="col-md-3">
+                            @Html.DisplayFor(modelItem => item.UF, item.UF.ToString(), new { @class = "label-celular-dados" })
+                        </div>
                     </div>
-                    <div class="col-md-3 col-xs-4 col-sm-4">
-                        @Html.LabelFor(modelItem => item.CEP, item.CEP.ToString(), new { @class = "label-celular-dados" })
+                    <div class="row">
+                        <div class="col-md-1 col-xs-2">
+                            <a asp-action="EditarEndereco" asp-controller="Nutricionista" asp-route-id="@item.ID" title="Editar endereço">
+                                <svg class="bi bi-pencil-square" width="1.5em" height="2em" viewBox="0 0 16 16" fill="black" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                </svg>
+                            </a>
+                        </div>
+                        <div class="col-md-1 col-xs-2">
+                            <a asp-action="ExcluirEndereco" asp-controller="Nutricionista" asp-route-id="@item.ID" title="Excluir endereço">
+                                <svg class="bi bi-trash-fill" width="1.5em" height="2em" viewBox="0 0 16 16" fill="black" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z" />
+                                </svg>
+                            </a>
+                        </div>
                     </div>
-                    <div class="col-md-3 col-xs-2">
-                        @Html.LabelFor(modelItem => item.UF)
-                    </div>
-                    <div class="col-md-3">
-                        @Html.DisplayFor(modelItem => item.UF, item.UF.ToString(), new { @class = "label-celular-dados" })
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-1 col-xs-2">
-                        <a asp-action="EditarEndereco" asp-controller="Nutricionista" asp-route-id="@item.ID" title="Editar endereço">
-                            <svg class="bi bi-pencil-square" width="1.5em" height="2em" viewBox="0 0 16 16" fill="black" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
-                            </svg>
-                        </a>
-                    </div>
-                    <div class="col-md-1 col-xs-2">
-                        <a asp-action="ExcluirEndereco" asp-controller="Nutricionista" asp-route-id="@item.ID" title="Excluir endereço">
-                            <svg class="bi bi-trash-fill" width="1.5em" height="2em" viewBox="0 0 16 16" fill="black" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z" />
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-                <hr />
+                    <hr />
+                }
+            }
+            else
+            {
+                <p>
+                    No momento, você não possui nenhum endereço cadastrado.
+                </p>
             }
         }
-        else
-        {
-            <p>
-                No momento, você não possui nenhum endereço cadastrado.
-            </p>
-        }
-    }
-</div>
-<div>
-    <a asp-action="Index" asp-controller="Home">Voltar para página inicial</a>
-</div>
+    </div>
+    <div>
+        <a asp-action="Index" asp-controller="Home">Voltar para página inicial</a>
+    </div>

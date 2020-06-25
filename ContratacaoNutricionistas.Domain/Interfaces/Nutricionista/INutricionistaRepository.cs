@@ -19,13 +19,14 @@
 #endregion
 
 using ContratacaoNutricionistas.Domain.Entidades.Nutricionista;
+using ContratacaoNutricionistas.Domain.Interfaces.Repository;
 
 namespace ContratacaoNutricionistas.Domain.Interfaces.Nutricionista
 {
     /// <summary>
     /// Interface da classe de comandos com o banco de dados para nutricionista
     /// </summary>
-    public interface INutricionistaRepository
+    public interface INutricionistaRepository : IRepositoryBase
     {
         /// <summary>
         /// Método que cadastra um nutricionista

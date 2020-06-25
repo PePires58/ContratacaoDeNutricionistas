@@ -28,10 +28,11 @@ using System;
 using System.Collections.Generic;
 using ContratacaoNutricionistas.Domain.Entidades.Contrato;
 using ContratacaoNutricionistas.Domain.Enumerados.Contrato;
+using ContratacaoNutricionistas.Domain.Interfaces.Repository;
 
 namespace ContratacaoNutricionistas.Domain.Interfaces.Contrato
 {
-    public interface IContratoRepository
+    public interface IContratoRepository : IRepositoryBase
     {
         /// <summary>
         /// Verifica se o paciente já possui um contrato para a data informada
