@@ -1,7 +1,15 @@
 ﻿@model IEnumerable<ContratacaoNutricionistasWEB.Models.Contrato.ContratoVM>
 @using ModulosHelper.Extensions
-<h4>Consultas</h4>
-<hr />
+
+@{
+
+    ViewData["Title"] = "Consultas";
+}
+
+<div class="col-md-12">
+    <h4>@ViewData["Title"]</h4>
+    <hr />
+</div>
 
 @if (ViewData[Constantes.ViewDataMensagemErro] != null)
     {

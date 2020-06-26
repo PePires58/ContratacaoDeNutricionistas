@@ -4,34 +4,36 @@
     ViewData["Title"] = "Endereços cadastrados";
 }
 
-<h4>@ViewData["Title"]</h4>
-<hr />
+<div class="col-md-12">
+    <h4>@ViewData["Title"]</h4>
+    <hr />
+</div>
 
-@if (ViewData[Constantes.ViewDataMensagemErro] != null)
-{
-    <div class="row">
-        <div class="col-md-12">
-            <div class="col-md-12 alert alert-danger">
-                <span>
-                    @ViewData[Constantes.ViewDataMensagemErro].ToString()
-                </span>
+    @if (ViewData[Constantes.ViewDataMensagemErro] != null)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-12 alert alert-danger">
+                    <span>
+                        @ViewData[Constantes.ViewDataMensagemErro].ToString()
+                    </span>
+                </div>
             </div>
         </div>
-    </div>
-}
+    }
 
-@if (ViewData[Constantes.ViewDataMensagemRetorno] != null)
-{
-    <div class="row">
-        <div class="col-md-12">
-            <div class="col-md-12 alert alert-success">
-                <span>
-                    @ViewData[Constantes.ViewDataMensagemRetorno].ToString()
-                </span>
+    @if (ViewData[Constantes.ViewDataMensagemRetorno] != null)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-12 alert alert-success">
+                    <span>
+                        @ViewData[Constantes.ViewDataMensagemRetorno].ToString()
+                    </span>
+                </div>
             </div>
         </div>
-    </div>
-}
+    }
 
 <div class="col-md-12">
     <p>
@@ -43,12 +45,12 @@
             @foreach (var item in Model)
             {
 
-                <div class="row">
-                    <div class="col-md-12">
-                        @Html.Label("", "Endereço")
-                    </div>
-                    <div class="col-md-12">
-                        @Html.LabelFor(modelItem => item.Logradouro, item.EnderecoCompleto, new { @class = "label-celular-dados" })
+                    <div class="row">
+                        <div class="col-md-12">
+                            @Html.Label("", "Endereço")
+                        </div>
+                        <div class="col-md-12">
+                            @Html.LabelFor(modelItem => item.Logradouro, item.EnderecoCompleto, new { @class = "label-celular-dados" })
 
                     </div>
                 </div>
