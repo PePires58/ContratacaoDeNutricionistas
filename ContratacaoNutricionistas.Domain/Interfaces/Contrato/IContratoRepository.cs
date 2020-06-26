@@ -29,6 +29,12 @@ Data: 26/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Método para realizar o atendimento.
 */
+
+/*
+Data: 26/06/2020
+Programador: Tatiane
+Descrição: Herdando da interface.
+*/
 #endregion
 using System;
 using System.Collections.Generic;

@@ -9,95 +9,89 @@
     <hr />
 </div>
 
-    @if (ViewData[Constantes.ViewDataMensagemErro] != null)
-    {
-        <div class="row">
-            <div class="col-md-12">
-                <div class="col-md-12 alert alert-danger">
-                    <span>
-                        @ViewData[Constantes.ViewDataMensagemErro].ToString()
-                    </span>
-                </div>
-            </div>
-        </div>
-    }
-
-    @if (ViewData[Constantes.ViewDataMensagemRetorno] != null)
-    {
-        <div class="row">
-            <div class="col-md-12">
-                <div class="col-md-12 alert alert-success">
-                    <span>
-                        @ViewData[Constantes.ViewDataMensagemRetorno].ToString()
-                    </span>
-                </div>
-            </div>
-        </div>
-    }
-
+@if (ViewData[Constantes.ViewDataMensagemErro] != null)
+{
+    <div class="row">
         <div class="col-md-12">
-            <p>
-                <a class="btn btn-success" asp-action="AgendaEndereco" asp-controller="Agenda">Nova agenda</a>
-            </p>
-            @{
-                if (Model.Any())
-                {
-                    @foreach (var item in Model)
-                    {
-                        <div class="row">
-                            <div class="col-md-6 col-xs-6 col-sm-6">
-                                @Html.LabelFor(modelItem => item.DataInicio)
-                            </div>
-                            <div class="col-md-6 col-xs-6 col-sm-6">
-                                @Html.LabelFor(modelItem => item.DataFim)
-                            </div>
-                            <div class="col-md-6 col-xs-6 col-sm-6">
-                                @Html.LabelFor(modelItem => item.DataInicio, item.DataInicio.ToString(Constantes.MascaraDataHora), new { @class = "label-celular-dados" })
-                            </div>
-                            <div class="col-md-6 col-xs-6 col-sm-6">
-                                @Html.LabelFor(modelItem => item.DataFim, item.DataFim.ToString(Constantes.MascaraDataHora), new { @class = "label-celular-dados" })
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                @Html.Label("", "Endereço")
-                            </div>
-                            <div class="col-md-12">
-                                @Html.DisplayFor(modelItem => item.Endereco.EnderecoCompleto, item.Endereco.EnderecoCompleto, new { @class = "label-celular-dados" })
-
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 col-xs-6">
-                                @Html.LabelFor(modelItem => item.Endereco.CEP)
-                            </div>
-                            <div class="col-md-6 col-xs-6">
-                                @Html.LabelFor(modelItem => item.Endereco.UF)
-                            </div>
-                            <div class="col-md-6 col-xs-6">
-                                @Html.DisplayFor(modelItem => item.Endereco.CEP, item.Endereco.CEP.ToString(), new { @class = "label-celular-dados" })
-                            </div>
-                            <div class="col-md-6" col-xs-6>
-                                @Html.DisplayFor(modelItem => item.Endereco.UF, item.Endereco.UF.ToString(), new { @class = "label-celular-dados" })
-                            </div>
-                        </div>
-                        <hr />
-                    }
-                }
-                else
-                {
-                    <p>
-                        <span style="font-weight: bold">
-                            <spam style="font-size: medium">
-                                <spam style="color: red">
-                                    No momento, não encontramos nenhuma agenda disponível.
-                                </spam>
-                            </spam>
-                        </span>
-                    </p>
-                }
-            }
+            <div class="col-md-12 alert alert-danger">
+                <span>
+                    @ViewData[Constantes.ViewDataMensagemErro].ToString()
+                </span>
+            </div>
         </div>
-    <div>
-        <a asp-action="Index" asp-controller="Home">Voltar para página inicial</a>
     </div>
+}
+
+@if (ViewData[Constantes.ViewDataMensagemRetorno] != null)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12 alert alert-success">
+                <span>
+                    @ViewData[Constantes.ViewDataMensagemRetorno].ToString()
+                </span>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="col-md-12">
+    <p>
+        <a class="btn btn-success" asp-action="AgendaEndereco" asp-controller="Agenda">Nova agenda</a>
+    </p>
+    @{
+        if (Model.Any())
+        {
+            @foreach (var item in Model)
+            {
+                <div class="row">
+                    <div class="col-md-6 col-xs-6 col-sm-6">
+                        @Html.LabelFor(modelItem => item.DataInicio)
+                    </div>
+                    <div class="col-md-6 col-xs-6 col-sm-6">
+                        @Html.LabelFor(modelItem => item.DataFim)
+                    </div>
+                    <div class="col-md-6 col-xs-6 col-sm-6">
+                        @Html.LabelFor(modelItem => item.DataInicio, item.DataInicio.ToString(Constantes.MascaraDataHora), new { @class = "label-celular-dados" })
+                    </div>
+                    <div class="col-md-6 col-xs-6 col-sm-6">
+                        @Html.LabelFor(modelItem => item.DataFim, item.DataFim.ToString(Constantes.MascaraDataHora), new { @class = "label-celular-dados" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        @Html.Label("", "Endereço")
+                    </div>
+                    <div class="col-md-12">
+                        @Html.DisplayFor(modelItem => item.Endereco.EnderecoCompleto, item.Endereco.EnderecoCompleto, new { @class = "label-celular-dados" })
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-xs-6">
+                        @Html.LabelFor(modelItem => item.Endereco.CEP)
+                    </div>
+                    <div class="col-md-6 col-xs-6">
+                        @Html.LabelFor(modelItem => item.Endereco.UF)
+                    </div>
+                    <div class="col-md-6 col-xs-6">
+                        @Html.DisplayFor(modelItem => item.Endereco.CEP, item.Endereco.CEP.ToString(), new { @class = "label-celular-dados" })
+                    </div>
+                    <div class="col-md-6" col-xs-6>
+                        @Html.DisplayFor(modelItem => item.Endereco.UF, item.Endereco.UF.ToString(), new { @class = "label-celular-dados" })
+                    </div>
+                </div>
+                <hr />
+            }
+        }
+        else
+        {
+            <p class="text-danger">
+                No momento, não encontramos nenhuma agenda disponível.
+            </p>
+        }
+    }
+</div>
+<div>
+    <a asp-action="Index" asp-controller="Home">Voltar para página inicial</a>
+</div>

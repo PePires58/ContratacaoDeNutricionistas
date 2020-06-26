@@ -14,6 +14,12 @@
 * Data: 04/06/2020
 * Implementação: Restrição pelo CPF e tipo de usuário.
 */
+
+/*
+Data: 26/06/2020
+Programador: Tatiane
+Descrição: Herdando da interface.
+*/
 #endregion
 using ContratacaoNutricionistas.Domain.Entidades.Usuario;
 using System;

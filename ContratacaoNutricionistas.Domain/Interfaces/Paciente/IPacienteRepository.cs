@@ -5,11 +5,17 @@
  * Implementação: Implementação Inicial da interface do paciente repository
  */
 
-  /*
- * Programador: Pedro Henrique Pires
- * Data: 01/06/2020
- * Implementação: Inclusão de método de alteração e consulta.
- */
+/*
+* Programador: Pedro Henrique Pires
+* Data: 01/06/2020
+* Implementação: Inclusão de método de alteração e consulta.
+*/
+
+/*
+Data: 26/06/2020
+Programador: Tatiane
+Descrição: Herdando da interface.
+*/
 #endregion
 
 using System;

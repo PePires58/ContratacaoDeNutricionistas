@@ -16,6 +16,12 @@
 * Data: 04/06/2020
 * Implementação: Migrando para classe de endereço
 */
+
+/*
+Data: 26/06/2020
+Programador: Tatiane
+Descrição: Herdando da interface.
+*/
 #endregion
 
 using ContratacaoNutricionistas.Domain.Entidades.Nutricionista;
