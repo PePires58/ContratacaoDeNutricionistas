@@ -23,6 +23,13 @@ Data: 19/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Verifica se a agenda está disponível para contratação.
 */
+
+
+/*
+Data: 26/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Método para realizar o atendimento.
+*/
 #endregion
 
 using System;
@@ -76,5 +83,12 @@ namespace ContratacaoNutricionistas.Domain.Interfaces.Contrato
         /// <param name="idContrato">ID do contrato</param>
         /// <param name="statusContratoEnum">Status de cancelamento (pelo paciente ou nutricionista)</param>
         void AlterarStatusContrato(int idContrato, StatusContratoEnum statusContratoEnum);
+
+        /// <summary>
+        /// Realiza o atendimento
+        /// </summary>
+        /// <param name="idContrato">Id do contrato</param>
+        /// <param name="mensagemAtendimento">Mensagem de atendimento</param>
+        void RealizarAtendimento(int idContrato, string mensagemAtendimento);
     }
 }

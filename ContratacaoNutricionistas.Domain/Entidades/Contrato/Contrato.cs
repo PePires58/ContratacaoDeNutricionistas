@@ -16,6 +16,12 @@ Data: 13/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Incluindo ID do contrato.
 */
+
+/*
+Data: 26/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Incluindo data de cadastro e receita.
+*/
 #endregion
 using ContratacaoNutricionistas.Domain.Enumerados.Contrato;
 using ContratacaoNutricionistas.Domain.Enumerados.Gerais;
@@ -100,5 +106,11 @@ namespace ContratacaoNutricionistas.Domain.Entidades.Contrato
 
         [Coluna(pNomeColuna: "STATUS", pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Enum, pTamanhoCampo: 2)]
         public StatusContratoEnum Status { get; set; }
+
+        [Coluna(pNomeColuna: "MENSAGEM", pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Varchar, pTamanhoCampo: 255)]
+        public string Mensagem { get; set; }
+
+        [Coluna(pNomeColuna: "DT_CADASTRO", pTipoDadosBanco: DataBaseHelper.Enumerados.TipoDadosBanco.Datetime)]
+        public DateTime DataCadastro { get; set; }
     }
 }

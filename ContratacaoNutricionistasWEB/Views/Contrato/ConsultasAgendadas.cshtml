@@ -1,32 +1,32 @@
 ﻿@model IEnumerable<ContratacaoNutricionistasWEB.Models.Contrato.ContratoVM>
-    @using ModulosHelper.Extensions
-    <h4>Consultas</h4>
-    <hr />
+@using ModulosHelper.Extensions
+<h4>Consultas</h4>
+<hr />
 
-    @if (ViewData[Constantes.ViewDataMensagemErro] != null)
+@if (ViewData[Constantes.ViewDataMensagemErro] != null)
     {
-    <div class="row">
-        <div class="col-md-12">
-            <div class="col-md-12 alert alert-danger">
-                <span>
-                    @ViewData[Constantes.ViewDataMensagemErro].ToString()
-                </span>
-            </div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-12 alert alert-danger">
+            <span>
+                @ViewData[Constantes.ViewDataMensagemErro].ToString()
+            </span>
         </div>
     </div>
+</div>
     }
 
-    @if (ViewData[Constantes.ViewDataMensagemRetorno] != null)
+@if (ViewData[Constantes.ViewDataMensagemRetorno] != null)
     {
-    <div class="row">
-        <div class="col-md-12">
-            <div class="col-md-12 alert alert-success">
-                <span>
-                    @ViewData[Constantes.ViewDataMensagemRetorno].ToString()
-                </span>
-            </div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-12 alert alert-success">
+            <span>
+                @ViewData[Constantes.ViewDataMensagemRetorno].ToString()
+            </span>
         </div>
     </div>
+</div>
     }
 
 <div class="col-md-12">
@@ -52,7 +52,7 @@
                 @Html.LabelFor(modelItem => item.Status, item.Status.GetDescription(),
                 new
                 {
-                @class = (item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.Agendada ? "label-consulta-aceita" :
+                @class = (item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.Agendada || item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.ConsultaRealizada ? "label-consulta-aceita" :
                 item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.PendenteAceitacaoNutricionista ? "label-consulta-pendente"
                 : "label-consulta-cancelada")
                 })
@@ -85,7 +85,7 @@
         <div class="row">
             <div class="col-md-12">
                 <br />
-                <a class="h4"
+                <a class="h5"
                    asp-action="AcoesContrato"
                    asp-controller="Contrato"
                    asp-route-ID="@item.IdContrato">
@@ -99,18 +99,6 @@
         <hr />
         }
 
-        <div class="row">
-            <div class="col-md-1 col-sm-3 col-lg-3 col-xs-3">
-                <a class="left" href="#myCarousel" role="button" data-slide="prev">
-                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                    <span class="sr-only">Anterior</span>
-                </a>
-            </div>
-            <a class="right" href="#myCarousel" role="button" data-slide="next">
-                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                <span class="sr-only">Próximo</span>
-            </a>
-        </div>
         }
         else
         {
@@ -130,5 +118,5 @@
     }
 </div>
 
-    <partial name="_BotaoFiltroPadrao" />
+<partial name="_BotaoFiltroPadrao" />
 

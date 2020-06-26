@@ -23,6 +23,13 @@ Programador: Pedro Henrique Pires
 Descrição: Agenda disponível para contratação.
 */
 
+
+/*
+Data: 26/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Método para realizar o atendimento.
+*/
+
 #endregion
 using ContratacaoNutricionistas.Domain.Entidades.Contrato;
 using ContratacaoNutricionistas.Domain.Enumerados.Contrato;
@@ -84,6 +91,8 @@ namespace ContratacaoNutricionistas.Domain.Servicos.Contrato
             if (_ContratoRepository.VerificarContratoExistenteNaData(pContrato.DataInicio, pContrato.DataTermino, pContrato.IdUsuario))
                 throw new Exception($"Você já possui uma consulta entre o dia/horário {pContrato.DataInicio.ToString(Constantes.MascaraDataHora)} até {pContrato.DataTermino.ToString(Constantes.MascaraDataHora)}. Não foi possível realizar o agendamento.");
 
+            pContrato.DataCadastro = Constantes.DateTimeNow();
+
             _ContratoRepository.ContratarNutricionista(pContrato);
         }
 
@@ -125,6 +134,17 @@ namespace ContratacaoNutricionistas.Domain.Servicos.Contrato
             if (pIdAgenda <= 0)
                 throw new ArgumentException("Agenda é obrigatória");
             return _ContratoRepository.AgendaDisponivelParaContratar(pIdAgenda);
+        }
+
+        /// <summary>
+        /// Realiza o atendimento
+        /// </summary>
+        /// <param name="idContrato"></param>
+        /// <param name="mensagemAtendimento"></param>
+        public void RealizarAtendimento(int idContrato, string mensagemAtendimento)
+        {
+            AlterarStatusContrato(idContrato, StatusContratoEnum.ConsultaRealizada);
+            _ContratoRepository.RealizarAtendimento(idContrato, mensagemAtendimento);
         }
         #endregion
 

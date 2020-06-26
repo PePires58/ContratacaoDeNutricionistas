@@ -10,6 +10,13 @@ Data: 13/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Excluindo endereço.
 */
+
+
+/*
+Data: 26/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Removendo transação.
+*/
 #endregion
 using ContratacaoNutricionistas.Domain.Enumerados.Gerais;
 using ContratacaoNutricionistas.Domain.Interfaces.Agenda;
@@ -195,20 +202,8 @@ namespace ContratacaoNutricionistas.Domain.Servicos.Endereco
             if (pIdEndereco <= 0)
                 throw new ArgumentException("O endereço é obrigatório.");
 
-            try
-            {
-                _EnderecoRepository.BeginTransaction();
-
-                _AgendaRepository.DesativarAgendaPorEnderecoExcluido(pIdUsuario, pIdEndereco);
-                _EnderecoRepository.ExcluirEndereco(pIdUsuario, pIdEndereco);
-
-                _EnderecoRepository.Commit();
-            }
-            catch 
-            {
-                _EnderecoRepository.RollBack();
-                throw;
-            }            
+            _AgendaRepository.DesativarAgendaPorEnderecoExcluido(pIdUsuario, pIdEndereco);
+            _EnderecoRepository.ExcluirEndereco(pIdUsuario, pIdEndereco);
         }
         #endregion
     }

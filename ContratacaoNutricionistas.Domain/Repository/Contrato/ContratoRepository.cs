@@ -35,6 +35,13 @@ Programador: Pedro Henrique Pires
 Descrição: Ajustando filtro de estado.
 */
 
+
+/*
+Data: 26/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Método para realizar o atendimento.
+*/
+
 #endregion
 using ContratacaoNutricionistas.Domain.Entidades.Contrato;
 using ContratacaoNutricionistas.Domain.Enumerados.Contrato;
@@ -157,7 +164,9 @@ namespace ContratacaoNutricionistas.Domain.Repository.Contrato
             stringBuilder.AppendLine("	C.CEP,");
             stringBuilder.AppendLine("	C.DT_INICIO,");
             stringBuilder.AppendLine("	C.DT_FIM,");
-            stringBuilder.AppendLine("	C.STATUS");
+            stringBuilder.AppendLine("	C.STATUS,");
+            stringBuilder.AppendLine("	C.DT_CADASTRO,");
+            stringBuilder.AppendLine("	C.MENSAGEM");
             stringBuilder.AppendLine("FROM CONTRATO_TB C WITH(NOLOCK)");
             stringBuilder.AppendLine("WHERE");
             stringBuilder.AppendLine("    (ISNULL(@RUA, C.RUA) = C.RUA OR C.RUA LIKE @RUA + '%')");
@@ -177,15 +186,19 @@ namespace ContratacaoNutricionistas.Domain.Repository.Contrato
 
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
-                DateTime datainicio = DateTime.MinValue,
-                        dataFim = DateTime.MinValue;
+                
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
+                    DateTime datainicio = DateTime.MinValue,
+                        dataFim = DateTime.MinValue,
+                        dataCadastro = DateTime.MinValue;
+
                     string Rua = string.Empty,
                         Bairro = string.Empty,
                         Cidade = string.Empty,
                         CEP = string.Empty,
-                        Complemento = string.Empty;
+                        Complemento = string.Empty,
+                        Mensagem = string.Empty;
 
                     uint? Numero = null;
                     int idPaciente = 0, idNutricionista = 0, idContrato = 0;
@@ -228,6 +241,8 @@ namespace ContratacaoNutricionistas.Domain.Repository.Contrato
                         datainicio = Convert.ToDateTime(ds.Tables[0].Rows[i]["DT_INICIO"]);
                     if (ds.Tables[0].Rows[i]["DT_FIM"] != DBNull.Value)
                         dataFim = Convert.ToDateTime(ds.Tables[0].Rows[i]["DT_FIM"]);
+                    if (ds.Tables[0].Rows[i]["DT_CADASTRO"] != DBNull.Value)
+                        dataCadastro = Convert.ToDateTime(ds.Tables[0].Rows[i]["DT_CADASTRO"]);
 
                     if (ds.Tables[0].Rows[i]["ID_CONTRATO"] != DBNull.Value)
                         idContrato = Convert.ToInt32(ds.Tables[0].Rows[i]["ID_CONTRATO"]);
@@ -235,6 +250,8 @@ namespace ContratacaoNutricionistas.Domain.Repository.Contrato
                         idPaciente = Convert.ToInt32(ds.Tables[0].Rows[i]["ID_USUARIO"]);
                     if (ds.Tables[0].Rows[i]["ID_NUTRI"] != DBNull.Value)
                         idNutricionista = Convert.ToInt32(ds.Tables[0].Rows[i]["ID_NUTRI"]);
+                    if (ds.Tables[0].Rows[i]["MENSAGEM"] != DBNull.Value)
+                        Mensagem = ds.Tables[0].Rows[i]["MENSAGEM"].ToString();
 
                     if (ds.Tables[0].Rows[i]["STATUS"] != DBNull.Value)
                         statusContrato = Enum.GetValues(typeof(StatusContratoEnum)).Cast<StatusContratoEnum>().
@@ -255,7 +272,9 @@ namespace ContratacaoNutricionistas.Domain.Repository.Contrato
                         statusContrato
                         )
                     {
-                        IdContrato = idContrato
+                        IdContrato = idContrato,
+                        DataCadastro = dataCadastro,
+                        Mensagem = Mensagem
                     });
                 }
             }
@@ -304,7 +323,9 @@ namespace ContratacaoNutricionistas.Domain.Repository.Contrato
             stringBuilder.AppendLine("	C.CEP,");
             stringBuilder.AppendLine("	C.DT_INICIO,");
             stringBuilder.AppendLine("	C.DT_FIM,");
-            stringBuilder.AppendLine("	C.STATUS");
+            stringBuilder.AppendLine("	C.STATUS,");
+            stringBuilder.AppendLine("	C.DT_CADASTRO,");
+            stringBuilder.AppendLine("	C.MENSAGEM");
             stringBuilder.AppendLine("FROM CONTRATO_TB C WITH(NOLOCK)");
             stringBuilder.AppendLine("WHERE");
             stringBuilder.AppendLine("    ID_CONTRATO = @ID_CONTRATO");
@@ -320,13 +341,15 @@ namespace ContratacaoNutricionistas.Domain.Repository.Contrato
                     Bairro = string.Empty,
                     Cidade = string.Empty,
                     CEP = string.Empty,
-                    Complemento = string.Empty;
+                    Complemento = string.Empty,
+                    Mensagem = string.Empty;
 
                 uint? Numero = null;
                 int idPaciente = 0, idNutricionista = 0, idContrato = 0;
 
                 DateTime datainicio = DateTime.MinValue,
-                        dataFim = DateTime.MinValue;
+                        dataFim = DateTime.MinValue,
+                        dataCadastro = DateTime.MinValue;
 
                 UnidadeFederacaoEnum UF = UnidadeFederacaoEnum.NaoDefinido;
                 StatusContratoEnum statusContrato = StatusContratoEnum.Agendada;
@@ -372,10 +395,15 @@ namespace ContratacaoNutricionistas.Domain.Repository.Contrato
                     datainicio = Convert.ToDateTime(ds.Tables[0].Rows[0]["DT_INICIO"]);
                 if (ds.Tables[0].Rows[0]["DT_FIM"] != DBNull.Value)
                     dataFim = Convert.ToDateTime(ds.Tables[0].Rows[0]["DT_FIM"]);
+                if (ds.Tables[0].Rows[0]["DT_CADASTRO"] != DBNull.Value)
+                    dataCadastro = Convert.ToDateTime(ds.Tables[0].Rows[0]["DT_CADASTRO"]);
 
                 if (ds.Tables[0].Rows[0]["STATUS"] != DBNull.Value)
                     statusContrato = Enum.GetValues(typeof(StatusContratoEnum)).Cast<StatusContratoEnum>().
                         FirstOrDefault(s => s.GetDefaultValue().Equals(ds.Tables[0].Rows[0]["STATUS"].ToString()));
+
+                if (ds.Tables[0].Rows[0]["MENSAGEM"] != DBNull.Value)
+                    Mensagem = ds.Tables[0].Rows[0]["MENSAGEM"].ToString();
 
                 return new Entidades.Contrato.Contrato(
                     idPaciente,
@@ -392,7 +420,9 @@ namespace ContratacaoNutricionistas.Domain.Repository.Contrato
                     statusContrato
                     )
                 {
-                    IdContrato = idContrato
+                    IdContrato = idContrato,
+                    DataCadastro = dataCadastro,
+                    Mensagem = Mensagem
                 };
 
             }
@@ -417,6 +447,26 @@ namespace ContratacaoNutricionistas.Domain.Repository.Contrato
             DataSet ds = _UnitOfWork.Consulta(stringBuilder.ToString());
 
             return !(ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0);
+        }
+
+        /// <summary>
+        /// Realiza o atendimento
+        /// </summary>
+        /// <param name="idContrato">ID do contrato</param>
+        /// <param name="mensagemAtendimento">Mensagem de atendimento</param>
+        public void RealizarAtendimento(int idContrato, string mensagemAtendimento)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            stringBuilder.AppendLine("DECLARE @MENSAGEM VARCHAR(255),");
+            stringBuilder.AppendLine("    @ID_CONTRATO INT");
+            stringBuilder.AppendLine($"SET @MENSAGEM = '{mensagemAtendimento}'");
+            stringBuilder.AppendLine($"SET @ID_CONTRATO = {idContrato}");
+            stringBuilder.AppendLine("UPDATE CONTRATO_TB");
+            stringBuilder.AppendLine("    SET MENSAGEM = @MENSAGEM");
+            stringBuilder.AppendLine("WHERE ID_CONTRATO = @ID_CONTRATO");
+
+            _UnitOfWork.Executar(stringBuilder.ToString());
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿@model ContratacaoNutricionistasWEB.Models.Contrato.ContratoVM
+﻿@model ContratacaoNutricionistasWEB.Models.Contrato.ContratoAtendimentoVM
 @using ModulosHelper.Extensions
 
 <h4>Detalhes da consulta</h4>
@@ -13,7 +13,7 @@
             @Html.LabelFor(modelItem => Model.Status, Model.Status.GetDescription(),
            new
                 {
-                    @class = (Model.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.Agendada ? "label-consulta-aceita" :
+                    @class = (Model.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.Agendada || Model.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.ConsultaRealizada ? "label-consulta-aceita" :
             Model.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.PendenteAceitacaoNutricionista ? "label-consulta-pendente"
             : "label-consulta-cancelada")
                 })
@@ -71,6 +71,26 @@
             @Html.DisplayFor(modelItem => modelItem.Endereco.UF, new { @class = "label-celular-dados" })
         </div>
     </div>
+    @if (Model.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.ConsultaRealizada && User.Claims.Any(c => c.Type == Constantes.PacienteLogado))
+    {
+        <div class="row">
+            <div class="col-md-12">
+                @Html.LabelFor(modelItem => modelItem.MensagemAtendimento)
+            </div>
+            @if (string.IsNullOrEmpty(Model.MensagemAtendimento))
+            {
+                <div class="col-md-12">
+                    O nutricionista ainda não escreveu a sua receita :(
+                </div>
+            }
+            else
+            {
+                <div class="col-md-12">
+                    @Html.DisplayFor(modelItem => modelItem.MensagemAtendimento, new { @class = "label-celular-dados" })
+                </div>
+            }
+        </div>
+    }
     <hr />
 </div>
 <div class="col-md-12">

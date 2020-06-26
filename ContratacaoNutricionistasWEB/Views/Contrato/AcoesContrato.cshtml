@@ -16,9 +16,9 @@
     <input hidden asp-for="IdContrato" />
     <input hidden asp-for="IdUsuario" />
 
-    @if (Model.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.Agendada ||
+    @if (Model.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.Agendada && Model.DataInicio > Constantes.DateTimeNow() ||
 Model.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.PendenteAceitacaoNutricionista
-&& Model.DataInicio > Constantes.DateTimeNow())
+)
     {
         <div class="row">
             <a class="text-danger" asp-action="CancelarConsulta" asp-controller="Contrato" asp-route-ID="@Model.IdContrato">
@@ -49,7 +49,7 @@ Model.DataInicio < Constantes.DateTimeNow())
     {
         <div class="row">
             <a class="text-success"
-               asp-action="RegistrarAtendimento"
+               asp-action="RealizarAtendimento"
                asp-controller="Contrato"
                asp-route-ID="@Model.IdContrato">
                 <div class="col-md-12 alert alert-success">

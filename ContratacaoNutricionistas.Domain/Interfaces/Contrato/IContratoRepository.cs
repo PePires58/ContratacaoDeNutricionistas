@@ -23,6 +23,12 @@ Data: 19/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Incluindo método para não permitir contratar mais de uma vez a mesma agenda.
 */
+
+/*
+Data: 26/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Método para realizar o atendimento.
+*/
 #endregion
 using System;
 using System.Collections.Generic;
@@ -83,5 +89,12 @@ namespace ContratacaoNutricionistas.Domain.Interfaces.Contrato
         /// <param name="pIdAgenda">ID da agenda</param>
         /// <returns>Se a agenda está disponível ou não para contratar</returns>
         bool AgendaDisponivelParaContratar(int pIdAgenda);
+
+        /// <summary>
+        /// Realiza o atendimento
+        /// </summary>
+        /// <param name="idContrato">ID do contrato</param>
+        /// <param name="mensagemAtendimento">Mensagem atendimento</param>
+        void RealizarAtendimento(int idContrato, string mensagemAtendimento);
     }
 }

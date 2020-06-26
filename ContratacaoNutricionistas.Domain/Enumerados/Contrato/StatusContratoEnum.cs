@@ -17,6 +17,12 @@ Programador: Pedro Henrique Pires
 Descrição: Ajustando valor default.
 */
 
+/*
+Data: 26/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Consulta realizada.
+*/
+
 #endregion
 using System.ComponentModel;
 
@@ -34,6 +40,9 @@ namespace ContratacaoNutricionistas.Domain.Enumerados.Contrato
         CanceladaNutricionista,
 
         [Description("Cancelado pelo paciente"), DefaultValue("CP")]
-        CanceladaPaciente
+        CanceladaPaciente,
+
+        [Description("Consulta realizada"),DefaultValue("CR")]
+        ConsultaRealizada,
     }
 }

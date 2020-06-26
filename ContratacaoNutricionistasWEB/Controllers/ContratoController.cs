@@ -46,6 +46,13 @@ Data: 22/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Ajuste de segurança.
 */
+
+
+/*
+Data: 26/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Método para realizar o atendimento.
+*/
 #endregion
 using System;
 using System.Collections.Generic;
@@ -596,6 +603,73 @@ namespace ContratacaoNutricionistasWEB.Controllers
         }
         #endregion
 
+        #region Realizar atendimento
+        /// <summary>
+        /// Realizar atendimento do contrato
+        /// </summary>
+        /// <param name="ID">ID</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize(Policy = "Nutricionista")]
+        public IActionResult RealizarAtendimento(int ID)
+        {
+            Contrato contrato = _ServiceContrato.BuscaContratoPorID(ID);
+
+            if (contrato == null)
+                return RedirectToAction("ConsultasAgendadas", "Contrato");
+
+            if (contrato.IdNutricionista != Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType))
+                return RedirectToAction("ConsultasAgendadas", "Contrato");
+
+
+            ContratoAtendimentoVM contratoVM = new ContratoAtendimentoVM()
+            {
+                DataFim = contrato.DataTermino,
+                DataInicio = contrato.DataInicio,
+                Endereco = new EnderecoVM()
+                {
+                    Bairro = contrato.Bairro,
+                    CEP = contrato.CEP,
+                    Cidade = contrato.Cidade,
+                    Complemento = contrato?.Complemento,
+                    Logradouro = contrato.Logradouro,
+                    Numero = contrato?.Numero,
+                    UF = contrato.UF.GetDefaultValue()
+                },
+                IdContrato = contrato.IdContrato,
+                IdUsuario = contrato.IdUsuario,
+                NomeNutricionista = _ServiceNutricionista.ConsultarNutricionistaPorID(contrato.IdNutricionista).Nome,
+                NomePaciente = _ServicePaciente.ConsultarPacientePorID(contrato.IdUsuario).Nome
+            };
+
+            return View(contratoVM);
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "Nutricionista")]
+        public IActionResult RealizarAtendimento(ContratoAtendimentoVM pModel)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return View(pModel);
+
+                if (pModel.NomeNutricionista != _ServiceNutricionista.ConsultarNutricionistaPorID(Convert.ToInt32(User
+                    .Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType)).Nome)
+                    return RedirectToAction("ConsultasAgendadas", "Contrato");
+
+                _ServiceContrato.RealizarAtendimento(pModel.IdContrato, pModel.MensagemAtendimento);
+
+                return RedirectToAction("ConsultasAgendadas", "Contrato", new { mensagem = "Receita preescrita com sucesso." });
+            }
+            catch (Exception ex)
+            {
+                ViewData[Constantes.ViewDataMensagemErro] = ex.Message;
+                return View(pModel);
+            }
+        }
+        #endregion
+
         #region Detalhes do contrato
         [HttpGet]
         [Authorize(Policy = "UsuarioLogado")]
@@ -617,7 +691,7 @@ namespace ContratacaoNutricionistasWEB.Controllers
                     return RedirectToAction("ConsultasAgendadas", "Contrato");
             }
 
-            ContratoVM contratoVM = PreencheContratoVM(contrato);
+            ContratoAtendimentoVM contratoVM = PreencheContratoVM(contrato);
 
             return View(contratoVM);
         }
@@ -656,9 +730,9 @@ namespace ContratacaoNutricionistasWEB.Controllers
         /// </summary>
         /// <param name="contrato">Contrato DML</param>
         /// <returns>Contrato VM</returns>
-        private ContratoVM PreencheContratoVM(Contrato contrato)
+        private ContratoAtendimentoVM PreencheContratoVM(Contrato contrato)
         {
-            return new ContratoVM()
+            return new ContratoAtendimentoVM()
             {
                 DataFim = contrato.DataTermino,
                 DataInicio = contrato.DataInicio,
@@ -676,7 +750,9 @@ namespace ContratacaoNutricionistasWEB.Controllers
                 IdUsuario = contrato.IdUsuario,
                 NomeNutricionista = _ServiceNutricionista.ConsultarNutricionistaPorID(contrato.IdNutricionista).Nome,
                 NomePaciente = _ServicePaciente.ConsultarPacientePorID(contrato.IdUsuario).Nome,
-                Status = contrato.Status
+                Status = contrato.Status,
+                MensagemAtendimento = contrato.Mensagem,
+                DataCadastro = contrato.DataCadastro
             };
         }
         #endregion
