@@ -10,6 +10,12 @@ Data: 19/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Incluindo herença.
 */
+
+/*
+Data: 27/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Inativar agenda.
+*/
 #endregion
 using System;
 using System.Collections.Generic;
@@ -59,5 +65,11 @@ namespace ContratacaoNutricionistas.Domain.Interfaces.Agenda
         /// </summary>
         /// <param name="pDataAgora">Agora</param>
         void InvativarAgendas(DateTime pDataAgora);
+
+        /// <summary>
+        /// Inativa as agendas
+        /// </summary>
+        /// <param name="idAgenda">id da agenda</param>
+        void InativarAgenda(int idAgenda);
     }
 }

@@ -1,0 +1,74 @@
+﻿@model ContratacaoNutricionistasWEB.Models.Agenda.AgendaListaContratoVM
+
+@{
+    ViewData["Title"] = "Exclusão de agenda";
+}
+
+<h4>@ViewData["Title"]</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="ExcluirAgenda">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input asp-for="IdAgenda" hidden />
+            <input asp-for="IdUsuario" hidden />
+            <input asp-for="DataInicio" hidden />
+            <input asp-for="DataFim" hidden />
+            <input asp-for="StatusDaAgenda" hidden />
+            <input hidden asp-for="Endereco.Bairro" />
+            <input hidden asp-for="Endereco.CEP" />
+            <input hidden asp-for="Endereco.Cidade" />
+            <input hidden asp-for="Endereco.Complemento" />
+            <input hidden asp-for="Endereco.Logradouro" />
+            <input hidden asp-for="Endereco.Numero" />
+            <input hidden asp-for="Endereco.UF" />
+
+            <div class="row">
+                <div class="col-md-6 col-xs-6 col-sm-6">
+                    @Html.LabelFor(modelItem => Model.DataInicio)
+                </div>
+                <div class="col-md-6 col-xs-6 col-sm-6">
+                    @Html.LabelFor(modelItem => Model.DataFim)
+                </div>
+                <div class="col-md-6 col-xs-6 col-sm-6">
+                    @Html.LabelFor(modelItem => Model.DataInicio, Model.DataInicio.ToString(Constantes.MascaraDataHora), new { @class = "label-celular-dados" })
+                </div>
+                <div class="col-md-6 col-xs-6 col-sm-6">
+                    @Html.LabelFor(modelItem => Model.DataFim, Model.DataFim.ToString(Constantes.MascaraDataHora), new { @class = "label-celular-dados" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.Label("", "Endereço")
+                </div>
+                <div class="col-md-12">
+                    @Html.DisplayFor(modelItem => Model.Endereco.EnderecoCompleto, Model.Endereco.EnderecoCompleto, new { @class = "label-celular-dados" })
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-xs-6">
+                    @Html.LabelFor(modelItem => Model.Endereco.CEP)
+                </div>
+                <div class="col-md-6 col-xs-6">
+                    @Html.LabelFor(modelItem => Model.Endereco.UF)
+                </div>
+                <div class="col-md-6 col-xs-6">
+                    @Html.DisplayFor(modelItem => Model.Endereco.CEP, Model.Endereco.CEP.ToString(), new { @class = "label-celular-dados" })
+                </div>
+                <div class="col-md-6" col-xs-6>
+                    @Html.DisplayFor(modelItem => Model.Endereco.UF, Model.Endereco.UF.ToString(), new { @class = "label-celular-dados" })
+                </div>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Excluir" class="btn btn-danger form-control" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" asp-controller="Agenda">Voltar à lista de agendas</a>
+</div>

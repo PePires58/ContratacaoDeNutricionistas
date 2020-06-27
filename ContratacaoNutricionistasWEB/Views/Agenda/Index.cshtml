@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ContratacaoNutricionistasWEB.Models.Agenda.AgendaLista>
+﻿@model IEnumerable<ContratacaoNutricionistasWEB.Models.Agenda.AgendaListaContratoVM>
 
 @{
     ViewData["Title"] = "Horários cadastrados";
@@ -81,6 +81,15 @@
                         @Html.DisplayFor(modelItem => item.Endereco.UF, item.Endereco.UF.ToString(), new { @class = "label-celular-dados" })
                     </div>
                 </div>
+                <div class="row">
+                    <br />
+                    <div class="col-md-1 col-xs-2">
+                        <a asp-action="ExcluirAgenda" asp-controller="Agenda" asp-route-id="@item.IdAgenda" title="Excluir agenda">
+                            <i class="glyphicon glyphicon-trash" style="font-size:20px; color:rgb(178, 47, 33)">
+                            </i>
+                        </a>
+                    </div>
+                </div>
                 <hr />
             }
         }
@@ -92,6 +101,7 @@
         }
     }
 </div>
-<div>
+<div class="col-md-12">
     <a asp-action="Index" asp-controller="Home">Voltar para página inicial</a>
+    <br />
 </div>

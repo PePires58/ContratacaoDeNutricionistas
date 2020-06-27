@@ -34,6 +34,12 @@ Programador: Pedro Henrique Pires
 Descrição: Abrindo transação para não dar erro ao executar comandos simultaneos em aparelhos diferentes.
 */
 
+/*
+Data: 27/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Inativar agenda.
+*/
+
 #endregion
 using ContratacaoNutricionistas.Domain.Interfaces.Agenda;
 using ContratacaoNutricionistas.Domain.Repository.Repository;
@@ -177,6 +183,21 @@ namespace ContratacaoNutricionistas.Domain.Repository.Agenda
             stringBuilder.AppendLine("WHERE ID_USUARIO = @ID_USUARIO");
             stringBuilder.AppendLine("    AND ID_ENDERECO = @ID_ENDERECO");
 
+            _UnitOfWork.Executar(stringBuilder.ToString());
+        }
+
+        /// <summary>
+        /// Inativa a agenda
+        /// </summary>
+        /// <param name="idAgenda"></param>
+        public void InativarAgenda(int idAgenda)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine("DECLARE @ID_AGENDA INT");
+            stringBuilder.AppendLine($"SET @ID_AGENDA = {idAgenda}");
+            stringBuilder.AppendLine("UPDATE AGENDA_TB");
+            stringBuilder.AppendLine("    SET AGENDA_STATUS = 'D'");
+            stringBuilder.AppendLine("WHERE ID_AGENDA = @ID_AGENDA");
             _UnitOfWork.Executar(stringBuilder.ToString());
         }
 

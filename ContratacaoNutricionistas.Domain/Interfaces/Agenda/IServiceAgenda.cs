@@ -16,6 +16,12 @@ Data: 19/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Método de inativar agendas.
 */
+
+/*
+Data: 27/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Inativar agenda.
+*/
 #endregion
 using System;
 using System.Collections.Generic;
@@ -47,5 +53,11 @@ namespace ContratacaoNutricionistas.Domain.Interfaces.Agenda
         /// Inativa as agendas
         /// </summary>
         void InvativarAgendas();
+        
+        /// <summary>
+        /// Inativar agenda
+        /// </summary>
+        /// <param name="idAgenda">Id da agenda</param>
+        void InativarAgenda(int idAgenda);
     }
 }

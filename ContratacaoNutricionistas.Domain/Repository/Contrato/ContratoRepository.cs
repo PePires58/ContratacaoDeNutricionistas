@@ -42,6 +42,12 @@ Programador: Pedro Henrique Pires
 Descrição: Método para realizar o atendimento.
 */
 
+/*
+Data: 27/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Ajuste para não considerar contratos cancelados como "ativos".
+*/
+
 #endregion
 using ContratacaoNutricionistas.Domain.Entidades.Contrato;
 using ContratacaoNutricionistas.Domain.Enumerados.Contrato;
@@ -111,6 +117,8 @@ namespace ContratacaoNutricionistas.Domain.Repository.Contrato
             stringBuilder.AppendLine("    WHERE TB.ID_USUARIO = @ID_USUARIO");
             stringBuilder.AppendLine("    AND(TB.DT_INICIO BETWEEN @DT_INICIO AND @DT_FIM");
             stringBuilder.AppendLine("        OR TB.DT_FIM BETWEEN @DT_INICIO AND @DT_FIM)");
+            stringBuilder.AppendLine("    AND STATUS NOT IN ('CP','CN')");
+
 
             DataSet ds = _UnitOfWork.Consulta(stringBuilder.ToString());
 

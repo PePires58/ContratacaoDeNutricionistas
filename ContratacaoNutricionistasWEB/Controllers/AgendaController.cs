@@ -10,6 +10,13 @@ Data: 08/06/2020
 Programador: Pedro Henrique Pires
 Descrição: Ajuste para escrita do método
 */
+
+/*
+Data: 27/06/2020
+Programador: Pedro Henrique Pires
+Descrição: Inativar agenda.
+*/
+
 #endregion
 using ContratacaoNutricionistas.Domain.Entidades.Agenda;
 using ContratacaoNutricionistas.Domain.Entidades.Nutricionista;
@@ -222,24 +229,85 @@ namespace ContratacaoNutricionistasWEB.Controllers
                 }).ToList();
             }
 
-            List<AgendaLista> listaAgendas = new List<AgendaLista>();
+            List<AgendaListaContratoVM> listaAgendas = new List<AgendaListaContratoVM>();
 
             if (agendas.Any() && enderecosVm.Any())
             {
                 listaAgendas = agendas.Join(enderecosVm,
                              a => a.IdEndereco,
                              e => e.ID,
-                             (agenda, endereco) => new AgendaLista()
+                             (agenda, endereco) => new AgendaListaContratoVM()
                              {
                                  DataFim = agenda.DataFim,
                                  DataInicio = agenda.DataInicio,
                                  StatusDaAgenda = StatusAgendaEnum.Ativa,
-                                 Endereco = endereco
+                                 Endereco = endereco,
+                                 IdAgenda = agenda.IdAgenda,
+                                 IdUsuario = agenda.IdUsuario
                              }).ToList();
             }
 
             return View(listaAgendas.Skip(pIndiceInicial).Take(Constantes.QuantidadeRegistrosPorPagina));
         }
+        #endregion
+
+        #region Excluir agenda
+        [HttpGet]
+        public IActionResult ExcluirAgenda(int ID)
+        {
+            List<Agenda> agendas = _ServiceAgenda.AgendasCadastradas(DateTime.MinValue, DateTime.MinValue,
+                Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType)
+                , false);
+
+            Agenda agenda = agendas.FirstOrDefault(c => c.IdAgenda == ID);
+
+            if (agenda == null)
+                return RedirectToAction("Index", "Agenda");
+
+            Endereco endereco = _ServiceEndereco.ConsultarEnderecoNutricionistaPorID(agenda.IdEndereco, agenda.IdUsuario);
+
+            AgendaListaContratoVM agendaVM = new AgendaListaContratoVM()
+            {
+                DataFim = agenda.DataFim,
+                DataInicio = agenda.DataInicio,
+                IdAgenda = agenda.IdAgenda,
+                IdUsuario = agenda.IdUsuario,
+                StatusDaAgenda = agenda.StatusAgenda,
+                Endereco = new EnderecoVM()
+                {
+                    Bairro = endereco.Bairro,
+                    CEP = endereco.CEP,
+                    Cidade = endereco.Cidade,
+                    Complemento = endereco?.Complemento,
+                    Logradouro = endereco?.Logradouro,
+                    Numero = endereco?.Numero,
+                    UF = endereco.UF.GetDefaultValue()
+                }
+            };
+
+            return View(agendaVM);
+        }
+
+        [HttpPost]
+        public IActionResult ExcluirAgenda(AgendaListaContratoVM pModel)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return View(pModel);
+
+                _ServiceAgenda.InativarAgenda(pModel.IdAgenda);
+
+                return RedirectToAction("Index", "Agenda", new { mensagem = "Agenda excluída com sucesso!" });
+            }
+            catch (Exception ex)
+            {
+                ViewData[Constantes.ViewDataMensagemErro] = ex.Message;
+                return View(pModel);
+            }
+
+        }
+
         #endregion
 
         #endregion
