@@ -23,7 +23,7 @@ namespace ContratacaoNutricionistas.Domain.Interfaces.Usuario
     /// <summary>
     /// Serviços para o usuário
     /// </summary>
-    public interface IServiceUsuario : IRepositoryBase
+    public interface IServiceUsuario
     {
         /// <summary>
         /// Verifica se o login existe
