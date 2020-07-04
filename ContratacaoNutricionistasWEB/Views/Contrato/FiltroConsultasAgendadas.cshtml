@@ -2,12 +2,12 @@
 
 <br />
 <form asp-action="FiltroConsultasAgendadas" asp-controller="Contrato">
-
+    <br />
     <div class="row">
-        <div class="col-md-6 col-xs-6 col-lg-6 col-sm-6">
+        <div class="input-field col s6">
             <a class="btn btn-default" asp-action="ConsultasAgendadas" asp-controller="Contrato" style="color:black;">LIMPAR TUDO</a>
         </div>
-        <div class="col-md-6 col-xs-6 col-lg-6 col-sm-6">
+        <div class="input-field col s6">
             <input type="submit" value="CONCLUÍDO" class="btn btn-default" style="float:right" />
         </div>
     </div>
@@ -15,81 +15,53 @@
     <div class="row">
         <div class="col-md-12">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <a class="form-control" style="color:black" data-toggle="collapse" href="#divLogradouro" role="button">
-                    Logradouro
-                </a>
-            </div>
-            <div class="form-group collapse" id="divLogradouro">
+            <div class="input-field col s12">
+                <label asp-for="Logradouro"></label>
                 <input asp-for="Logradouro" class="form-control" />
+                <span asp-validation-for="Logradouro" class="text-danger"></span>
             </div>
-
-            <div class="form-group">
-                <a class="form-control" style="color:black" data-toggle="collapse" href="#divCidade" role="button">
-                    Cidade
-                </a>
-            </div>
-            <div class="form-group collapse" id="divCidade">
+            <div class="input-field col s12">
+                <label asp-for="Cidade"></label>
                 <input asp-for="Cidade" class="form-control" />
                 <span asp-validation-for="Cidade" class="text-danger"></span>
             </div>
-
-            <div class="form-group">
-                <a class="form-control" style="color:black" data-toggle="collapse" href="#divBairro" role="button">
-                    Bairro
-                </a>
-            </div>
-            <div class="form-group collapse" id="divBairro">
+            <div class="input-field col s12">
+                <label asp-for="Bairro"></label>
                 <input asp-for="Bairro" class="form-control" />
                 <span asp-validation-for="Bairro" class="text-danger"></span>
             </div>
-
-            <div class="form-group">
-                <a class="form-control" style="color:black" data-toggle="collapse" href="#divCEP" role="button">
-                    CEP
-                </a>
-            </div>
-            <div class="form-group collapse" id="divCEP">
+            <div class="input-field col s12" id="divCEP">
+                <label asp-for="CEP"></label>
                 <input asp-for="CEP" class="form-control" />
                 <span asp-validation-for="CEP" class="text-danger"></span>
                 <span id="spanCEP" hidden class="text-danger">CEP não encontrado</span>
             </div>
-
-            <div class="form-group">
-                <a class="form-control" style="color:black" data-toggle="collapse" href="#divUF" role="button">
-                    Estado
-                </a>
-            </div>
-            <div class="form-group collapse" id="divUF">
-                <select class="form-control" asp-for="UF" asp-items="@ViewData[Constantes.ViewDataUnidadesFeracao] as List<SelectListItem>"></select>
+            <div class="input-field col s12">
+                <label asp-for="UF"></label>
+                <select class="" asp-for="UF" asp-items="@ViewData[Constantes.ViewDataUnidadesFeracao] as List<SelectListItem>"></select>
                 <span asp-validation-for="UF" class="text-danger"></span>
             </div>
-
-            <div class="form-group">
-                <a class="form-control" style="color:black" data-toggle="collapse" href="#divDataInicio" role="button">
-                    Data de início
-                </a>
-            </div>
-            <div class="form-group collapse" id="divDataInicio">
-                <input asp-for="DataAgendaInicio" class="form-control" />
+            <br />
+            <div class="input-field col s12">
+                <label asp-for="DataAgendaInicio"></label>
+                <input asp-for="DataAgendaInicio" class="datepicker" />
                 <span asp-validation-for="DataAgendaInicio" class="text-danger"></span>
             </div>
-
-            <div class="form-group">
-                <a class="form-control" style="color:black" data-toggle="collapse" href="#divDataTermino" role="button">
-                    Data de término
-                </a>
-            </div>
-            <div class="form-group collapse" id="divDataTermino">
-                <input asp-for="DataAgendaFim" class="form-control" />
+            <div class="input-field col s12">
+                <label asp-for="DataAgendaFim"></label>
+                <input asp-for="DataAgendaFim" class="datepicker" />
                 <span asp-validation-for="DataAgendaFim" class="text-danger"></span>
             </div>
         </div>
     </div>
 </form>
 
-<div>
-    <a asp-action="ConsultasAgendadas" asp-controller="Contrato">Voltar para página inicial</a>
+<div class="row">
+    <div class="col-md-12">
+        <div class="col s12">
+            <a asp-action="ConsultasAgendadas" asp-controller="Contrato">Voltar para página inicial</a>
+        </div>
+    </div>
 </div>
 
 
@@ -99,4 +71,10 @@
         var urlCadastrarCEP = "@Url.Action("ConsultarEnderecoCEP", "Nutricionista")"
     </script>
     <script src="~/js/Nutricionista/buscarEnderecoPorCEP.js"></script>
+<script>
+    $(document).ready(function () {
+        $('select').formSelect();
+        $('.datepicker').datepicker();
+    });
+</script>
 }

@@ -47,6 +47,12 @@
 * Data: 04/06/2020
 * Implementação: Inclusão de método de logout.
 */
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 04/07/2020
+* Implementação: Ajuste para atualizar os dados.
+*/
 #endregion
 
 using ContratacaoNutricionistas.Domain.Entidades.Paciente;
@@ -208,19 +214,22 @@ namespace ContratacaoNutricionistasWEB.Controllers
                 if (!ModelState.IsValid)
                     return View(pModel);
 
-                PacienteAlteracao pacienteAlteracao = _ServicePaciente.ConsultarPacientePorID(pModel.ID);
+                PacienteAlteracao pacienteAlteracao = _ServicePaciente.ConsultarPacientePorID(Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType));
 
                 if (pacienteAlteracao == null)
                     return NoContent();
                 else if (!pacienteAlteracao.Senha.Equals(pModel.Senha))
                     throw new Exception(Constantes.MensagemErroSenhaNaoLocalizada);
 
-                _ServicePaciente.AlterarDados(new PacienteAlteracao(pModel.ID,
+                _ServicePaciente.AlterarDados(new PacienteAlteracao(Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType),
                     pModel.Nome,
                     pModel.Telefone,
                     pModel.Login,
                     pModel.Senha,
-                    pacienteAlteracao.CpfObjeto));
+                    pacienteAlteracao.CpfObjeto)
+                {
+                    ID = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == Constantes.IDUsuarioLogado).ValueType)
+                });
 
                 ViewData[Constantes.ViewDataMensagemRetorno] = "Dados do paciente alterado com sucesso";
                 

@@ -12,4 +12,7 @@
                 element.mask("(99) 9999-9999?9");
             }
         });
+
+    if ($('#Telefone').val())
+        $('#Telefone').focusout();
 });

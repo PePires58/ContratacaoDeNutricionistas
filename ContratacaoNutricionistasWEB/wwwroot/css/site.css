@@ -49,17 +49,29 @@ body {
     font-weight: 500;
 }
 
-.label-consulta-aceita{
-    color:green;
+.label-consulta-aceita {
+    color: green;
 }
 
-.label-consulta-cancelada{
-    color:red;
+.label-consulta-cancelada {
+    color: red;
 }
 
-.label-consulta-pendente{
-    color:rgb(151, 134, 40);
+.label-consulta-pendente {
+    color: rgb(151, 134, 40);
 }
+
+
+.border-dashed {
+    border: 1px dashed rgb(60, 53, 53);
+}
+
+.border-solid {
+    border: 1px solid rgb(60, 53, 53);
+}
+
+
+
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
     /* Hide captions */
@@ -68,11 +80,11 @@ body {
     }
 }
 
-@media screen and (max-width:320px){
+@media screen and (max-width:320px) {
 
     label.label-celular-dados {
         font-size: 0.9em;
-        font-weight:500;
+        font-weight: 500;
     }
 
     label.label-celular-dados-negrito {

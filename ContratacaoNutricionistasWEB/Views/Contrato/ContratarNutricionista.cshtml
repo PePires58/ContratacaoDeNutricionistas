@@ -9,17 +9,13 @@
     <hr />
 </div>
 
-<div class="col-md-12">
+<div class="">
     @if (ViewData[Constantes.ViewDataMensagemErro] != null)
     {
-        <div class="row">
-            <div class="col-md-12">
-                <div class="col-md-12 alert alert-danger">
-                    <span>
-                        @ViewData[Constantes.ViewDataMensagemErro].ToString()
-                    </span>
-                </div>
-            </div>
+        <div class="col-md-12 alert alert-danger">
+            <span>
+                @ViewData[Constantes.ViewDataMensagemErro].ToString()
+            </span>
         </div>
     }
     <form asp-action="ContratarNutricionista" asp-controller="Contrato">
@@ -72,9 +68,11 @@
                 @Html.DisplayFor(modelItem => modelItem.Endereco.UF, new { @class = "label-celular-dados" })
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group row">
             <br />
-            <input id="btnCadastrar" type="submit" value="Contratar" class="btn btn-primary form-control" />
+            <div class="col m12">
+                <input id="btnCadastrar" type="submit" value="Contratar" class="btn btn-primary form-control" />
+            </div>
         </div>
     </form>
 </div>

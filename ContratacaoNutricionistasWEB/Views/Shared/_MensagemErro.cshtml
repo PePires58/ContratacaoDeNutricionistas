@@ -1,0 +1,8 @@
+﻿@if (ViewData[Constantes.ViewDataMensagemErro] != null)
+{
+    <div class="col s12 alert alert-danger">
+        <span>
+            @ViewData[Constantes.ViewDataMensagemErro].ToString()
+        </span>
+    </div>
+}

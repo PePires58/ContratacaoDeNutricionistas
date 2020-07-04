@@ -8,6 +8,7 @@
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
+        <link type="text/css" rel="stylesheet" href="~/css/materialize.css" media="screen,projection" />
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
@@ -15,6 +16,8 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+        <link type="text/css" rel="stylesheet" href="~/css/materialize.min.css" media="screen,projection" />
     </environment>
 </head>
 <body>
@@ -93,15 +96,19 @@
 
     <div class="container body-content">
         @RenderBody()
-        <hr />
         <footer>
-            <p>&copy; 2020 - Contratação de Nutricionista WEB</p>
+            <div class="col-md-12">
+                <p>&copy; 2020 - Contratação de Nutricionista WEB</p>
+            </div>
         </footer>
     </div>
 
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/materialize.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
         <script src="~/lib/jquery-masked-input/jquery.maskedinput.js"></script>
     </environment>
@@ -120,6 +127,8 @@
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
         <script src="~/lib/jquery-masked-input/jquery.maskedinput.js" asp-append-version="true"></script>
+
+        <script type="text/javascript" src="~/js/materialize.min.js"></script>
     </environment>
 
     @RenderSection("Scripts", required: false)

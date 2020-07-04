@@ -48,6 +48,12 @@ Programador: Pedro Henrique Pires
 Descrição: Ajuste para não considerar contratos cancelados como "ativos".
 */
 
+/*
+Data: 04/07/2020
+Programador: Pedro Henrique Pires
+Descrição: Ajuste na regra de contratação
+*/
+
 #endregion
 using ContratacaoNutricionistas.Domain.Entidades.Contrato;
 using ContratacaoNutricionistas.Domain.Enumerados.Contrato;
@@ -451,7 +457,8 @@ namespace ContratacaoNutricionistas.Domain.Repository.Contrato
             stringBuilder.AppendLine("SELECT TOP 1 1 FROM CONTRATO_TB TB WITH(NOLOCK)");
             stringBuilder.AppendLine("    INNER JOIN AGENDA_TB AG WITH(NOLOCK) ON TB.ID_NUTRI = AG.ID_USUARIO");
             stringBuilder.AppendLine("WHERE AG.ID_AGENDA = @ID_AGENDA AND TB.STATUS NOT IN ('CN','CP')");
-
+            stringBuilder.AppendLine("AND (TB.DT_INICIO BETWEEN AG.DT_INICIO AND AG.DT_FIM OR TB.DT_FIM BETWEEN AG.DT_INICIO AND AG.DT_FIM)");
+            
             DataSet ds = _UnitOfWork.Consulta(stringBuilder.ToString());
 
             return !(ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0);

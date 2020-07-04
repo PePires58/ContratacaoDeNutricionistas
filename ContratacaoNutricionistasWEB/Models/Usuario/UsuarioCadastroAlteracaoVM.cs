@@ -16,6 +16,12 @@
 * Data: 04/06/2020
 * Implementação: Arrumando mensagem e mascara de data.
 */
+
+/*
+* Programador: Pedro Henrique Pires
+* Data: 04/07/2020
+* Implementação: Arrumando prompt para usar css do materialize.
+*/
 #endregion
 
 using System.ComponentModel.DataAnnotations;
@@ -30,7 +36,7 @@ namespace ContratacaoNutricionistasWEB.Models.Usuario
         /// <summary>
         /// Nome
         /// </summary>
-        [Display(Name = "Nome completo",Prompt ="Ex.: Fulano de tal")]
+        [Display(Name = "Nome completo")]
         [MaxLength(50, ErrorMessage = "O tamanho máximo do campo Nome é 50 caracteres")]
         [Required(ErrorMessage = "O campo Nome completo é obrigatório")]
         public string Nome { get; set; }
@@ -38,7 +44,7 @@ namespace ContratacaoNutricionistasWEB.Models.Usuario
         /// <summary>
         /// Telefone
         /// </summary>
-        [Display(Name = "Telefone", Prompt = "Ex.: (11) 91242-1234")]
+        [Display(Name = "Telefone")]
         [RegularExpression(@"^\([1-9]{2}\) (9)?[0-9]{4}\-[0-9]{4}$", ErrorMessage = "Telefone deve estar no formato (11) 91242-1234 ou (11) 1242-1234")]
         [Required(ErrorMessage = "O campo Telefone é obrigatório.")]
         public string Telefone { get; set; }

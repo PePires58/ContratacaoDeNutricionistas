@@ -6,122 +6,127 @@
     ViewData["Title"] = "Consultas";
 }
 
-<div class="col-md-12">
-    <h4>@ViewData["Title"]</h4>
-    <hr />
+<div class="col s12">
+    <div class="col s12">
+        <h4>
+            @ViewData["Title"]
+            @if (User.Claims.Any(c => c.Type == Constantes.PacienteLogado))
+            {
+                <a class="btn btn-floating" title="Nova consulta" asp-action="LocalizarNutricionista" asp-controller="Contrato"><i class="material-icons">add</i></a>
+            }
+        </h4>
+        <hr />
+    </div>
 </div>
 
 @if (ViewData[Constantes.ViewDataMensagemErro] != null)
-    {
-<div class="row">
-    <div class="col-md-12">
-        <div class="col-md-12 alert alert-danger">
-            <span>
-                @ViewData[Constantes.ViewDataMensagemErro].ToString()
-            </span>
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12 alert alert-danger">
+                <span>
+                    @ViewData[Constantes.ViewDataMensagemErro].ToString()
+                </span>
+            </div>
         </div>
     </div>
-</div>
-    }
+}
 
 @if (ViewData[Constantes.ViewDataMensagemRetorno] != null)
-    {
-<div class="row">
-    <div class="col-md-12">
-        <div class="col-md-12 alert alert-success">
-            <span>
-                @ViewData[Constantes.ViewDataMensagemRetorno].ToString()
-            </span>
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12 alert alert-success">
+                <span>
+                    @ViewData[Constantes.ViewDataMensagemRetorno].ToString()
+                </span>
+            </div>
         </div>
     </div>
-</div>
-    }
+}
 
-<div class="col-md-12">
-    @if (User.Claims.Any(c => c.Type == Constantes.PacienteLogado))
-        {
-    <p>
-        <a class="btn btn-success" asp-action="LocalizarNutricionista" asp-controller="Contrato">Nova consulta</a>
-    </p>
-        }
+<div class="col s12">
     @{
         if (Model.Any())
         {
+            @foreach (var item in Model)
+            {
+                <div class="row">
+                    <div class="col-md-12 col-xs-12 col-sm-12">
+                        @Html.LabelFor(modelItem => item.Status)
+                    </div>
+                    <div class="col-md-12 col-xs-12 col-sm-12">
+                        @Html.LabelFor(modelItem => item.Status, item.Status.GetDescription(),
+                        new
+                        {
+                        @class = (item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.Agendada || item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.ConsultaRealizada ? "label-consulta-aceita" :
+                        item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.PendenteAceitacaoNutricionista ? "label-consulta-pendente"
+                        : "label-consulta-cancelada")
+                        })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-xs-6 col-sm-6">
+                        @Html.LabelFor(modelItem => item.DataInicio)
+                    </div>
+                    <div class="col-md-6 col-xs-6 col-sm-6">
+                        @Html.LabelFor(modelItem => item.DataFim)
+                    </div>
+                    <div class="col-md-6 col-xs-6 col-sm-6">
+                        @Html.LabelFor(modelItem => item.DataInicio, item.DataInicio.ToString(Constantes.MascaraDataHora), new { @class = "label-celular-dados" })
+                    </div>
+                    <div class="col-md-6 col-xs-6 col-sm-6">
+                        @Html.LabelFor(modelItem => item.DataFim, item.DataFim.ToString(Constantes.MascaraDataHora), new { @class = "label-celular-dados" })
+                    </div>
+                </div>
 
+                <div class="row">
+                    <div class="col-md-12">
+                        @Html.Label("", "Endereço")
+                    </div>
+                    <div class="col-md-12">
+                        @Html.DisplayFor(modelItem => item.Endereco.EnderecoCompleto, item.Endereco.EnderecoCompleto, new { @class = "label-celular-dados" })
 
-        @foreach (var item in Model)
-        {
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <br />
+                        <a class="h5"
+                           asp-action="AcoesContrato"
+                           asp-controller="Contrato"
+                           asp-route-ID="@item.IdContrato">
+                            <b>
+                                Ações
+                                <i class="glyphicon glyphicon-cog"></i>
+                            </b>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 ">
+                        <div class="col s12 border-solid">
 
-        <div class="row">
-            <div class="col-md-12 col-xs-12 col-sm-12">
-                @Html.LabelFor(modelItem => item.Status)
-            </div>
-            <div class="col-md-12 col-xs-12 col-sm-12">
-                @Html.LabelFor(modelItem => item.Status, item.Status.GetDescription(),
-                new
-                {
-                @class = (item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.Agendada || item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.ConsultaRealizada ? "label-consulta-aceita" :
-                item.Status == ContratacaoNutricionistas.Domain.Enumerados.Contrato.StatusContratoEnum.PendenteAceitacaoNutricionista ? "label-consulta-pendente"
-                : "label-consulta-cancelada")
-                })
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6 col-xs-6 col-sm-6">
-                @Html.LabelFor(modelItem => item.DataInicio)
-            </div>
-            <div class="col-md-6 col-xs-6 col-sm-6">
-                @Html.LabelFor(modelItem => item.DataFim)
-            </div>
-            <div class="col-md-6 col-xs-6 col-sm-6">
-                @Html.LabelFor(modelItem => item.DataInicio, item.DataInicio.ToString(Constantes.MascaraDataHora), new { @class = "label-celular-dados" })
-            </div>
-            <div class="col-md-6 col-xs-6 col-sm-6">
-                @Html.LabelFor(modelItem => item.DataFim, item.DataFim.ToString(Constantes.MascaraDataHora), new { @class = "label-celular-dados" })
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                @Html.Label("", "Endereço")
-            </div>
-            <div class="col-md-12">
-                @Html.DisplayFor(modelItem => item.Endereco.EnderecoCompleto, item.Endereco.EnderecoCompleto, new { @class = "label-celular-dados" })
-
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <br />
-                <a class="h5"
-                   asp-action="AcoesContrato"
-                   asp-controller="Contrato"
-                   asp-route-ID="@item.IdContrato">
-                    <b>
-                        Ações
-                        <i class="glyphicon glyphicon-cog"></i>
-                    </b>
-                </a>
-            </div>
-        </div>
-        <hr />
-        }
+                        </div>
+                    </div>
+                </div>
+            }
 
         }
         else
         {
-        if (User.Claims.Any(c => c.Type == Constantes.PacienteLogado))
-        {
-        <h4>
-            No momento, você não agendou nenhuma consulta.
-        </h4>
-        }
-        else if (User.Claims.Any(c => c.Type == Constantes.NutricionistaLogado))
-        {
-        <h4>
-            No momento, você não possui nenhum paciente para consulta.
-        </h4>
-        }
+            if (User.Claims.Any(c => c.Type == Constantes.PacienteLogado))
+            {
+                <h4>
+                    No momento, você não agendou nenhuma consulta.
+                </h4>
+            }
+            else if (User.Claims.Any(c => c.Type == Constantes.NutricionistaLogado))
+            {
+                <h4>
+                    No momento, você não possui nenhum paciente para consulta.
+                </h4>
+            }
         }
     }
 </div>

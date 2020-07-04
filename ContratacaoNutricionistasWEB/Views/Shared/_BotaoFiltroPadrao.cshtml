@@ -1,12 +1,14 @@
-﻿
-<div style="position:fixed; bottom:8px; width:100%">
-    <div class="col-md-8 col-md-offset-1 col-sm-8 col-sm-offset-1 col-xs-8 col-xs-offset-1">
-        <a class="btn btn-default form-control" style="border:1.2px solid blue; border-radius:8px;"
-           asp-action="@ViewData[Constantes.ViewDataActionFiltro]"
-           asp-controller="@ViewData[Constantes.ViewDataControllerFiltro]">
-            <i class="glyphicon glyphicon-align-justify">
-            </i>
-            Filtros
-        </a>
+﻿<div class="row" style="position:fixed; bottom:8px; width:100%; z-index:2">
+    <div class="col s10 m8">
+        <div class="col s12 m8 offset-m2 center">
+            <a class="btn btn-default form-control" style="border-radius:8px;"
+               asp-action="@ViewData[Constantes.ViewDataActionFiltro]"
+               asp-controller="@ViewData[Constantes.ViewDataControllerFiltro]">
+                <i class="material-icons">
+                    filter_list
+                </i>
+                Filtros
+            </a>
+        </div>
     </div>
 </div>
