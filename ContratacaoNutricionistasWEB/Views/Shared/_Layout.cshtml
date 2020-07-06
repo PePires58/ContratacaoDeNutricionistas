@@ -31,11 +31,11 @@
                     </button>
                     @if (User.Claims.Any(c => c.Type == Constantes.NutricionistaLogado))
                     {
-                        <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Nutricionistas WEB - Nutricionista</a>
+                        <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand"><img class="img-responsive" style="height:100%;" src="~/images/logoNutri.png"/></a>
                     }
                     else if (User.Claims.Any(c => c.Type == Constantes.PacienteLogado))
                     {
-                        <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Nutricionistas WEB - Paciente</a>
+                        <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand"><img class="img-responsive" style="height:100%" src="~/images/logoPaciente.png"/></a>
                     }
 
                 </div>
